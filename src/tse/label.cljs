@@ -21,6 +21,7 @@
           {:position "absolute"
            :zIndex z-index
            :transform (str/format "translate(%spx, %spx) rotate(%srad)" x y angle)
+           :will-change "transform"
            :padding "0"
            :width w
            :height h}

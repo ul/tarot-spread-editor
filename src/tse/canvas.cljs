@@ -29,6 +29,7 @@
        [:div#canvas
         {:style {:transform-origin "left top"
                  :transform (str "scale(" @(sub [:canvas/scale]) ")")
+                 :will-change "transform"
                  :user-select "none"
                  :-webkit-user-select "none"}}
         [tse.background/view ctx]

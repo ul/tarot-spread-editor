@@ -20,6 +20,7 @@
           :style
           {:position "absolute"
            :transform (str/format "translate(%spx, %spx) rotate(%srad)" x y angle)
+           :will-change "transform"
            :zIndex z-index
            :width w
            :height h}

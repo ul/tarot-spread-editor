@@ -30,6 +30,7 @@
           :on-load #(emit [:background/set-dimensions [(.. % -target -clientWidth) (.. % -target -clientHeight)]])
           :style {:position "absolute"
                   :transform (str/format "translate(%spx, %spx)" x y)
+                  :will-change "transform"
                   :width w
                   :height h}
           :src src}]))))

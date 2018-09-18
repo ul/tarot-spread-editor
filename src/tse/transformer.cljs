@@ -63,6 +63,7 @@
               :style
               {:position "absolute"
                :transform (str/format "translate(%spx, %spx)" rx ry)
+               :will-change "transform"
                :zIndex 100000
                :width 24
                :height 24
@@ -74,6 +75,7 @@
               :style
               {:position "absolute"
                :transform (str/format "translate(%spx, %spx) rotate(%srad)" x y angle)
+               :will-change "transform"
                :zIndex 100000
                :width w
                :height h
@@ -104,6 +106,7 @@
                {:position "absolute"
                 :zIndex 100000
                 :transform (str/format "translate(%spx, %spx)" x1 y1)
+                :will-change "transform"
                 :background-color "rgba(128,128,128,0.1)"
                 :border "2px solid rgba(128,128,128,0.5)"
                 :width w

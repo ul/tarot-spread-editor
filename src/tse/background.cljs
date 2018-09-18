@@ -70,6 +70,7 @@
                   :backgroundColor @(sub [:background/color])
                   :width (background-width @node w scale)
                   :height (background-height @node h scale)}
+          :on-click #(emit [:item/unselect-all])
           :on-mousedown #(when (and (zero? (.-button %)) (.-shiftKey %))
                            (let [offset [(.-offsetX %) (.-offsetY %)]
                                  target-rect (.. % -target getBoundingClientRect)
