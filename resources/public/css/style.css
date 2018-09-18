@@ -1,0 +1,112 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    display: flex;
+    font-family: 'PT Sans', sans-serif;
+}
+
+#app {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
+a.mini {
+    margin: 5px;
+}
+
+a.mini.active>img,
+a.mini>img:hover {
+    box-shadow: 0 5px/*5px*/
+    5px black;
+    /*left: -5px;*/
+    top: -5px;
+    position: relative;
+}
+
+.autocomplete {
+    position: relative;
+    margin-bottom: 1em;
+}
+
+.autocomplete input {
+    width: 100%;
+}
+
+.autocomplete .menu-wrapper {
+    position: absolute;
+    width: 100%;
+    padding: 0 1em;
+    display: none;
+    z-index: 100000;
+}
+
+.autocomplete .menu-wrapper.open {
+    display: block;
+}
+
+.autocomplete .pure-menu {
+    background-color: #fafaff;
+}
+
+.autocomplete .pure-menu-list {
+    letter-spacing: 0;
+}
+
+.button-destructive {
+    color: rgb(202, 60, 60);
+}
+
+.button-success,
+.button-error,
+.button-danger,
+.button-warning,
+.button-secondary {
+    color: white;
+    border-radius: 4px;
+    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
+}
+
+.button-success {
+    background: rgb(28, 184, 65);
+    /* this is a green */
+}
+
+.button-error,
+.button-danger {
+    background: rgb(202, 60, 60);
+    /* this is a maroon */
+}
+
+.button-warning {
+    background: rgb(223, 117, 20);
+    /* this is an orange */
+}
+
+.button-secondary {
+    background: rgb(66, 184, 221);
+    /* this is a light blue */
+}
+
+#canvas {
+    user-select: none;
+}
+
+.modal-dialog-buttons {
+    display: flex;
+    justify-content: space-between;
+}
+
+#ruler {
+    position: absolute;
+    visibility: hidden;
+    height: auto;
+    width: auto;
+    white-space: nowrap;
+}
+
+#canvas p, #ruler p {
+    margin: 0;
+}

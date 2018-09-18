@@ -1,0 +1,315 @@
+{"tarot"       [{:name   {:en "Major" :ru "Старшие Арканы"}
+                 :cards  "m:00...21"
+                 :titles {:en ["0" "I" "II" "III" "IV" "V" "VI" "VII" "VIII" "IX" "X" "XI" "XII" "XIII"
+                               "XIV" "XV" "XVI" "XVII" "XVIII" "XIX" "XX" "XXI"]
+                          :ru ["0" "I" "II" "III" "IV" "V" "VI" "VII" "VIII" "IX" "X" "XI" "XII" "XIII"
+                               "XIV" "XV" "XVI" "XVII" "XVIII" "XIX" "XX" "XXI"]}}
+                {:name   {:en "Wands" :ru "Жезлы"}
+                 :cards  "w:01...14"
+                 :titles {:en ["Ace of Wands" "Two of Wands" "Three of Wands" "Four of Wands"
+                               "Five of Wands" "Six of Wands" "Seven of Wands" "Eight of Wands"
+                               "Nine of Wands" "Ten of Wands" "Page of Wands" "Knight of Wands"
+                               "Queen of Wands" "King of Wands"]
+                          :ru ["Туз Жезлов" "Двойка Жезлов" "Тройка Жезлов" "Четвёрка Жезлов"
+                               "Пятёрка Жезлов" "Шестёрка Жезлов" "Семёрка Жезлов" "Восьмёрка Жезлов"
+                               "Девятка Жезлов" "Десятка Жезлов" "Паж Жезлов" "Рыцарь Жезлов"
+                               "Королева Жезлов" "Король Жезлов"]}}
+                {:name   {:en "Cups" :ru "Кубки"}
+                 :cards  "c:01...14"
+                 :titles {:en ["Ace of Cups" "Two of Cups" "Three of Cups" "Four of Cups"
+                               "Five of Cups" "Six of Cups" "Seven of Cups" "Eight of Cups"
+                               "Nine of Cups" "Ten of Cups" "Page of Cups" "Knight of Cups"
+                               "Queen of Cups" "King of Cups"]
+                          :ru ["Туз Кубков" "Двойка Кубков" "Тройка Кубков" "Четвёрка Кубков"
+                               "Пятёрка Кубков" "Шестёрка Кубков" "Семёрка Кубков" "Восьмёрка Кубков"
+                               "Девятка Кубков" "Десятка Кубков" "Паж Кубков" "Рыцарь Кубков"
+                               "Королева Кубков" "Король Кубков"]}}
+                {:name   {:en "Swords" :ru "Мечи"}
+                 :cards  "s:01...14"
+                 :titles {:en ["Ace of Swords" "Two of Swords" "Three of Swords" "Four of Swords"
+                               "Five of Swords" "Six of Swords" "Seven of Swords" "Eight of Swords"
+                               "Nine of Swords" "Ten of Swords" "Page of Swords" "Knight of Swords"
+                               "Queen of Swords" "King of Swords"]
+                          :ru ["Туз Мечей" "Двойка Мечей" "Тройка Мечей" "Четвёрка Мечей"
+                               "Пятёрка Мечей" "Шестёрка Мечей" "Семёрка Мечей" "Восьмёрка Мечей"
+                               "Девятка Мечей" "Десятка Мечей" "Паж Мечей" "Рыцарь Мечей"
+                               "Королева Мечей" "Король Мечей"]}}
+                {:name   {:en "Pentacles" :ru "Пентакли"}
+                 :cards  "p:01...14"
+                 :titles {:en ["Ace of Pentacles" "Two of Pentacles" "Three of Pentacles" "Four of Pentacles"
+                               "Five of Pentacles" "Six of Pentacles" "Seven of Pentacles" "Eight of Pentacles"
+                               "Nine of Pentacles" "Ten of Pentacles" "Page of Pentacles" "Knight of Pentacles"
+                               "Queen of Pentacles" "King of Pentacles"]
+                          :ru ["Туз Пентаклей" "Двойка Пентаклей" "Тройка Пентаклей" "Четвёрка Пентаклей"
+                               "Пятёрка Пентаклей" "Шестёрка Пентаклей" "Семёрка Пентаклей" "Восьмёрка Пентаклей"
+                               "Девятка Пентаклей" "Десятка Пентаклей" "Паж Пентаклей" "Рыцарь Пентаклей"
+                               "Королева Пентаклей" "Король Пентаклей"]}}]
+ "major"       [{:name  {:en "Major" :ru "Старшие Арканы"}
+                 :cards "m:00...21"}]
+ "elisium"     [{:name  {:en "Major" :ru "Старшие Арканы"}
+                 :cards "m:00...21"}
+                {:name  {:en "Major" :ru "Старшие Арканы"}
+                 :cards "n:00...21"}
+                {:name  {:en "Wands" :ru "Жезлы"}
+                 :cards "w:01...15"}
+                {:name  {:en "Cups" :ru "Кубки"}
+                 :cards "c:01...15"}
+                {:name  {:en "Swords" :ru "Мечи"}
+                 :cards "s:01...15"}
+                {:name  {:en "Pentacles" :ru "Пентакли"}
+                 :cards "p:01...15"}
+                {:name "⊕"
+                 :cards "x:01...08"}]
+ "monosov"     [{:name  {:en "Major" :ru "Старшие Арканы"}
+                 :cards "m:01...22"}
+                {:name  {:en "Wands" :ru "Жезлы"}
+                 :cards "w:01...14"}
+                {:name  {:en "Cups" :ru "Кубки"}
+                 :cards "c:01...14"}
+                {:name  {:en "Swords" :ru "Мечи"}
+                 :cards "s:01...14"}
+                {:name  {:en "Pentacles" :ru "Пентакли"}
+                 :cards "p:01...14"}]
+ "osho"        [{:name  {:en "Major" :ru "Старшие Арканы"}
+                 :cards "m:01...22"}
+                {:name  {:en "Wands" :ru "Жезлы"}
+                 :cards "w:01...14"}
+                {:name  {:en "Cups" :ru "Кубки"}
+                 :cards "c:01...14"}
+                {:name  {:en "Swords" :ru "Мечи"}
+                 :cards "s:01...14"}
+                {:name  {:en "Pentacles" :ru "Пентакли"}
+                 :cards "p:01...14"}]
+ "rocambole"   [{:name  {:en "Major" :ru "Старшие Арканы"}
+                 :cards "m:00-1,00-2,00-3,01...21"}
+                {:name  {:en "Wands" :ru "Жезлы"}
+                 :cards "w:01...16"}
+                {:name  {:en "Cups" :ru "Кубки"}
+                 :cards "c:01...16"}
+                {:name  {:en "Swords" :ru "Мечи"}
+                 :cards "s:01...16"}
+                {:name  {:en "Pentacles" :ru "Пентакли"}
+                 :cards "p:01...16"}]
+ "petrak"      [{:name  {:en "Major" :ru "Старшие Арканы"}
+                 :cards "m:00,01-1,01-2,02...21"}
+                {:name  {:en "Wands" :ru "Жезлы"}
+                 :cards "w:01...14"}
+                {:name  {:en "Cups" :ru "Кубки"}
+                 :cards "c:01...14"}
+                {:name  {:en "Swords" :ru "Мечи"}
+                 :cards "s:01...14"}
+                {:name  {:en "Pentacles" :ru "Пентакли"}
+                 :cards "p:01...14"}]
+ "inspiration" [{:name  {:en "Major" :ru "Старшие Арканы"}
+                 :cards "m:00...24"}
+                {:name  {:en "Wands" :ru "Жезлы"}
+                 :cards "w:01...15"}
+                {:name  {:en "Cups" :ru "Кубки"}
+                 :cards "c:01...15"}
+                {:name  {:en "Swords" :ru "Мечи"}
+                 :cards "s:01...15"}
+                {:name  {:en "Pentacles" :ru "Пентакли"}
+                 :cards "p:01...15"}]
+ "steele"      [{:name  {:en "Major" :ru "Старшие Арканы"}
+                 :cards "m:00...27"}
+                {:name  {:en "Wands" :ru "Жезлы"}
+                 :cards "w:01...15"}
+                {:name  {:en "Cups" :ru "Кубки"}
+                 :cards "c:01...15"}
+                {:name  {:en "Swords" :ru "Мечи"}
+                 :cards "s:01...15"}
+                {:name  {:en "Pentacles" :ru "Пентакли"}
+                 :cards "p:01...15"}]
+ "astromyth"   [{:name {:en [:span {:color "black"} ♣]}
+                 :cards "w:01...14"}
+                {:name {:en [:span {:color "red"} ♥]}
+                 :cards "c:01...14"}
+                {:name {:en [:span {:color "black"} ♠]}
+                 :cards "s:01...14"}
+                {:name {:en [:span {:color "red"} ♦]}
+                 :cards "p:01...14"}
+                {:name {:en [:span {:color "blue"} ≡]}
+                 :cards "man,woman"}]
+ "symbolon"    [{:name {:en [:span {:style {:fontSize "xx-large"}} ❂]}
+                 :cards "01...12"}
+                {:name {:en "♈"}
+                 :cards "34,35,13,24,36,37,38,39,40,41,42"
+                 :bar   :h}
+                {:name {:en "♉"}
+                 :cards "34,43,14,25,44,45,46,47,48,49,50"
+                 :bar   :h}
+                {:name {:en "♊"}
+                 :cards "35,43,15,26,51,52,53,54,55,56,57"
+                 :bar   :h}
+                {:name {:en "♋"}
+                 :cards "13,14,15,16,17,18,19,20,21,22,23"
+                 :bar   :h}
+                {:name {:en "♌"}
+                 :cards "24,25,26,16,27,28,29,30,31,32,33"
+                 :bar   :h}
+                {:name {:en "♍"}
+                 :cards "36,44,51,17,27,58,59,60,61,62,63"
+                 :bar   :h}
+                {:name {:en "♎"}
+                 :cards "37,45,52,18,28,58,64,65,66,67,68"
+                 :bar   :h}
+                {:name {:en "♏"}
+                 :cards "38,46,53,19,29,59,64,69,70,71,72"
+                 :bar   :h}
+                {:name {:en "♐"}
+                 :cards "39,47,54,20,30,60,65,69,73,74,75"
+                 :bar   :h}
+                {:name {:en "♑"}
+                 :cards "40,48,55,21,31,61,66,70,73,76,77"
+                 :bar   :h}
+                {:name {:en "♒"}
+                 :cards "41,49,56,22,32,62,67,71,74,76,78"
+                 :bar   :h}
+                {:name {:en "♓"}
+                 :cards "42,50,57,23,33,63,68,72,75,77,78"
+                 :bar   :h}]
+ "alone"       [{:cards "01...09"}
+                {:cards "10...12,12-1"}
+                {:cards "19...27"}
+                {:cards "28,28-1,29,29-1,30...36"}]
+ "roses"       [{:cards "01...09"}
+                {:cards "10...13,13-1,14...18"}
+                {:cards "19...27"}
+                {:cards "28,28-1,29,29-1,30...36"}]
+ "reverie"     [{:cards "01...10"}
+                {:cards "11,12,12-1,13...20"}
+                {:cards "21...28,28-1,29,29-1,30"}
+                {:cards "31...40"}]
+ "paracelsus"  [{:name  {:en "Major" :ru "Старшие Арканы"}
+                 :cards "m:00...21"}
+                {:name  {:en "Wands" :ru "Жезлы"}
+                 :cards "w:01...14"}
+                {:name  {:en "Cups" :ru "Кубки"}
+                 :cards "c:01...14"}
+                {:name  {:en "Swords" :ru "Мечи"}
+                 :cards "s:01...14"}
+                {:name  {:en "Pentacles" :ru "Пентакли"}
+                 :cards "p:01...14"}
+                {:name {:en [:span {:color "blue"} ≡]}
+                 :cards "a:01...09"}]
+ "roma"        [{:name {:en [:span {:color "black"} ♣]}
+                 :cards "w:01...13"}
+                {:name {:en [:span {:color "red"} ♥]}
+                 :cards "c:01...13"}
+                {:name {:en [:span {:color "black"} ♠]}
+                 :cards "s:01...13"}
+                {:name {:en [:span {:color "red"} ♦]}
+                 :cards "p:01...13"}]
+ "healing"     [{:name {:en "Conspiracy"}
+                 :cards "01...45"}
+                {:name {:en "Healing"}
+                 :cards "46...56"}
+                {:name {:en "Gift"}
+                 :cards "57...66"}
+                {:name {:en "Grace"}
+                 :cards "67...91"}]
+ "cosmic"      [{:name  {:en "Major" :ru "Старшие Арканы"}
+                 :cards "m:00...06,06-1,06-2,07...21,back-2"} ;; FIXME mback-2
+                {:name  {:en "Wands" :ru "Жезлы"}
+                 :cards "w:01...14,back-2"}
+                {:name  {:en "Cups" :ru "Кубки"}
+                 :cards "c:01...14,back-2"}
+                {:name  {:en "Swords" :ru "Мечи"}
+                 :cards "s:01...14,back-2"}
+                {:name  {:en "Pentacles" :ru "Пентакли"}
+                 :cards "p:01...14,back-2"}]
+ "futhark"     [{:name {:en "I"}
+                 :cards "01...08"}
+                {:name {:en "II"}
+                 :cards "09...16"}
+                {:name {:en "III"}
+                 :cards "17...24"}]
+ "futhark+"    [{:name {:en "I"}
+                 :cards "01...08"}
+                {:name {:en "II"}
+                 :cards "09...16"}
+                {:name {:en "III"}
+                 :cards "17...25"}]
+ "futhork"     [{:name {:en "I"}
+                 :cards "01...08"}
+                {:name {:en "II"}
+                 :cards "09...16"}
+                {:name {:en "III"}
+                 :cards "17...24"}
+                {:name {:en "IV"}
+                 :cards "25...33"}]
+ "stardust"    [{:cards "00...19"}
+                {:cards "20...39"}
+                {:cards "40...59"}
+                {:cards "60...79"}
+                {:cards "80...102"}]
+ "daniloff"    [{:name  {:en "Major" :ru "Старшие Арканы"}
+                 :cards "m:00...08,08-1,09,10,11,11-1,12...21,white"}
+                {:name  {:en "Wands" :ru "Жезлы"}
+                 :cards "w:01...14"}
+                {:name  {:en "Cups" :ru "Кубки"}
+                 :cards "c:01...14"}
+                {:name  {:en "Swords" :ru "Мечи"}
+                 :cards "s:01...14"}
+                {:name  {:en "Pentacles" :ru "Пентакли"}
+                 :cards "p:01...14"}]
+ "maroon"      [{:name  {:en "Major" :ru "Старшие Арканы"}
+                 :cards "m:00...22"}
+                {:name  {:en "Wands" :ru "Жезлы"}
+                 :cards "w:01...14"}
+                {:name  {:en "Cups" :ru "Кубки"}
+                 :cards "c:01...14"}
+                {:name  {:en "Swords" :ru "Мечи"}
+                 :cards "s:01...14"}
+                {:name  {:en "Pentacles" :ru "Пентакли"}
+                 :cards "p:01...14"}]
+ "akron"       [{:name  {:en "Major" :ru "Старшие Арканы"}
+                 :cards "m:00...23"}
+                {:name  {:en "Wands" :ru "Жезлы"}
+                 :cards "w:01...14"}
+                {:name  {:en "Cups" :ru "Кубки"}
+                 :cards "c:01...14"}
+                {:name  {:en "Swords" :ru "Мечи"}
+                 :cards "s:01...14"}
+                {:name  {:en "Pentacles" :ru "Пентакли"}
+                 :cards "p:01...14"}]
+ "sangre"      [{:name  {:en "Major" :ru "Старшие Арканы"}
+                 :cards "m:00...11,11-2,12...24"}
+                {:name  {:en "Wands" :ru "Жезлы"}
+                 :cards "w:01...14"}
+                {:name  {:en "Cups" :ru "Кубки"}
+                 :cards "c:01...14"}
+                {:name  {:en "Swords" :ru "Мечи"}
+                 :cards "s:01...14"}
+                {:name  {:en "Pentacles" :ru "Пентакли"}
+                 :cards "p:01...14"}]
+ "alice"       [{:name  {:en "Major" :ru "Старшие Арканы"}
+                 :cards "m:00...06,06-1,07...21"}
+                {:name  {:en "Wands" :ru "Жезлы"}
+                 :cards "w:01...07,07-1,08...14"}
+                {:name  {:en "Cups" :ru "Кубки"}
+                 :cards "c:01...14"}
+                {:name  {:en "Swords" :ru "Мечи"}
+                 :cards "s:01...14"}
+                {:name  {:en "Pentacles" :ru "Пентакли"}
+                 :cards "p:01...14"}]
+ "chairs"      [{:name  {:en "Major" :ru "Старшие Арканы"}
+                 :cards "m:00...23"}
+                {:name  {:en "Wands" :ru "Жезлы"}
+                 :cards "w:01...14"}
+                {:name  {:en "Cups" :ru "Кубки"}
+                 :cards "c:01...14"}
+                {:name  {:en "Swords" :ru "Мечи"}
+                 :cards "s:01...14"}
+                {:name  {:en "Pentacles" :ru "Пентакли"}
+                 :cards "p:01...14"}]
+ "soulbreath"  [{:name  {:en "Major" :ru "Старшие Арканы"}
+                 :cards "m:00,01,01-1,02,03,03-1,04...11,11-1,12...15,15-1,16...21"}
+                {:name  {:en "Wands" :ru "Жезлы"}
+                 :cards "w:01...14"}
+                {:name  {:en "Cups" :ru "Кубки"}
+                 :cards "c:01...14"}
+                {:name  {:en "Swords" :ru "Мечи"}
+                 :cards "s:01...14"}
+                {:name  {:en "Pentacles" :ru "Пентакли"}
+                 :cards "p:01...14"}]}
