@@ -5,7 +5,7 @@
 
 (defn suit-selector [{:keys [sub emit]}]
   [:div.pure-menu
-   {:style {:width "150px"
+   {:style {:width 150
             :margin-right "1rem"}}
    [:ul.pure-menu-list
     (let [lang @(sub [:lang/code])
@@ -38,7 +38,7 @@
                      (emit [:card/add {:deck deck :suit suit :index index}]))}
         [:img
          {:src src
-          :style {:width 64}}]]))])
+          :style {:height 120}}]]))])
 
 (defn view [{:keys [sub emit] :as ctx}]
   [:div
