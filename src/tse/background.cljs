@@ -38,9 +38,11 @@
 
 (defn init-bg [{:keys [emit] :as ctx} *node]
   (fn [node]
-    (when node
-      (make-popup-menu ctx node))
-    (reset! *node node)))
+    (when (not= node @*node)
+      (if node
+        (make-popup-menu ctx node)
+        (js/console.log "FIXME Dispose popup menu"))
+      (reset! *node node))))
 
 (defn grid-css [grid]
   (str/format "repeating-linear-gradient(0deg,transparent,transparent %(step)spx,#CCC %(step)spx,#CCC calc(%(step)spx + 1px)),repeating-linear-gradient(-90deg,transparent,transparent %(step)spx,#CCC %(step)spx,#CCC calc(%(step)spx + 1px))" grid))

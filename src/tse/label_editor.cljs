@@ -19,28 +19,38 @@
                                    #js [#js {:color #js []} #js {:background #js []}]
                                    #js ["clean"]]}})
 
-(defn init-editor [{:keys [sub emit]}]
+(defn init-editor [{:keys [sub emit]} *node]
   (fn [node]
-    (when node
-      (emit [:label-editor/set-editor (js/Quill. node editor-options)]))))
+    (when (not= node @*node)
+      (if node
+        (emit [:label-editor/set-editor (js/Quill. node editor-options)])
+        (js/console.log "FIXME Dispose Quill"))
+      (reset! *node node))))
 
 (defn content-editor [ctx]
-  [:div
-   {:ref (init-editor ctx)}])
+  (let [node (atom nil)]
+    (fn [ctx]
+      [:div
+       {:ref (init-editor ctx node)}])))
 
-(defn init-dialog [{:keys [sub emit] :as ctx} dialog]
+(defn init-dialog [{:keys [sub emit] :as ctx} dialog *node]
   (fn [node]
-    (if node
-      (reset! dialog
-              (tse.dialog/make {:visible? (sub [:label-editor/visible?])
-                                :title (sub [:t :label-editor/title "Label"])
-                                :view [content-editor ctx]
-                                :handlers {"ok" #(emit [:label-editor/save])
-                                           "cancel" #(emit [:label-editor/cancel])}}))
-      (do
-        (.dispose @dialog)
-        (reset! dialog nil)))))
+    (when (not= node @*node)
+      (if node
+        (reset! dialog
+                (tse.dialog/make {:visible? (sub [:label-editor/visible?])
+                                  :title (sub [:t :label-editor/title "Label"])
+                                  :view [content-editor ctx]
+                                  :handlers {"ok" #(emit [:label-editor/save])
+                                             "cancel" #(emit [:label-editor/cancel])}}))
+        (do
+          (.dispose @dialog)
+          (reset! dialog nil)))
+      (reset! *node node))))
 
 (defn view [ctx]
-  [:div
-   {:ref (init-dialog ctx (atom nil))}])
+  (let [dialog (atom nil)
+        node   (atom nil)]
+    (fn [ctx]
+      [:div
+       {:ref (init-dialog ctx dialog node)}])))

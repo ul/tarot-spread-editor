@@ -5,7 +5,7 @@
             tse.menu))
 
 (defn view [ctx id]
-  (let [ref (tse.transformer/make-interact ctx)]
+  (let [ref (tse.transformer/make-interact ctx (atom nil))]
     (fn [{:keys [sub emit] :as ctx} id]
       (let [{[x y] :origin
              [w h] :dimensions

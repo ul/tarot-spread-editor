@@ -4,7 +4,7 @@
             [tse.transformer :as trans]))
 
 (defn view [ctx id]
-  (let [ref (trans/make-interact ctx)]
+  (let [ref (trans/make-interact ctx (atom nil))]
     (fn [{:keys [sub emit] :as ctx} id]
       (let [{:keys [src angle z-index]
              [x y] :origin

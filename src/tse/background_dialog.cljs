@@ -4,16 +4,18 @@
            goog.ui.Tab
            goog.ui.Component.EventType))
 
-(defn init-tab-bar [{:keys [emit]}]
+(defn init-tab-bar [{:keys [emit]} *node]
   (fn [node]
-    (if node
-      (let [bar (goog.ui.TabBar.)]
-        (doto bar
-          (.decorate node)
-          (.listen goog.ui.Component.EventType.SELECT
-                   (fn [e]
-                     (emit [:background-dialog/select-tab (.. e -target getElement  -dataset -tab)])))))
-      (js/console.log "FIXME Dispose TabBar!"))))
+    (when (not= node @*node)
+      (if node
+        (let [bar (goog.ui.TabBar.)]
+          (doto bar
+            (.decorate node)
+            (.listen goog.ui.Component.EventType.SELECT
+                     (fn [e]
+                       (emit [:background-dialog/select-tab (.. e -target getElement  -dataset -tab)])))))
+        (js/console.log "FIXME Dispose TabBar"))
+      (reset! *node node))))
 
 (defn link-widget [{:keys [emit]}]
   [:div.pure-form
@@ -44,7 +46,7 @@
      :style {:width "100%"}}]])
 
 (defn background-dialog [ctx]
-  (let [ref (init-tab-bar ctx)]
+  (let [ref (init-tab-bar ctx (atom nil))]
     (fn [{:keys [sub]}]
       (let [tab @(sub [:background-dialog/tab])]
         [:div
@@ -71,19 +73,24 @@
             "color" [color-widget ctx]
             nil)]]))))
 
-(defn init [{:keys [sub emit] :as ctx} dialog]
+(defn init [{:keys [sub emit] :as ctx} dialog *node]
   (fn [node]
-    (if node
-      (reset! dialog
-              (tse.dialog/make {:visible? (sub [:background-dialog/visible?])
-                                :title (sub [:t :background-dialog/title "Background"])
-                                :view [background-dialog ctx]
-                                :handlers {"ok" #(emit [:background-dialog/save])
-                                           "cancel" #(emit [:background-dialog/cancel])}}))
-      (do
-        (.dispose @dialog)
-        (reset! dialog nil)))))
+    (when (not= node @*node)
+      (if node
+        (reset! dialog
+                (tse.dialog/make {:visible? (sub [:background-dialog/visible?])
+                                  :title (sub [:t :background-dialog/title "Background"])
+                                  :view [background-dialog ctx]
+                                  :handlers {"ok" #(emit [:background-dialog/save])
+                                             "cancel" #(emit [:background-dialog/cancel])}}))
+        (do
+          (.dispose @dialog)
+          (reset! dialog nil)))
+      (reset! *node node))))
 
 (defn view [ctx]
-  [:div
-   {:ref (init ctx (atom nil))}])
+  (let [dialog (atom nil)
+        node   (atom nil)]
+    (fn [ctx]
+      [:div
+       {:ref (init ctx dialog node)}])))

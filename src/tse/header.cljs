@@ -22,7 +22,7 @@
   {:width "5em"
    :background "#2d3e50"
    :color "#6fbef3"})
-   
+
 (def item-style
   {:display "flex"
    :align-items "center"})

@@ -8,44 +8,50 @@
 (set! *warn-on-infer* true)
 
 ;; memoize?
-(defn make-interact [{:keys [emit sub]}]
+(defn make-interact [{:keys [emit sub]} *node]
   (fn [node]
-    (when node
-      (let [^js/Interactable interact (js/window.interact node)]
-        (doto interact
-          (.draggable #js {:inertia false
-                           :autoScroll true
-                           :onmove (fn [^js/InteractEvent e]
-                                     (emit [:transformer/move [(.-dx e) (.-dy e)]]))})
-          (.resizable #js {:preserveAspectRatio true
-                           :edges #js {:left true :top true :right true :bottom true}
-                           :onmove (fn [^js/InteractEvent e]
-                                     (emit [:transformer/resize (.-rect e) (.-deltaRect e)]))}))
-        (let [grid (sub [:config/grid])]
-          ;; FIXME leak
-          (add-watch grid interact
-                     (fn [_ _ _ {:keys [snap? step]}]
-                       (if (.. interact -_element -parentNode)
-                         (.draggable interact
-                                     #js {:snap (if snap?
-                                                  #js {:targets #js [(js/window.interact.createSnapGrid #js {:x step :y step})]
-                                                       :range js/Infinity
-                                                       :relativePoints #js [#js {:x 0 :y 0}]}
-                                                  nil)})
-                         (remove-watch grid interact)))))))))
+    (when (not= node @*node)
+      (if node
+        (let [^js/Interactable interact (js/window.interact node)]
+          (doto interact
+            (.draggable #js {:inertia false
+                             :autoScroll true
+                             :onmove (fn [^js/InteractEvent e]
+                                       (emit [:transformer/move [(.-dx e) (.-dy e)]]))})
+            (.resizable #js {:preserveAspectRatio true
+                             :edges #js {:left true :top true :right true :bottom true}
+                             :onmove (fn [^js/InteractEvent e]
+                                       (emit [:transformer/resize (.-rect e) (.-deltaRect e)]))}))
+          (let [grid (sub [:config/grid])]
+            ;; FIXME leak
+            (add-watch grid interact
+                       (fn [_ _ _ {:keys [snap? step]}]
+                         (if (.. interact -_element -parentNode)
+                           (.draggable interact
+                                       #js {:snap (if snap?
+                                                    #js {:targets #js [(js/window.interact.createSnapGrid #js {:x step :y step})]
+                                                         :range js/Infinity
+                                                         :relativePoints #js [#js {:x 0 :y 0}]}
+                                                    nil)})
+                           (remove-watch grid interact))))))
+        (js/console.log "FIXME: Dispose Interactable"))
+      (reset! *node node))))
 
 ;; memoize?
-(defn make-rotator [{:keys [emit]}]
+(defn make-rotator [{:keys [emit]} *node]
   (fn [node]
-    (when node
-      (let [^js/Interactable interact (js/window.interact node)]
-        (.draggable interact #js {:inertia false
-                                  :onmove (fn [^js/InteractEvent e] (emit [:transformer/rotate [(.-dx e) (.-dy e)]]))
-                                  :onend #(emit [:transformer/end-rotation])})))))
+    (when (not= node @*node)
+      (if node
+        (let [^js/Interactable interact (js/window.interact node)]
+          (.draggable interact #js {:inertia false
+                                    :onmove (fn [^js/InteractEvent e] (emit [:transformer/rotate [(.-dx e) (.-dy e)]]))
+                                    :onend #(emit [:transformer/end-rotation])}))
+        (js/console.log "FIXME: Dispose Interactable"))
+      (reset! *node node))))
 
 (defn view [ctx]
-  (let [rotator-ref (make-rotator ctx)
-        interact-ref (make-interact ctx)]
+  (let [rotator-ref (make-rotator ctx (atom nil))
+        interact-ref (make-interact ctx (atom nil))]
     (fn [{:keys [sub emit] :as ctx}]
       [:div
        (when-not (empty? @(sub [:item/selected]))
