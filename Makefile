@@ -5,5 +5,5 @@ publish:
 	cp -a resources/public/* ./
 	git add .
 	git commit -m "up"
-	git push
+	git push -f
 	git checkout master
