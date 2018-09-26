@@ -56,7 +56,7 @@
   (snap-nearby x rotation-snap rotation-snap-threshold))
 
 (def resize-snap 10)
-(def resize-snap-threshold 2)
+(def resize-snap-threshold 1)
 (defn snap-resize [[x y]]
   (let [y' (snap-nearby y resize-snap resize-snap-threshold)]
     [(/ (* y' x) y) y']))

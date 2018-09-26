@@ -16,8 +16,9 @@
 (defn remove-selected [{:keys [db]}]
   (swap! db update :items (fn [items] (filterv #(not (get % :selected?)) items))))
 
-(defn remove-all [{:keys [db]}]
-  (swap! db assoc :items []))
+(defn remove-all [{:keys [db sub]}]
+  (when (js/confirm @(sub [:t :toolbar/remove-all-confirmation]))
+    (swap! db assoc :items [])))
 
 (defn unselect-all [{db :db}]
   (swap! db update :items update-selected assoc :selected? false))

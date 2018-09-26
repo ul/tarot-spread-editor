@@ -20,7 +20,8 @@
                 :reversible? "reversible?"
                 :reversible?-hint "Allow random card to be upside down"}
         :toolbar {:remove-selected "Remove selected"
-                  :remove-all "Remove all"}
+                  :remove-all "Remove all"
+                  :remove-all-confirmation "Are you sure to clean canvas?"}
         :canvas {:scale "Scale"}
         :deck-search {:placeholder "Select a deck..."
                       :hint "Start typing deck name (at least 3 letters)"}
@@ -42,7 +43,8 @@
                 :reversible? "с перевёрнутыми?"
                 :reversible?-hint "Иногда переворачивать случайную карту"}
         :toolbar {:remove-selected "Удалить выбранные"
-                  :remove-all "Удалить всё"}
+                  :remove-all "Удалить всё"
+                  :remove-all-confirmation "Вы действительно хотите очистить холст?" }
         :canvas {:scale "Масштаб"}
         :deck-search {:placeholder "Выберите колоду..."
                       :hint "Начните набирать название колоды (минимум 3 буквы)"}
