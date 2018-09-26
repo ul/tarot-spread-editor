@@ -21,7 +21,8 @@
         content (->> html
                      hickory.core/parse-fragment
                      (map hickory.core/as-hiccup))
-        dimensions (tse.utils/measure-html html)
+        ;; extra pixel to prevent accidental word wrap
+        dimensions (mapv inc (tse.utils/measure-html html))
         quill-content (.getContents editor)]
     (swap! db update :label-editor assoc :visible? false :id nil)
     (emit [(if id :label/update :label/add)
