@@ -11,7 +11,7 @@
         w (.-width rect)
         dw (.-width deltaRect)
         dd (/ w (- w dw))]
-    (swap! db update :items update-selected update :dimensions #(math/snap-resize (math/v* % dd)))))
+    (swap! db update :items update-selected update :dimensions #(math/v* % dd))))
 
 (defn rotate [{:keys [sub db], [dv] :args}]
   (let [{[x y] :origin
