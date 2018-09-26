@@ -44,7 +44,7 @@
                 :reversible?-hint "Иногда переворачивать случайную карту"}
         :toolbar {:remove-selected "Удалить выбранные"
                   :remove-all "Удалить всё"
-                  :remove-all-confirmation "Вы действительно хотите очистить холст?" }
+                  :remove-all-confirmation "Вы действительно хотите очистить холст?"}
         :canvas {:scale "Масштаб"}
         :deck-search {:placeholder "Выберите колоду..."
                       :hint "Начните набирать название колоды (минимум 3 буквы)"}
