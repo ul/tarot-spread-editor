@@ -4,6 +4,7 @@
 
 (def dictionary
   {:en {:app {:title "Tarot Spread Editor"
+              :disclaimer "Disclaimer"
               :contact "Contact us"}
         :lang {:switch "Switch language"}
         :menu {:show-grid? "Show grid?"
@@ -27,6 +28,7 @@
                       :hint "Start typing deck name (at least 3 letters)"}
         :label-editor {:title "Label"}}
    :ru {:app {:title "Редактор Раскладов"
+              :disclaimer "Отказ от ответственности"
               :contact "Связаться с нами"}
         :lang {:switch "Переключить язык"}
         :menu {:show-grid? "Показать сетку?"
