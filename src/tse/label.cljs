@@ -1,5 +1,6 @@
 (ns tse.label
-  (:require [cuerdas.core :as str]
+  (:require [goog.labs.userAgent.browser :as browser]
+            [cuerdas.core :as str]
             [carbon.rx :as rx :include-macros true]
             tse.transformer
             tse.menu))
@@ -27,8 +28,8 @@
            :height h}
           :ref ref
           ;; NOTE mousedown is not fired in Firefox and pointerdown in Safari for somewhat reason
-          :on-mousedown on-mousedown
-          :on-pointerdown on-mousedown}
+          :on-mousedown (when-not (browser/isFirefox) on-mousedown)
+          :on-pointerdown (when (browser/isFirefox) on-mousedown)}
          [:div
           {:style
            {:transform (str/format "scale(%s)" (/ w w0))
