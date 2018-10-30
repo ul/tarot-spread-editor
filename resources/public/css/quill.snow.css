@@ -909,3 +909,7 @@
 .ql-container.ql-snow {
   border: 1px solid #ccc;
 }
+
+.ql-editor {
+    font-size: 36px;
+}
