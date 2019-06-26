@@ -15,23 +15,8 @@
     <title>Tarot Spread Editor</title>
     <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">
     <link rel=\"stylesheet\" href=\"https://unpkg.com/purecss@0.6.2/build/pure-min.css\" integrity=\"sha384-UQiGfs9ICog+LwheBSRCt1o5cbyKIHbwjWscjemyBMT9YCUMZffs6UqUTd0hObXD\" crossorigin=\"anonymous\">
-    <style>
-      * {
-        box-sizing: border-box;
-      }
-
-      body {
-          display: flex;
-          font-family: 'PT Sans', sans-serif;
-      }
-
-      #app {
-          display: flex;
-          flex-direction: column;
-          flex: 1;
-      }
-    </style>
     <style>"
+       (m/include "resources/public/css/style.css")
        (m/include "resources/public/css/quill.snow.css")
        "</style>
 </head>
