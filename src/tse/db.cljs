@@ -5,7 +5,7 @@
   (rx/cell
    {:decks {}
     :suitcases {}
-    :deck-base-url "http://editor.mantike.pro/decks/"
+    :deck-base-url "http://decks.mantike.pro/"
     :lang :en
     :active-deck "RiderWaiteTarot"
     :active-suit 0

@@ -42,7 +42,7 @@
            blob (new js/Blob
                      #js [content]
                      #js {:type mime-type})]
-       (.. (js/fetch "http://185.26.97.202:43691" #js {
+       (.. (js/fetch "http://html-render-service.mantike.pro:43691" #js {
              :method "POST"
              :headers #js {
                "Content-Type" "application/json; charset=utf-8"
