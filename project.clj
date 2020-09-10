@@ -6,7 +6,7 @@
 
   :min-lein-version "2.7.1"
 
-  :dependencies [[org.clojure/clojure "1.10.0-alpha8"]
+  :dependencies [[org.clojure/clojure "1.10.1"]
                  [org.clojure/clojurescript "1.10.339"]
                  [instaparse "1.4.9"]
                  [com.cognitect/transit-clj "0.8.313"]
@@ -122,5 +122,6 @@
                    ;; need to add dev source path here to get user.clj loaded
                    :source-paths ["src" "dev"]
                    ;; for CIDER
-                   :plugins [[cider/cider-nrepl "0.18.0"]]
-                   :repl-options {:nrepl-middleware [cemerick.piggieback/wrap-cljs-repl]}}})
+                   ;; :plugins [[cider/cider-nrepl "0.18.0"]]
+                   ;; :repl-options {:nrepl-middleware [cemerick.piggieback/wrap-cljs-repl]}
+                   }})

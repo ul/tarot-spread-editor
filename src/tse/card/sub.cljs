@@ -25,7 +25,7 @@
            {:keys [suitcase format] deck-src :src}      @(sub [:deck/entity deck])
            src                                          (get-in
                                                          @(sub [:suitcase/entity suitcase])
-                                                         [:suits suit :cards index])
+                                                         [:suits suit :cards index] "back")
            src                                          (str @base-url deck-src "/" src "." format)]
        (assoc item :src src)))))
 
