@@ -14,7 +14,7 @@
   #js {:theme "snow"
        :formats #js ["font" "size" "bold" "italic" "underline" "strike" "color" "background"]
        :modules #js {:toolbar #js [#js [#js {:font #js []}]
-                                   #js [#js {:size #js []}]
+                                   #js [#js {:size #js ["40px" "50px" "70px" "90px" "100px"]}]
                                    #js ["bold" "italic" "underline" "strike"]
                                    #js [#js {:color #js []} #js {:background #js []}]
                                    #js ["clean"]]}})
