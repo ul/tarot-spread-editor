@@ -68,6 +68,9 @@
                         selector-box)))
               items)))))
 
+(defn shift-mode [{:keys [db], [shift-mode?] :args}]
+  (swap! db assoc-in [:transformer :shift-mode?] shift-mode?))
+
 (def spec
   {:transformer/move move
    :transformer/resize resize
@@ -75,4 +78,5 @@
    :transformer/end-rotation end-rotation
    :transformer/start-selection start-selection
    :transformer/move-selection move-selection
-   :transformer/end-selection end-selection})
+   :transformer/end-selection end-selection
+   :transformer/shift-mode shift-mode})

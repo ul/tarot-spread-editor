@@ -14,5 +14,9 @@
          :angle 0}
         @trans)))))
 
+(defn shift-mode? [{:keys [sub db]}]
+  (rx/rx (get @(sub [:transformer/entity]) :shift-mode?)))
+
 (def spec
-  {:transformer/entity get-entity})
+  {:transformer/entity get-entity
+   :transformer/shift-mode? shift-mode?})

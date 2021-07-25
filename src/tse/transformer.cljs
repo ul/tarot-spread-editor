@@ -9,33 +9,41 @@
 
 ;; memoize?
 (defn make-interact [{:keys [emit sub]} *node]
-  (fn [node]
-    (when (not= node @*node)
-      (if node
-        (let [^js/Interactable interact (js/window.interact node)]
-          (doto interact
-            (.draggable #js {:inertia false
+  (let [grid (sub [:config/grid])
+        shift-mode? (sub [:transformer/shift-mode?])]
+    (fn [node]
+      (when (not= node @*node)
+        (if node
+          (do
+            (.draggable ^js/Interactable (js/window.interact node)
+                        #js {:inertia false
                              :autoScroll true
                              :onmove (fn [^js/InteractEvent e]
                                        (emit [:transformer/move [(.-dx e) (.-dy e)]]))})
-            (.resizable #js {:preserveAspectRatio true
-                             :edges #js {:left true :top true :right true :bottom true}
-                             :onmove (fn [^js/InteractEvent e]
-                                       (emit [:transformer/resize (.-rect e) (.-deltaRect e)]))}))
-          (let [grid (sub [:config/grid])]
-            ;; FIXME leak
-            (add-watch grid interact
+            (add-watch shift-mode? :shift-mode?
+                       (fn [_ _ _ shift-mode?]
+                         (print "resz" shift-mode?)
+                         (.resizable ^js/Interactable (js/window.interact node)
+                                     (if shift-mode?
+                                       #js {:preserveAspectRatio true
+                                            :edges #js {:left true :top true :right true :bottom true}
+                                            :onmove (fn [^js/InteractEvent e]
+                                                      (emit [:transformer/resize (.-rect e) (.-deltaRect e)]))}
+                                       false))))
+            (add-watch grid :transformer
                        (fn [_ _ _ {:keys [snap? step]}]
-                         (if (.. interact -_element -parentNode)
-                           (.draggable interact
+                         (if (.. ^js/Interactable (js/window.interact node) -_element -parentNode)
+                           (.draggable ^js/Interactable (js/window.interact node)
                                        #js {:snap (if snap?
                                                     #js {:targets #js [(js/window.interact.createSnapGrid #js {:x step :y step})]
                                                          :range js/Infinity
                                                          :relativePoints #js [#js {:x 0 :y 0}]}
-                                                    nil)})
-                           (remove-watch grid interact))))))
-        (js/console.log "FIXME: Dispose Interactable"))
-      (reset! *node node))))
+                                                    nil)})))))
+          (do
+            (remove-watch shift-mode? :shift-mode?)
+            (remove-watch grid :transformer)
+            (js/console.log "FIXME: Dispose Interactable")))
+        (reset! *node node)))))
 
 ;; memoize?
 (defn make-rotator [{:keys [emit]} *node]
@@ -49,9 +57,13 @@
         (js/console.log "FIXME: Dispose Interactable"))
       (reset! *node node))))
 
-(defn view [ctx]
+(defn view [{:keys [sub emit] :as ctx}]
   (let [rotator-ref (make-rotator ctx (atom nil))
         interact-ref (make-interact ctx (atom nil))]
+    (.addEventListener js/window "keydown"
+                       (fn [^js/Event e] (when (.-shiftKey e) (emit [:transformer/shift-mode true]))))
+    (.addEventListener js/window "keyup"
+                       #(emit [:transformer/shift-mode false]))
     (fn [{:keys [sub emit] :as ctx}]
       [:div
        (when-not (empty? @(sub [:item/selected]))
@@ -88,17 +100,18 @@
                :background-color "rgba(128,128,128,0.1)"
                :border "2px solid rgba(128,128,128,0.5)"}
               :on-dblclick #(emit [:item/edit])}
-             [:button.pure-button
-              {:style {:width 24
-                       :height 24
-                       :font-size 12
-                       :padding 0
-                       :color "red"
-                       :background-color "rgba(128,128,128,0.8)"
-                       :position "relative"
-                       :left (- w 28)}
-               :on-click #(emit [:item/remove-selected])}
-              [:i.fa.fa-times]]]]))
+             (when @(sub [:transformer/shift-mode?])
+               [:button.pure-button
+                {:style {:width 24
+                         :height 24
+                         :font-size 12
+                         :padding 0
+                         :color "red"
+                         :background-color "rgba(128,128,128,0.8)"
+                         :position "relative"
+                         :left (- w 28)}
+                 :on-click #(emit [:item/remove-selected])}
+                [:i.fa.fa-times]])]]))
        ;; FIXME move calc to sub
        (let [{{:keys [start end offset]} :selector} @(sub [:transformer/entity])
              scale @(sub [:canvas/scale])]
