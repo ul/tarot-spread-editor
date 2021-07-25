@@ -42,15 +42,10 @@
            blob (new js/Blob
                      #js [content]
                      #js {:type mime-type})]
-       (.. (js/fetch "http://html-render-service.mantike.pro:43691" #js {
-             :method "POST"
-             :headers #js {
-               "Content-Type" "application/json; charset=utf-8"
-             }
-             :body (js/JSON.stringify #js {
-               :filename filename
-               :html content
-             })})
+       (.. (js/fetch "http://html-render-service.mantike.pro:43691" #js {:method "POST"
+                                                                         :headers #js {"Content-Type" "application/json; charset=utf-8"}
+                                                                         :body (js/JSON.stringify #js {:filename filename
+                                                                                                       :html content})})
            (then #(. % blob))
            (then #(js/saveAs % filename))
            (catch #(.. js/window (alert "Download failed.")))

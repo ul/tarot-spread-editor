@@ -1,5 +1,3 @@
 (ns tse.share.sub)
 
-(def spec {
-  :share/in-progress [:share/in-progress]
-})
+(def spec {:share/in-progress [:share/in-progress]})
