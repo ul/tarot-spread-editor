@@ -6,21 +6,21 @@
 
   :min-lein-version "2.7.1"
 
-  :dependencies [[org.clojure/clojure "1.10.1"]
-                 [org.clojure/clojurescript "1.10.339"]
-                 [instaparse "1.4.9"]
-                 [com.cognitect/transit-clj "0.8.313"]
-                 [com.cognitect/transit-cljs "0.8.256"]
+  :dependencies [[org.clojure/clojure "1.12.0-alpha1"]
+                 [org.clojure/clojurescript "1.11.60"]
+                 [instaparse "1.4.12"]
+                 [com.cognitect/transit-clj "1.0.329"]
+                 [com.cognitect/transit-cljs "0.8.280"]
                  [carbon "0.3.0-SNAPSHOT"]
-                 [com.taoensso/tempura "1.2.1"]
-                 [funcool/cuerdas "2.0.6"]
+                 [com.taoensso/tempura "1.3.0"]
+                 [funcool/cuerdas "2022.06.16-403"]
                  [cljsjs/interact "1.2.8-0"]
                  [cljsjs/filesaverjs "1.3.3-0"]
                  [hickory "0.7.1"]]
 
-  :plugins [[lein-figwheel "0.5.16"]
-            [lein-cljfmt "0.6.1"]
-            [lein-cljsbuild "1.1.7" :exclusions [[org.clojure/clojure]]]]
+  :plugins [[lein-figwheel "0.5.20"]
+            [lein-cljfmt "0.8.2"]
+            [lein-cljsbuild "1.1.8" :exclusions [[org.clojure/clojure]]]]
 
   :source-paths ["src"]
 
@@ -116,8 +116,8 @@
   ;; https://github.com/bhauman/lein-figwheel/wiki/Using-the-Figwheel-REPL-within-NRepl
 
 
-  :profiles {:dev {:dependencies [[binaryage/devtools "0.9.10"]
-                                  [figwheel-sidecar "0.5.16"]
+  :profiles {:dev {:dependencies [[binaryage/devtools "1.0.6"]
+                                  [figwheel-sidecar "0.5.20"]
                                   [com.cemerick/piggieback "0.2.2"]]
                    ;; need to add dev source path here to get user.clj loaded
                    :source-paths ["src" "dev"]
