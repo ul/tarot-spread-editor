@@ -2356,8 +2356,8 @@
   :suitcase "futhork",
   :format   "png",
   :back     false,
-  :width    245,
-  :height   360}
+  :width    183,
+  :height   180}
  {:name    {:en "Archetypes and Shadows", :ru "Архетипы и Тени"},
   :src      "ArchetypesAndShadows",
   :suitcase 90,
