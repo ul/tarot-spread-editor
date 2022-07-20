@@ -51,8 +51,8 @@
                            :externs ["resources/libs/quill/common/quill.ext.js"]
                            :infer-externs true
                            :source-map-timestamp true
-                           :language-in :ecmascript5
-                           :language-out :ecmascript5
+                           :language-in :ecmascript-next
+                           :language-out :ecmascript-next
                            ;; To console.log CLJS data-structures make sure you enable devtools in Chrome
                            ;; https://github.com/binaryage/cljs-devtools
                            :preloads [devtools.preload]}}
@@ -71,8 +71,8 @@
                            :infer-externs true
                            :elide-asserts true
                            :pretty-print false
-                           :language-in :ecmascript5
-                           :language-out :ecmascript5
+                           :language-in :ecmascript-next
+                           :language-out :ecmascript-next
                            ;; :pretty-print true
                            ;; :pseudo-names true
 }}]}
