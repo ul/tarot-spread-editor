@@ -22,7 +22,6 @@
                                        (emit [:transformer/move [(.-dx e) (.-dy e)]]))})
             (add-watch shift-mode? :shift-mode?
                        (fn [_ _ _ shift-mode?]
-                         (print "resz" shift-mode?)
                          (.resizable ^js/Interactable (js/window.interact node)
                                      (if shift-mode?
                                        #js {:preserveAspectRatio true
