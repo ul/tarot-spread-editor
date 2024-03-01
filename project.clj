@@ -15,7 +15,6 @@
                  [com.taoensso/tempura "1.3.0"]
                  [funcool/cuerdas "2022.06.16-403"]
                  [cljsjs/interact "1.2.8-0"]
-                 [cljsjs/filesaverjs "1.3.3-0"]
                  [hickory "0.7.1"]]
 
   :plugins [[lein-figwheel "0.5.20"]

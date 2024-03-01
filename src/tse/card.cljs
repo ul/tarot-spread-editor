@@ -31,6 +31,4 @@
            :zIndex z-index
            :height h}
           :on-load on-load
-          ;; NOTE mousedown is not fired in Firefox and pointerdown in Safari for somewhat reason
-          :on-mousedown (when-not (browser/isFirefox) on-mousedown)
-          :on-pointerdown (when (browser/isFirefox) on-mousedown)}]))))
+          :on-mousedown on-mousedown}]))))

@@ -9,7 +9,6 @@
         :lang {:switch "Switch language"}
         :menu {:show-grid? "Show grid?"
                :snap-grid? "Snap to grid?"
-               :download "Download"
                :add-label "Add label"
                :set-background "Set background"}
         :background-dialog {:tabs {:color "Color"
@@ -33,7 +32,6 @@
         :lang {:switch "Переключить язык"}
         :menu {:show-grid? "Показать сетку?"
                :snap-grid? "Прилипать к сетке?"
-               :download "Скачать"
                :add-label "Добавить ярлык"
                :set-background "Выбрать фон"}
         :background-dialog {:tabs {:color "Заливка"

@@ -15,10 +15,6 @@
                              :checked? (sub [:config/snap-grid?])
                              :action #(emit [:config/toggle-grid-snap (.isChecked %)])}))
 
-(defn download-menu-item [{:keys [sub emit]}]
-  (tse.menu/make-item {:content (sub [:t :menu/download "Download"])
-                       :action #(emit [:share/download])}))
-
 (defn add-label-menu-item [{:keys [sub emit]}]
   (tse.menu/make-item {:content (sub [:t :menu/add-label "Add label"])
                        :action #(emit [:label-editor/new])}))
@@ -31,7 +27,6 @@
   (tse.menu/make-popup
    [(show-grid-menu-item ctx)
     (snap-grid-menu-item ctx)
-    (download-menu-item ctx)
     (add-label-menu-item ctx)
     (set-background-menu-item ctx)]
    node

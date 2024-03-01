@@ -14,4 +14,5 @@
     :items []
     :background-dialog {:tab "color"
                         :color "#ffffff"}
-    :background {:origin [0 0]}}))
+    :background {:origin [0 0]}
+    :loaded? false}))

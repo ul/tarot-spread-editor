@@ -6,7 +6,6 @@
         scale @(sub [:canvas/scale])
         x (-> mx (- (.-scrollX js/window) (.-x canvas)) (/ scale))
         y (-> my (- (.-scrollY js/window) (.-y canvas)) (/ scale))]
-    (js/console.log canvas mx my (.-scrollX js/window) scale x y)
     (swap! db update :items
            (fn [items]
              (conj (mapv #(assoc % :selected? false) items)

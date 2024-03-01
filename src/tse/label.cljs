@@ -27,9 +27,7 @@
            :width w
            :height h}
           :ref ref
-          ;; NOTE mousedown is not fired in Firefox and pointerdown in Safari for somewhat reason
-          :on-mousedown (when-not (browser/isFirefox) on-mousedown)
-          :on-pointerdown (when (browser/isFirefox) on-mousedown)}
+          :on-mousedown on-mousedown}
          [:div
           {:style
            {:transform (str/format "scale(%s)" (/ w w0))

@@ -9,3 +9,5 @@ figwheel_server.log
 decks.coffee
 suitcases.coffee
 /checkouts
+.DS_Store
+/.rebel_readline_history
