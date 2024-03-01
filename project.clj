@@ -1,6 +1,6 @@
 (defproject tse "0.1.0-SNAPSHOT"
   :description "Tarot Spread Editor"
-  :url "http://tarot-editor.mantike.pro"
+  :url "https://tarot-editor.mantike.pro"
   :license {:name "Eclipse Public License"
             :url "http://www.eclipse.org/legal/epl-v10.html"}
 
