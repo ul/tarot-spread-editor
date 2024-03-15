@@ -1,12 +1,15 @@
-// Compiled by ClojureScript 1.10.339 {:language-out :ecmascript5}
+// Compiled by ClojureScript 1.11.60 {:language-out :ecmascript-next, :optimizations :none}
 goog.provide('carbon.vdom');
 goog.require('cljs.core');
 goog.require('cljsjs.inferno');
 goog.require('cljsjs.inferno.hyperscript');
 goog.require('cljsjs.inferno.create_class');
-goog.require('goog.object');
 goog.require('carbon.rx');
 goog.require('clojure.string');
+goog.require('goog.object');
+goog.scope(function(){
+carbon.vdom.goog$module$goog$object = goog.module.get('goog.object');
+});
 carbon.vdom.kebab_start = (new RegExp("-(\\w)","g"));
 carbon.vdom.upper_case_second = (function carbon$vdom$upper_case_second(x){
 return clojure.string.upper_case.call(null,(x[(1)]));
@@ -50,11 +53,11 @@ return cljs.core.remove.call(null,cljs.core.nil_QMARK_,cljs.core.remove.call(nul
 carbon.vdom.valid_tag_QMARK_ = (function carbon$vdom$valid_tag_QMARK_(tag){
 return (((tag instanceof cljs.core.Keyword)) || (typeof tag === 'string'));
 });
-carbon.vdom.dealias = (function carbon$vdom$dealias(p__51847){
-var map__51848 = p__51847;
-var map__51848__$1 = ((((!((map__51848 == null)))?(((((map__51848.cljs$lang$protocol_mask$partition0$ & (64))) || ((cljs.core.PROTOCOL_SENTINEL === map__51848.cljs$core$ISeq$))))?true:false):false))?cljs.core.apply.call(null,cljs.core.hash_map,map__51848):map__51848);
-var m = map__51848__$1;
-var class$ = cljs.core.get.call(null,map__51848__$1,new cljs.core.Keyword(null,"class","class",-2030961996));
+carbon.vdom.dealias = (function carbon$vdom$dealias(p__32415){
+var map__32416 = p__32415;
+var map__32416__$1 = cljs.core.__destructure_map.call(null,map__32416);
+var m = map__32416__$1;
+var class$ = cljs.core.get.call(null,map__32416__$1,new cljs.core.Keyword(null,"class","class",-2030961996));
 if(cljs.core.truth_(class$)){
 return cljs.core.assoc.call(null,m,new cljs.core.Keyword(null,"className","className",-1983287057),class$);
 } else {
@@ -64,19 +67,19 @@ return m;
 carbon.vdom.node = (function carbon$vdom$node(tag,attrs,children){
 return Inferno.h(cljs.core.name.call(null,tag),cljs.core.clj__GT_js.call(null,carbon.vdom.map_keys.call(null,carbon.vdom.camel_event_handlers,carbon.vdom.dealias.call(null,carbon.vdom.filter_vals.call(null,cljs.core.some_QMARK_,attrs)))),cljs.core.apply.call(null,cljs.core.array,children));
 });
-carbon.vdom.parse_arg = (function carbon$vdom$parse_arg(p__51850){
-var vec__51851 = p__51850;
-var seq__51852 = cljs.core.seq.call(null,vec__51851);
-var first__51853 = cljs.core.first.call(null,seq__51852);
-var seq__51852__$1 = cljs.core.next.call(null,seq__51852);
-var tag = first__51853;
-var vec__51854 = seq__51852__$1;
-var seq__51855 = cljs.core.seq.call(null,vec__51854);
-var first__51856 = cljs.core.first.call(null,seq__51855);
-var seq__51855__$1 = cljs.core.next.call(null,seq__51855);
-var attrs = first__51856;
-var children = seq__51855__$1;
-var args = vec__51854;
+carbon.vdom.parse_arg = (function carbon$vdom$parse_arg(p__32417){
+var vec__32418 = p__32417;
+var seq__32419 = cljs.core.seq.call(null,vec__32418);
+var first__32420 = cljs.core.first.call(null,seq__32419);
+var seq__32419__$1 = cljs.core.next.call(null,seq__32419);
+var tag = first__32420;
+var vec__32421 = seq__32419__$1;
+var seq__32422 = cljs.core.seq.call(null,vec__32421);
+var first__32423 = cljs.core.first.call(null,seq__32422);
+var seq__32422__$1 = cljs.core.next.call(null,seq__32422);
+var attrs = first__32423;
+var children = seq__32422__$1;
+var args = vec__32421;
 var full_QMARK_ = cljs.core.map_QMARK_.call(null,attrs);
 return new cljs.core.PersistentVector(null, 3, 5, cljs.core.PersistentVector.EMPTY_NODE, [tag,((full_QMARK_)?attrs:cljs.core.PersistentArrayMap.EMPTY),((full_QMARK_)?children:args)], null);
 });
@@ -85,11 +88,11 @@ return new cljs.core.PersistentVector(null, 3, 5, cljs.core.PersistentVector.EMP
 carbon.vdom.process = (function carbon$vdom$process(arg){
 if(cljs.core.vector_QMARK_.call(null,arg)){
 var tag = cljs.core.get.call(null,arg,(0));
-if(cljs.core.truth_(carbon.vdom.valid_tag_QMARK_.call(null,tag))){
-var vec__51857 = carbon.vdom.parse_arg.call(null,arg);
-var tag__$1 = cljs.core.nth.call(null,vec__51857,(0),null);
-var attrs = cljs.core.nth.call(null,vec__51857,(1),null);
-var children = cljs.core.nth.call(null,vec__51857,(2),null);
+if(carbon.vdom.valid_tag_QMARK_.call(null,tag)){
+var vec__32424 = carbon.vdom.parse_arg.call(null,arg);
+var tag__$1 = cljs.core.nth.call(null,vec__32424,(0),null);
+var attrs = cljs.core.nth.call(null,vec__32424,(1),null);
+var children = cljs.core.nth.call(null,vec__32424,(2),null);
 return carbon.vdom.node.call(null,tag__$1,attrs,cljs.core.map.call(null,carbon.vdom.process,carbon.vdom.flatten_children.call(null,children)));
 } else {
 return carbon.vdom.component.call(null,tag,cljs.core.subvec.call(null,arg,(1)),cljs.core.meta.call(null,arg));
@@ -98,20 +101,20 @@ return carbon.vdom.component.call(null,tag,cljs.core.subvec.call(null,arg,(1)),c
 if(cljs.core.seq_QMARK_.call(null,arg)){
 return carbon.vdom.node.call(null,new cljs.core.Keyword(null,"div","div",1057191632),cljs.core.PersistentArrayMap.EMPTY,cljs.core.map.call(null,carbon.vdom.process,carbon.vdom.flatten_children.call(null,arg)));
 } else {
-return [cljs.core.str.cljs$core$IFn$_invoke$arity$1(arg)].join('');
+return cljs.core.str.cljs$core$IFn$_invoke$arity$1(arg);
 
 }
 }
 });
 carbon.vdom.get_prop = (function carbon$vdom$get_prop(this$,k){
-return goog.object.getValueByKeys(this$,"props",cljs.core.name.call(null,k));
+return carbon.vdom.goog$module$goog$object.getValueByKeys.call(null,this$,"props",cljs.core.name.call(null,k));
 });
 carbon.vdom.get_state = (function carbon$vdom$get_state(this$,k){
-return goog.object.getValueByKeys(this$,"state",cljs.core.name.call(null,k));
+return carbon.vdom.goog$module$goog$object.getValueByKeys.call(null,this$,"state",cljs.core.name.call(null,k));
 });
 carbon.vdom.call_some = (function carbon$vdom$call_some(var_args){
-var G__51861 = arguments.length;
-switch (G__51861) {
+var G__32428 = arguments.length;
+switch (G__32428) {
 case 2:
 return carbon.vdom.call_some.cljs$core$IFn$_invoke$arity$2((arguments[(0)]),(arguments[(1)]));
 
@@ -126,61 +129,61 @@ throw (new Error(["Invalid arity: ",cljs.core.str.cljs$core$IFn$_invoke$arity$1(
 }
 });
 
-carbon.vdom.call_some.cljs$core$IFn$_invoke$arity$2 = (function (this$,k){
-var temp__5559__auto__ = cljs.core.get.call(null,carbon.vdom.get_prop.call(null,this$,"meta"),k);
-if(cljs.core.truth_(temp__5559__auto__)){
-var f = temp__5559__auto__;
+(carbon.vdom.call_some.cljs$core$IFn$_invoke$arity$2 = (function (this$,k){
+var temp__5818__auto__ = cljs.core.get.call(null,carbon.vdom.get_prop.call(null,this$,"meta"),k);
+if(cljs.core.truth_(temp__5818__auto__)){
+var f = temp__5818__auto__;
 return f.call(null,this$);
 } else {
 return null;
 }
-});
+}));
 
-carbon.vdom.call_some.cljs$core$IFn$_invoke$arity$3 = (function (this$,k,args){
-var temp__5559__auto__ = cljs.core.get.call(null,carbon.vdom.get_prop.call(null,this$,"meta"),k);
-if(cljs.core.truth_(temp__5559__auto__)){
-var f = temp__5559__auto__;
+(carbon.vdom.call_some.cljs$core$IFn$_invoke$arity$3 = (function (this$,k,args){
+var temp__5818__auto__ = cljs.core.get.call(null,carbon.vdom.get_prop.call(null,this$,"meta"),k);
+if(cljs.core.truth_(temp__5818__auto__)){
+var f = temp__5818__auto__;
 return cljs.core.apply.call(null,f,this$,args);
 } else {
 return null;
 }
-});
+}));
 
-carbon.vdom.call_some.cljs$lang$maxFixedArity = 3;
+(carbon.vdom.call_some.cljs$lang$maxFixedArity = 3);
 
 carbon.vdom.lifecycle = (function carbon$vdom$lifecycle(k){
 return (function() { 
-var G__51863__delegate = function (args){
+var G__32430__delegate = function (args){
 var this$ = this;
 return carbon.vdom.call_some.call(null,this$,k,args);
 };
-var G__51863 = function (var_args){
+var G__32430 = function (var_args){
 var args = null;
 if (arguments.length > 0) {
-var G__51864__i = 0, G__51864__a = new Array(arguments.length -  0);
-while (G__51864__i < G__51864__a.length) {G__51864__a[G__51864__i] = arguments[G__51864__i + 0]; ++G__51864__i;}
-  args = new cljs.core.IndexedSeq(G__51864__a,0,null);
+var G__32431__i = 0, G__32431__a = new Array(arguments.length -  0);
+while (G__32431__i < G__32431__a.length) {G__32431__a[G__32431__i] = arguments[G__32431__i + 0]; ++G__32431__i;}
+  args = new cljs.core.IndexedSeq(G__32431__a,0,null);
 } 
-return G__51863__delegate.call(this,args);};
-G__51863.cljs$lang$maxFixedArity = 0;
-G__51863.cljs$lang$applyTo = (function (arglist__51865){
-var args = cljs.core.seq(arglist__51865);
-return G__51863__delegate(args);
+return G__32430__delegate.call(this,args);};
+G__32430.cljs$lang$maxFixedArity = 0;
+G__32430.cljs$lang$applyTo = (function (arglist__32432){
+var args = cljs.core.seq(arglist__32432);
+return G__32430__delegate(args);
 });
-G__51863.cljs$core$IFn$_invoke$arity$variadic = G__51863__delegate;
-return G__51863;
+G__32430.cljs$core$IFn$_invoke$arity$variadic = G__32430__delegate;
+return G__32430;
 })()
 ;
 });
 carbon.vdom.wrapper_cache = cljs.core.atom.call(null,cljs.core.PersistentArrayMap.EMPTY);
 carbon.vdom.make_wrapper = (function carbon$vdom$make_wrapper(f){
-return Inferno.createClass(({"componentDidUnmount": carbon.vdom.lifecycle.call(null,new cljs.core.Keyword(null,"component-did-unmount","component-did-unmount",-665071477)), "componentDidUpdate": carbon.vdom.lifecycle.call(null,new cljs.core.Keyword(null,"component-did-update","component-did-update",-1468549173)), "displayName": (function (){var or__3949__auto__ = cljs.core.get.call(null,cljs.core.meta.call(null,f),new cljs.core.Keyword("component","display-name","component/display-name",-1644917572));
-if(cljs.core.truth_(or__3949__auto__)){
-return or__3949__auto__;
+return Inferno.createClass(({"componentDidUnmount": carbon.vdom.lifecycle.call(null,new cljs.core.Keyword(null,"component-did-unmount","component-did-unmount",-665071477)), "componentDidUpdate": carbon.vdom.lifecycle.call(null,new cljs.core.Keyword(null,"component-did-update","component-did-update",-1468549173)), "displayName": (function (){var or__5045__auto__ = cljs.core.get.call(null,cljs.core.meta.call(null,f),new cljs.core.Keyword("component","display-name","component/display-name",-1644917572));
+if(cljs.core.truth_(or__5045__auto__)){
+return or__5045__auto__;
 } else {
-var or__3949__auto____$1 = f.name;
-if(cljs.core.truth_(or__3949__auto____$1)){
-return or__3949__auto____$1;
+var or__5045__auto____$1 = f.name;
+if(cljs.core.truth_(or__5045__auto____$1)){
+return or__5045__auto____$1;
 } else {
 return "CarbonWrapper";
 }
@@ -194,20 +197,22 @@ return carbon.vdom.call_some.call(null,this$,new cljs.core.Keyword(null,"compone
 var this$ = this;
 carbon.vdom.call_some.call(null,this$,new cljs.core.Keyword(null,"component-will-receive-props","component-will-receive-props",551608157));
 
-var next_args = goog.object.get(next_props,"args");
+var next_args = carbon.vdom.goog$module$goog$object.get.call(null,next_props,"args");
 var args = carbon.vdom.get_state.call(null,this$,new cljs.core.Keyword(null,"args","args",1315556576));
 return cljs.core.reset_BANG_.call(null,args,next_args);
 }), "componentShouldUpdate": cljs.core.constantly.call(null,false), "render": (function (){
 var this$ = this;
-var _STAR_rx_STAR_51866 = carbon.rx._STAR_rx_STAR_;
-carbon.rx._STAR_rx_STAR_ = null;
+var _STAR_rx_STAR__orig_val__32433 = carbon.rx._STAR_rx_STAR_;
+var _STAR_rx_STAR__temp_val__32434 = null;
+(carbon.rx._STAR_rx_STAR_ = _STAR_rx_STAR__temp_val__32434);
 
-try{var _STAR_path_STAR_51867 = carbon.vdom._STAR_path_STAR_;
-carbon.vdom._STAR_path_STAR_ = carbon.vdom.get_state.call(null,this$,new cljs.core.Keyword(null,"path","path",-188191168));
+try{var _STAR_path_STAR__orig_val__32435 = carbon.vdom._STAR_path_STAR_;
+var _STAR_path_STAR__temp_val__32436 = carbon.vdom.get_state.call(null,this$,new cljs.core.Keyword(null,"path","path",-188191168));
+(carbon.vdom._STAR_path_STAR_ = _STAR_path_STAR__temp_val__32436);
 
 try{return carbon.vdom.process.call(null,cljs.core.deref.call(null,carbon.vdom.get_state.call(null,this$,new cljs.core.Keyword(null,"component","component",1555936782))));
-}finally {carbon.vdom._STAR_path_STAR_ = _STAR_path_STAR_51867;
-}}finally {carbon.rx._STAR_rx_STAR_ = _STAR_rx_STAR_51866;
+}finally {(carbon.vdom._STAR_path_STAR_ = _STAR_path_STAR__orig_val__32435);
+}}finally {(carbon.rx._STAR_rx_STAR_ = _STAR_rx_STAR__orig_val__32433);
 }}), "componentWillUpdate": carbon.vdom.lifecycle.call(null,new cljs.core.Keyword(null,"component-will-update","component-will-update",335247566)), "componentDidMount": carbon.vdom.lifecycle.call(null,new cljs.core.Keyword(null,"component-did-mount","component-did-mount",-1126910518)), "componentWillMount": (function (){
 var this$ = this;
 carbon.vdom.call_some.call(null,this$,new cljs.core.Keyword(null,"component-will-mount","component-will-mount",209708855));
@@ -216,30 +221,26 @@ var args = carbon.vdom.get_prop.call(null,this$,new cljs.core.Keyword(null,"args
 var path = cljs.core.conj.call(null,carbon.vdom.get_prop.call(null,this$,new cljs.core.Keyword(null,"parent-path","parent-path",-2115866866)),carbon.vdom.next_id.call(null));
 var view = carbon.rx.cell_STAR_.call(null,f,new cljs.core.PersistentArrayMap(null, 1, [new cljs.core.Keyword(null,"meta","meta",1499536964),new cljs.core.PersistentArrayMap(null, 1, [new cljs.core.Keyword(null,"form","form",-1624062471),"(carbon.macros/cell f)\n"], null)], null));
 var args__$1 = carbon.rx.cell_STAR_.call(null,args,new cljs.core.PersistentArrayMap(null, 1, [new cljs.core.Keyword(null,"meta","meta",1499536964),new cljs.core.PersistentArrayMap(null, 1, [new cljs.core.Keyword(null,"form","form",-1624062471),"(carbon.macros/cell args)\n"], null)], null));
-var component = carbon.rx.rx_STAR_.call(null,((function (args,path,view,args__$1,this$){
-return (function (){
+var component = carbon.rx.rx_STAR_.call(null,(function (){
 return cljs.core.apply.call(null,cljs.core.deref.call(null,view),cljs.core.deref.call(null,args__$1));
-});})(args,path,view,args__$1,this$))
-,null,new cljs.core.PersistentArrayMap(null, 1, [new cljs.core.Keyword(null,"form","form",-1624062471),"(carbon.macros/rx (apply @view @args))\n"], null));
+}),null,new cljs.core.PersistentArrayMap(null, 1, [new cljs.core.Keyword(null,"form","form",-1624062471),"(carbon.macros/rx (apply @view @args))\n"], null));
 var form = cljs.core.deref.call(null,component);
 if(cljs.core.fn_QMARK_.call(null,form)){
 cljs.core.reset_BANG_.call(null,view,form);
 } else {
 }
 
-goog.object.get(this$,"setState").call(null,({"component": component, "path": path, "view": view, "args": args__$1}));
+carbon.vdom.goog$module$goog$object.get.call(null,this$,"setState").call(null,({"component": component, "path": path, "view": view, "args": args__$1}));
 
-return cljs.core.add_watch.call(null,component,new cljs.core.Keyword("carbon.vdom","render","carbon.vdom/render",-19564989),((function (args,path,view,args__$1,component,form,this$){
-return (function (){
+return cljs.core.add_watch.call(null,component,new cljs.core.Keyword("carbon.vdom","render","carbon.vdom/render",-19564989),(function (){
 return carbon.vdom.request_render.call(null,path,this$);
-});})(args,path,view,args__$1,component,form,this$))
-);
+}));
 })}));
 });
 carbon.vdom.get_wrapper = (function carbon$vdom$get_wrapper(f){
-var temp__5557__auto__ = cljs.core.get.call(null,cljs.core.deref.call(null,carbon.vdom.wrapper_cache),f);
-if(cljs.core.truth_(temp__5557__auto__)){
-var c = temp__5557__auto__;
+var temp__5816__auto__ = cljs.core.get.call(null,cljs.core.deref.call(null,carbon.vdom.wrapper_cache),f);
+if(cljs.core.truth_(temp__5816__auto__)){
+var c = temp__5816__auto__;
 return c;
 } else {
 var c = carbon.vdom.make_wrapper.call(null,f);
@@ -254,23 +255,23 @@ return Inferno.h(carbon.vdom.get_wrapper.call(null,f),({"args": args, "key": clj
 carbon.vdom.mount = (function carbon$vdom$mount(view,elem){
 return Inferno.render(carbon.vdom.process.call(null,view),elem);
 });
-carbon.vdom.schedule = (function (){var or__3949__auto__ = (function (){var and__3938__auto__ = (typeof window !== 'undefined');
-if(and__3938__auto__){
-var or__3949__auto__ = window.requestAnimationFrame;
-if(cljs.core.truth_(or__3949__auto__)){
-return or__3949__auto__;
+carbon.vdom.schedule = (function (){var or__5045__auto__ = (function (){var and__5043__auto__ = (typeof window !== 'undefined');
+if(and__5043__auto__){
+var or__5045__auto__ = window.requestAnimationFrame;
+if(cljs.core.truth_(or__5045__auto__)){
+return or__5045__auto__;
 } else {
-var or__3949__auto____$1 = window.webkitRequestAnimationFrame;
-if(cljs.core.truth_(or__3949__auto____$1)){
-return or__3949__auto____$1;
+var or__5045__auto____$1 = window.webkitRequestAnimationFrame;
+if(cljs.core.truth_(or__5045__auto____$1)){
+return or__5045__auto____$1;
 } else {
-var or__3949__auto____$2 = window.mozRequestAnimationFrame;
-if(cljs.core.truth_(or__3949__auto____$2)){
-return or__3949__auto____$2;
+var or__5045__auto____$2 = window.mozRequestAnimationFrame;
+if(cljs.core.truth_(or__5045__auto____$2)){
+return or__5045__auto____$2;
 } else {
-var or__3949__auto____$3 = window.msRequestAnimationFrame;
-if(cljs.core.truth_(or__3949__auto____$3)){
-return or__3949__auto____$3;
+var or__5045__auto____$3 = window.msRequestAnimationFrame;
+if(cljs.core.truth_(or__5045__auto____$3)){
+return or__5045__auto____$3;
 } else {
 return window.oRequestAnimationFrame;
 }
@@ -278,17 +279,15 @@ return window.oRequestAnimationFrame;
 }
 }
 } else {
-return and__3938__auto__;
+return and__5043__auto__;
 }
 })();
-if(cljs.core.truth_(or__3949__auto__)){
-return or__3949__auto__;
+if(cljs.core.truth_(or__5045__auto__)){
+return or__5045__auto__;
 } else {
-return ((function (or__3949__auto__){
-return (function (p1__51868_SHARP_){
-return setTimeout(p1__51868_SHARP_,(16));
+return (function (p1__32437_SHARP_){
+return setTimeout(p1__32437_SHARP_,(16));
 });
-;})(or__3949__auto__))
 }
 })();
 carbon.vdom.empty_queue = cljs.core.sorted_map.call(null);
@@ -297,53 +296,53 @@ carbon.vdom.render = (function carbon$vdom$render(){
 var queue = cljs.core.deref.call(null,carbon.vdom.render_queue);
 cljs.core.vreset_BANG_.call(null,carbon.vdom.render_queue,carbon.vdom.empty_queue);
 
-var seq__51869 = cljs.core.seq.call(null,cljs.core.vals.call(null,queue));
-var chunk__51870 = null;
-var count__51871 = (0);
-var i__51872 = (0);
+var seq__32438 = cljs.core.seq.call(null,cljs.core.vals.call(null,queue));
+var chunk__32439 = null;
+var count__32440 = (0);
+var i__32441 = (0);
 while(true){
-if((i__51872 < count__51871)){
-var c = cljs.core._nth.call(null,chunk__51870,i__51872);
-goog.object.get(c,"forceUpdate").call(null);
+if((i__32441 < count__32440)){
+var c = cljs.core._nth.call(null,chunk__32439,i__32441);
+carbon.vdom.goog$module$goog$object.get.call(null,c,"forceUpdate").call(null);
 
 
-var G__51873 = seq__51869;
-var G__51874 = chunk__51870;
-var G__51875 = count__51871;
-var G__51876 = (i__51872 + (1));
-seq__51869 = G__51873;
-chunk__51870 = G__51874;
-count__51871 = G__51875;
-i__51872 = G__51876;
+var G__32442 = seq__32438;
+var G__32443 = chunk__32439;
+var G__32444 = count__32440;
+var G__32445 = (i__32441 + (1));
+seq__32438 = G__32442;
+chunk__32439 = G__32443;
+count__32440 = G__32444;
+i__32441 = G__32445;
 continue;
 } else {
-var temp__5559__auto__ = cljs.core.seq.call(null,seq__51869);
-if(temp__5559__auto__){
-var seq__51869__$1 = temp__5559__auto__;
-if(cljs.core.chunked_seq_QMARK_.call(null,seq__51869__$1)){
-var c__4351__auto__ = cljs.core.chunk_first.call(null,seq__51869__$1);
-var G__51877 = cljs.core.chunk_rest.call(null,seq__51869__$1);
-var G__51878 = c__4351__auto__;
-var G__51879 = cljs.core.count.call(null,c__4351__auto__);
-var G__51880 = (0);
-seq__51869 = G__51877;
-chunk__51870 = G__51878;
-count__51871 = G__51879;
-i__51872 = G__51880;
+var temp__5818__auto__ = cljs.core.seq.call(null,seq__32438);
+if(temp__5818__auto__){
+var seq__32438__$1 = temp__5818__auto__;
+if(cljs.core.chunked_seq_QMARK_.call(null,seq__32438__$1)){
+var c__5568__auto__ = cljs.core.chunk_first.call(null,seq__32438__$1);
+var G__32446 = cljs.core.chunk_rest.call(null,seq__32438__$1);
+var G__32447 = c__5568__auto__;
+var G__32448 = cljs.core.count.call(null,c__5568__auto__);
+var G__32449 = (0);
+seq__32438 = G__32446;
+chunk__32439 = G__32447;
+count__32440 = G__32448;
+i__32441 = G__32449;
 continue;
 } else {
-var c = cljs.core.first.call(null,seq__51869__$1);
-goog.object.get(c,"forceUpdate").call(null);
+var c = cljs.core.first.call(null,seq__32438__$1);
+carbon.vdom.goog$module$goog$object.get.call(null,c,"forceUpdate").call(null);
 
 
-var G__51881 = cljs.core.next.call(null,seq__51869__$1);
-var G__51882 = null;
-var G__51883 = (0);
-var G__51884 = (0);
-seq__51869 = G__51881;
-chunk__51870 = G__51882;
-count__51871 = G__51883;
-i__51872 = G__51884;
+var G__32450 = cljs.core.next.call(null,seq__32438__$1);
+var G__32451 = null;
+var G__32452 = (0);
+var G__32453 = (0);
+seq__32438 = G__32450;
+chunk__32439 = G__32451;
+count__32440 = G__32452;
+i__32441 = G__32453;
 continue;
 }
 } else {
@@ -365,4 +364,4 @@ carbon.vdom.clear_render = (function carbon$vdom$clear_render(path){
 return cljs.core._vreset_BANG_.call(null,carbon.vdom.render_queue,cljs.core.dissoc.call(null,cljs.core._deref.call(null,carbon.vdom.render_queue),path));
 });
 
-//# sourceMappingURL=vdom.js.map?rel=1537946275852
+//# sourceMappingURL=vdom.js.map?rel=1710474315203

@@ -1,4 +1,4 @@
-// Compiled by ClojureScript 1.10.339 {:language-out :ecmascript5}
+// Compiled by ClojureScript 1.11.60 {:language-out :ecmascript-next, :optimizations :none}
 goog.provide('taoensso.truss');
 goog.require('cljs.core');
 goog.require('taoensso.truss.impl');
@@ -19,7 +19,7 @@ return f;
  * Sets the root (fn [data-map-delay]) called on invariant violations.
  */
 taoensso.truss.set_error_fn_BANG_ = (function taoensso$truss$set_error_fn_BANG_(f){
-return taoensso.truss.impl._STAR_error_fn_STAR_ = taoensso.truss._error_fn.call(null,f);
+return (taoensso.truss.impl._STAR_error_fn_STAR_ = taoensso.truss._error_fn.call(null,f));
 });
 
-//# sourceMappingURL=truss.js.map?rel=1537946277221
+//# sourceMappingURL=truss.js.map?rel=1710474315903

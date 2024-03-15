@@ -1,4 +1,4 @@
-;; Copyright (c) 2015-2016 Andrey Antukh <niwi@niwi.nz>
+;; Copyright (c) Andrey Antukh <niwi@niwi.nz>
 ;; All rights reserved.
 ;;
 ;; Redistribution and use in source and binary forms, with or without
@@ -25,12 +25,8 @@
 (ns cuerdas.regexp
   "A regexp helpers and enhancements (mostly for cljs)."
   (:refer-clojure :exclude [regexp?])
-  #?(:cljs (:require [cuerdas.vendor.xregexp]
-                     [goog.string :as gstr]))
+  #?(:cljs (:require [goog.string :as gstr]))
   #?(:clj (:import (java.util.regex Pattern))))
-
-#?(:cljs
-   (def ^:private xregexp js/XRegExp))
 
 (defn regexp?
   "Return `true` if `x` is a regexp pattern
@@ -38,14 +34,6 @@
   [x]
   #?(:cljs (cljs.core/regexp? x)
      :clj (instance? Pattern x)))
-
-(defn enhace
-  "Enhace the regexp instance with unicode support. This is noop
-  in JVM because it already works perfectly with unicode."
-  [re]
-  {:pre [(regexp? re)]}
-  #?(:clj re
-     :cljs (xregexp (.-source re) (.-flags re))))
 
 (defn escape
   "Escapes characters in the string that are not safe

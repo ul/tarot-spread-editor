@@ -11,7 +11,7 @@
         w (.-width rect)
         dw (.-width deltaRect)
         dd (/ w (- w dw))]
-    (swap! db update :items update-selected update :dimensions #(math/snap-resize (math/v* % dd)))))
+    (swap! db update :items update-selected update :dimensions #(math/v* % dd))))
 
 (defn rotate [{:keys [sub db], [dv] :args}]
   (let [{[x y] :origin
@@ -68,6 +68,9 @@
                         selector-box)))
               items)))))
 
+(defn shift-mode [{:keys [db], [shift-mode?] :args}]
+  (swap! db assoc-in [:transformer :shift-mode?] shift-mode?))
+
 (def spec
   {:transformer/move move
    :transformer/resize resize
@@ -75,4 +78,5 @@
    :transformer/end-rotation end-rotation
    :transformer/start-selection start-selection
    :transformer/move-selection move-selection
-   :transformer/end-selection end-selection})
+   :transformer/end-selection end-selection
+   :transformer/shift-mode shift-mode})

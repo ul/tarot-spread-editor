@@ -1,4 +1,4 @@
-// Compiled by ClojureScript 1.10.339 {:language-out :ecmascript5}
+// Compiled by ClojureScript 1.11.60 {:language-out :ecmascript-next, :optimizations :none}
 goog.provide('tse.effect');
 goog.require('cljs.core');
 goog.require('carbon.rx');
@@ -10,85 +10,86 @@ tse.effect.perform_STAR_ = (function tse$effect$perform_STAR_(db,emit,sub,key__G
 var q = cljs.core.deref.call(null,queue);
 cljs.core.vreset_BANG_.call(null,queue,cljs.core.PersistentVector.EMPTY);
 
-return carbon.rx.dosync_STAR_.call(null,((function (q){
-return (function (){
-var seq__53327 = cljs.core.seq.call(null,q);
-var chunk__53328 = null;
-var count__53329 = (0);
-var i__53330 = (0);
+return carbon.rx.dosync_STAR_.call(null,(function (){
+var seq__36622 = cljs.core.seq.call(null,q);
+var chunk__36623 = null;
+var count__36624 = (0);
+var i__36625 = (0);
 while(true){
-if((i__53330 < count__53329)){
-var vec__53331 = cljs.core._nth.call(null,chunk__53328,i__53330);
-var seq__53332 = cljs.core.seq.call(null,vec__53331);
-var first__53333 = cljs.core.first.call(null,seq__53332);
-var seq__53332__$1 = cljs.core.next.call(null,seq__53332);
-var key = first__53333;
-var args = seq__53332__$1;
-var temp__5557__auto___53339 = cljs.core.get.call(null,cljs.core.deref.call(null,key__GT_fn),key);
-if(cljs.core.truth_(temp__5557__auto___53339)){
-var f_53340 = temp__5557__auto___53339;
-var _STAR_rx_STAR_53334_53341 = carbon.rx._STAR_rx_STAR_;
-carbon.rx._STAR_rx_STAR_ = null;
+if((i__36625 < count__36624)){
+var vec__36636 = cljs.core._nth.call(null,chunk__36623,i__36625);
+var seq__36637 = cljs.core.seq.call(null,vec__36636);
+var first__36638 = cljs.core.first.call(null,seq__36637);
+var seq__36637__$1 = cljs.core.next.call(null,seq__36637);
+var key = first__36638;
+var args = seq__36637__$1;
+var temp__5816__auto___36646 = cljs.core.get.call(null,cljs.core.deref.call(null,key__GT_fn),key);
+if(cljs.core.truth_(temp__5816__auto___36646)){
+var f_36647 = temp__5816__auto___36646;
+var _STAR_rx_STAR__orig_val__36639_36648 = carbon.rx._STAR_rx_STAR_;
+var _STAR_rx_STAR__temp_val__36640_36649 = null;
+(carbon.rx._STAR_rx_STAR_ = _STAR_rx_STAR__temp_val__36640_36649);
 
-try{f_53340.call(null,new cljs.core.PersistentArrayMap(null, 4, [new cljs.core.Keyword(null,"emit","emit",-1327179018),emit,new cljs.core.Keyword(null,"sub","sub",-2093760025),sub,new cljs.core.Keyword(null,"db","db",993250759),db,new cljs.core.Keyword(null,"args","args",1315556576),args], null));
-}finally {carbon.rx._STAR_rx_STAR_ = _STAR_rx_STAR_53334_53341;
+try{f_36647.call(null,new cljs.core.PersistentArrayMap(null, 4, [new cljs.core.Keyword(null,"emit","emit",-1327179018),emit,new cljs.core.Keyword(null,"sub","sub",-2093760025),sub,new cljs.core.Keyword(null,"db","db",993250759),db,new cljs.core.Keyword(null,"args","args",1315556576),args], null));
+}finally {(carbon.rx._STAR_rx_STAR_ = _STAR_rx_STAR__orig_val__36639_36648);
 }} else {
 console.warn("no effect",key);
 }
 
 
-var G__53342 = seq__53327;
-var G__53343 = chunk__53328;
-var G__53344 = count__53329;
-var G__53345 = (i__53330 + (1));
-seq__53327 = G__53342;
-chunk__53328 = G__53343;
-count__53329 = G__53344;
-i__53330 = G__53345;
+var G__36650 = seq__36622;
+var G__36651 = chunk__36623;
+var G__36652 = count__36624;
+var G__36653 = (i__36625 + (1));
+seq__36622 = G__36650;
+chunk__36623 = G__36651;
+count__36624 = G__36652;
+i__36625 = G__36653;
 continue;
 } else {
-var temp__5559__auto__ = cljs.core.seq.call(null,seq__53327);
-if(temp__5559__auto__){
-var seq__53327__$1 = temp__5559__auto__;
-if(cljs.core.chunked_seq_QMARK_.call(null,seq__53327__$1)){
-var c__4351__auto__ = cljs.core.chunk_first.call(null,seq__53327__$1);
-var G__53346 = cljs.core.chunk_rest.call(null,seq__53327__$1);
-var G__53347 = c__4351__auto__;
-var G__53348 = cljs.core.count.call(null,c__4351__auto__);
-var G__53349 = (0);
-seq__53327 = G__53346;
-chunk__53328 = G__53347;
-count__53329 = G__53348;
-i__53330 = G__53349;
+var temp__5818__auto__ = cljs.core.seq.call(null,seq__36622);
+if(temp__5818__auto__){
+var seq__36622__$1 = temp__5818__auto__;
+if(cljs.core.chunked_seq_QMARK_.call(null,seq__36622__$1)){
+var c__5568__auto__ = cljs.core.chunk_first.call(null,seq__36622__$1);
+var G__36654 = cljs.core.chunk_rest.call(null,seq__36622__$1);
+var G__36655 = c__5568__auto__;
+var G__36656 = cljs.core.count.call(null,c__5568__auto__);
+var G__36657 = (0);
+seq__36622 = G__36654;
+chunk__36623 = G__36655;
+count__36624 = G__36656;
+i__36625 = G__36657;
 continue;
 } else {
-var vec__53335 = cljs.core.first.call(null,seq__53327__$1);
-var seq__53336 = cljs.core.seq.call(null,vec__53335);
-var first__53337 = cljs.core.first.call(null,seq__53336);
-var seq__53336__$1 = cljs.core.next.call(null,seq__53336);
-var key = first__53337;
-var args = seq__53336__$1;
-var temp__5557__auto___53350 = cljs.core.get.call(null,cljs.core.deref.call(null,key__GT_fn),key);
-if(cljs.core.truth_(temp__5557__auto___53350)){
-var f_53351 = temp__5557__auto___53350;
-var _STAR_rx_STAR_53338_53352 = carbon.rx._STAR_rx_STAR_;
-carbon.rx._STAR_rx_STAR_ = null;
+var vec__36641 = cljs.core.first.call(null,seq__36622__$1);
+var seq__36642 = cljs.core.seq.call(null,vec__36641);
+var first__36643 = cljs.core.first.call(null,seq__36642);
+var seq__36642__$1 = cljs.core.next.call(null,seq__36642);
+var key = first__36643;
+var args = seq__36642__$1;
+var temp__5816__auto___36658 = cljs.core.get.call(null,cljs.core.deref.call(null,key__GT_fn),key);
+if(cljs.core.truth_(temp__5816__auto___36658)){
+var f_36659 = temp__5816__auto___36658;
+var _STAR_rx_STAR__orig_val__36644_36660 = carbon.rx._STAR_rx_STAR_;
+var _STAR_rx_STAR__temp_val__36645_36661 = null;
+(carbon.rx._STAR_rx_STAR_ = _STAR_rx_STAR__temp_val__36645_36661);
 
-try{f_53351.call(null,new cljs.core.PersistentArrayMap(null, 4, [new cljs.core.Keyword(null,"emit","emit",-1327179018),emit,new cljs.core.Keyword(null,"sub","sub",-2093760025),sub,new cljs.core.Keyword(null,"db","db",993250759),db,new cljs.core.Keyword(null,"args","args",1315556576),args], null));
-}finally {carbon.rx._STAR_rx_STAR_ = _STAR_rx_STAR_53338_53352;
+try{f_36659.call(null,new cljs.core.PersistentArrayMap(null, 4, [new cljs.core.Keyword(null,"emit","emit",-1327179018),emit,new cljs.core.Keyword(null,"sub","sub",-2093760025),sub,new cljs.core.Keyword(null,"db","db",993250759),db,new cljs.core.Keyword(null,"args","args",1315556576),args], null));
+}finally {(carbon.rx._STAR_rx_STAR_ = _STAR_rx_STAR__orig_val__36644_36660);
 }} else {
 console.warn("no effect",key);
 }
 
 
-var G__53353 = cljs.core.next.call(null,seq__53327__$1);
-var G__53354 = null;
-var G__53355 = (0);
-var G__53356 = (0);
-seq__53327 = G__53353;
-chunk__53328 = G__53354;
-count__53329 = G__53355;
-i__53330 = G__53356;
+var G__36662 = cljs.core.next.call(null,seq__36622__$1);
+var G__36663 = null;
+var G__36664 = (0);
+var G__36665 = (0);
+seq__36622 = G__36662;
+chunk__36623 = G__36663;
+count__36624 = G__36664;
+i__36625 = G__36665;
 continue;
 }
 } else {
@@ -97,8 +98,7 @@ return null;
 }
 break;
 }
-});})(q))
-);
+}));
 });
 tse.effect.emit_STAR_ = (function tse$effect$emit_STAR_(perform,queue,v){
 if(cljs.core.empty_QMARK_.call(null,cljs.core.deref.call(null,queue))){
@@ -111,22 +111,16 @@ return cljs.core._vreset_BANG_.call(null,queue,cljs.core.conj.call(null,cljs.cor
 tse.effect.make = (function tse$effect$make(db,sub){
 var key__GT_fn = cljs.core.volatile_BANG_.call(null,cljs.core.PersistentArrayMap.EMPTY);
 var queue = cljs.core.volatile_BANG_.call(null,cljs.core.PersistentVector.EMPTY);
-var register = ((function (key__GT_fn,queue){
-return (function tse$effect$make_$_register(key,f){
+var register = (function tse$effect$make_$_register(key,f){
 return tse.effect.register_STAR_.call(null,key__GT_fn,key,f);
-});})(key__GT_fn,queue))
-;
-var emit = ((function (key__GT_fn,queue){
-return (function tse$effect$make_$_emit(v){
+});
+var emit = (function tse$effect$make_$_emit(v){
 return tse.effect.emit_STAR_.call(null,perform,queue,v);
-});})(key__GT_fn,queue))
-;
-var perform = ((function (key__GT_fn,queue){
-return (function tse$effect$make_$_perform(){
+});
+var perform = (function tse$effect$make_$_perform(){
 return tse.effect.perform_STAR_.call(null,db,emit,sub,key__GT_fn,queue);
-});})(key__GT_fn,queue))
-;
+});
 return new cljs.core.PersistentArrayMap(null, 2, [new cljs.core.Keyword(null,"register-effect","register-effect",163395106),register,new cljs.core.Keyword(null,"emit","emit",-1327179018),emit], null);
 });
 
-//# sourceMappingURL=effect.js.map?rel=1537946281307
+//# sourceMappingURL=effect.js.map?rel=1710474317923

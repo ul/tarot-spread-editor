@@ -1,4 +1,4 @@
-// Compiled by ClojureScript 1.10.339 {:language-out :ecmascript5}
+// Compiled by ClojureScript 1.11.60 {:language-out :ecmascript-next, :optimizations :none}
 goog.provide('cljs.core.async.impl.dispatch');
 goog.require('cljs.core');
 goog.require('cljs.core.async.impl.buffers');
@@ -8,20 +8,20 @@ cljs.core.async.impl.dispatch.running_QMARK_ = false;
 cljs.core.async.impl.dispatch.queued_QMARK_ = false;
 cljs.core.async.impl.dispatch.TASK_BATCH_SIZE = (1024);
 cljs.core.async.impl.dispatch.process_messages = (function cljs$core$async$impl$dispatch$process_messages(){
-cljs.core.async.impl.dispatch.running_QMARK_ = true;
+(cljs.core.async.impl.dispatch.running_QMARK_ = true);
 
-cljs.core.async.impl.dispatch.queued_QMARK_ = false;
+(cljs.core.async.impl.dispatch.queued_QMARK_ = false);
 
-var count_44734 = (0);
+var count_38284 = (0);
 while(true){
-var m_44735 = cljs.core.async.impl.dispatch.tasks.pop();
-if((m_44735 == null)){
+var m_38285 = cljs.core.async.impl.dispatch.tasks.pop();
+if((m_38285 == null)){
 } else {
-m_44735.call(null);
+m_38285.call(null);
 
-if((count_44734 < cljs.core.async.impl.dispatch.TASK_BATCH_SIZE)){
-var G__44736 = (count_44734 + (1));
-count_44734 = G__44736;
+if((count_38284 < cljs.core.async.impl.dispatch.TASK_BATCH_SIZE)){
+var G__38286 = (count_38284 + (1));
+count_38284 = G__38286;
 continue;
 } else {
 }
@@ -29,7 +29,7 @@ continue;
 break;
 }
 
-cljs.core.async.impl.dispatch.running_QMARK_ = false;
+(cljs.core.async.impl.dispatch.running_QMARK_ = false);
 
 if((cljs.core.async.impl.dispatch.tasks.length > (0))){
 return cljs.core.async.impl.dispatch.queue_dispatcher.call(null);
@@ -41,7 +41,7 @@ cljs.core.async.impl.dispatch.queue_dispatcher = (function cljs$core$async$impl$
 if(((cljs.core.async.impl.dispatch.queued_QMARK_) && (cljs.core.async.impl.dispatch.running_QMARK_))){
 return null;
 } else {
-cljs.core.async.impl.dispatch.queued_QMARK_ = true;
+(cljs.core.async.impl.dispatch.queued_QMARK_ = true);
 
 return goog.async.nextTick(cljs.core.async.impl.dispatch.process_messages);
 }
@@ -55,4 +55,4 @@ cljs.core.async.impl.dispatch.queue_delay = (function cljs$core$async$impl$dispa
 return setTimeout(f,delay);
 });
 
-//# sourceMappingURL=dispatch.js.map?rel=1537946256719
+//# sourceMappingURL=dispatch.js.map?rel=1710474318624

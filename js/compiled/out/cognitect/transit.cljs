@@ -1,4 +1,4 @@
-;; Copyright 2014-2018 Cognitect. All Rights Reserved.
+;; Copyright 2014-2022 Cognitect. All Rights Reserved.
 ;;
 ;; Licensed under the Apache License, Version 2.0 (the "License");
 ;; you may not use this file except in compliance with the License.
@@ -14,9 +14,11 @@
 
 (ns cognitect.transit
   (:refer-clojure :exclude [integer? uuid uuid? uri?])
-  (:require [com.cognitect.transit :as t]
+  (:require [clojure.set :as set]
+            [com.cognitect.transit :as t]
             [com.cognitect.transit.types :as ty]
-            [com.cognitect.transit.eq :as eq])
+            [com.cognitect.transit.eq :as eq]
+            [goog.object :as gobj])
   (:import [goog.math Long]))
 
 ;; patch cljs.core/UUID IEquiv
@@ -51,7 +53,7 @@
   Long
   (-equiv [this other]
     (.equiv this other))
-  
+
   ty/UUID
   (-equiv [this other]
     (if (instance? UUID other)
@@ -76,14 +78,15 @@
     (eq/hashCode this)))
 
 (extend-type ty/UUID
+  IUUID
   IPrintWithWriter
   (-pr-writer [uuid writer _]
     (-write writer (str "#uuid \"" (.toString uuid) "\""))))
 
 (defn ^:no-doc opts-merge [a b]
   (doseq [k (js-keys b)]
-    (let [v (aget b k)]
-      (aset a k v)))
+    (let [v (gobj/get b k)]
+      (gobj/set a k v)))
   a)
 
 (deftype ^:no-doc MapBuilder []
@@ -103,8 +106,10 @@
 (defn reader
   "Return a transit reader. type may be either :json or :json-verbose.
    opts may be a map optionally containing a :handlers entry. The value
-   of :handlers should be map from tag to a decoder function which returns
-   then in-memory representation of the semantic transit value."
+   of :handlers should be map from string tag to a decoder function of one
+   argument which returns the in-memory representation of the semantic transit
+   value. If a :default handler is provided, it will be used when no matching
+   read handler can be found."
   ([type] (reader type nil))
   ([type opts]
      (t/reader (name type)
@@ -116,7 +121,7 @@
                    ":"    (fn [v] (keyword v))
                    "set"  (fn [v] (into #{} v))
                    "list" (fn [v] (into () (.reverse v)))
-                   "cmap" (fn [v] 
+                   "cmap" (fn [v]
                             (loop [i 0 ret (transient {})]
                               (if (< i (alength v))
                                 (recur (+ i 2)
@@ -124,14 +129,22 @@
                                 (persistent! ret))))
                    "with-meta"
                           (fn [v] (with-meta (aget v 0) (aget v 1)))}
-                  (:handlers opts)))
+                  (dissoc (:handlers opts) :default)))
+              :defaultHandler (-> opts :handlers :default)
               :mapBuilder (MapBuilder.)
               :arrayBuilder (VectorBuilder.)
-              :prefersStrings false}
-         (clj->js (dissoc opts :handlers))))))
+              :preferStrings false
+              :preferBuffers false}
+         (clj->js
+           (set/rename-keys
+             (dissoc opts :handlers)
+             {:array-builder  :arrayBuilder
+              :map-builder    :mapBuilder
+              :prefer-strings :preferStrings
+              :prefer-buffers :preferBuffers}))))))
 
 (defn read
-  "Read a transit encoded string into ClojureScript values given a 
+  "Read a transit encoded string into ClojureScript values given a
    transit reader."
   [r str]
   (.read r str))
@@ -200,7 +213,9 @@
   "Return a transit writer. type maybe either :json or :json-verbose.
   opts is a map with the following optional keys:
 
-    :handlers  - a map of type constructors to handler instances.
+    :handlers  - a map of type constructors to handler instances. Can optionally
+                 provide a :default write handler which will be used if no
+                 matching handler can be found.
     :transform - a function of one argument returning a transformed value. Will
                  be invoked on a value before it is written."
   ([type] (writer type nil))
@@ -242,6 +257,8 @@
               cljs.core/PersistentVector      vector-handler
               cljs.core/Subvec                vector-handler
               cljs.core/UUID                  uuid-handler
+              cljs.core/BlackNode             vector-handler
+              cljs.core/RedNode               vector-handler
               WithMeta                        meta-handler}
              (when (exists? cljs.core/Eduction)
                {^:cljs.analyzer/no-resolve cljs.core/Eduction list-handler})
@@ -263,8 +280,10 @@
                  Object
                  (forEach
                    ([coll f]
-                      (doseq [[k v] coll]
-                        (f v k)))))
+                    (doseq [[k v] coll]
+                      (if (= :default k)
+                        (f v "default")
+                        (f v k))))))
                :unpack
                (fn [x]
                  (if (instance? cljs.core/PersistentArrayMap x)
@@ -283,6 +302,10 @@
   [from-rep]
   from-rep)
 
+(defn- fn-or-val
+  [f]
+  (if (fn? f) f (constantly f)))
+
 (defn write-handler
   "Creates a transit write handler whose tag, rep,
    stringRep, and verboseWriteHandler methods
@@ -292,12 +315,16 @@
   ([tag-fn rep-fn str-rep-fn]
      (write-handler tag-fn rep-fn str-rep-fn nil))
   ([tag-fn rep-fn str-rep-fn verbose-handler-fn]
+   (let [tag-fn (fn-or-val tag-fn)
+         rep-fn (fn-or-val rep-fn)
+         str-rep-fn (fn-or-val str-rep-fn)
+         verbose-handler-fn (fn-or-val verbose-handler-fn)]
      (reify
        Object
        (tag [_ o] (tag-fn o))
        (rep [_ o] (rep-fn o))
        (stringRep [_ o] (when str-rep-fn (str-rep-fn o)))
-       (getVerboseHandler [_] (when verbose-handler-fn (verbose-handler-fn))))))
+       (getVerboseHandler [_] (when verbose-handler-fn (verbose-handler-fn)))))))
 
 ;; =============================================================================
 ;; Constructors & Predicates

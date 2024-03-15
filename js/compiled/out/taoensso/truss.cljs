@@ -82,6 +82,7 @@
   (macroexpand '(have? [:or nil? string?] "hello"))
   (have? [:set>= #{:a :b}]    [:a :b :c])
   (have? [:set<= [:a :b :c]] #{:a :b})
+  (have? [:n= 3] [:a :b :c :d])
   (qb 10000
     (with-error-fn nil                  (have? string? 5))
     (with-error-fn (fn [_] :truss/error) (have? string? 5)))
@@ -116,7 +117,27 @@
 
   ((fn [x]
      (let [a "a" b "b"]
-       (have string? x :data {:env (enc/get-env)}))) 5))
+       (have string? x :data {:env (enc/get-env)}))) 5)
+
+  (do
+    (set! *assert* false)
+    (have? integer? 4.0))
+
+  ;; Combinations: truthy?, single?, in? (8 combinations)
+  (do (def i1 1) (def v1 [1 2 3]) (def s1 #{1 2 3}))
+  (macroexpand '(have? integer?      1))
+  (macroexpand '(have? integer?      1 2 i1))
+  (macroexpand '(have? integer? :in [1 2 i1]))
+  (macroexpand '(have? integer? :in [1 2] [3 4 i1] v1))
+  (macroexpand '(have  integer?      1))
+  (macroexpand '(have  integer?      1 2 i1))
+  (macroexpand '(have  integer? :in [1 2 i1]))
+  (macroexpand '(have  integer? :in [1 2] [3 4 i1] v1))
+
+  (have? integer? :in s1)
+  (have  integer? :in s1)
+  (have  integer? :in #{1 2 3})
+  (have  integer? :in #{1 2 3} [4 5 6] #{7 8 9} s1))
 
 ;;;; Utils
 

@@ -86,5 +86,10 @@
 
 ((get ctx :emit) [:deck/load])
 ((get ctx :emit) [:suitcase/load])
+((get ctx :emit) [:share/load-from-fragment])
+
+(js/window.addEventListener
+ "popstate"
+ (fn [_] ((get ctx :emit) [:share/load-from-fragment])))
 
 (carbon.vdom/mount [tse.app/view ctx] (js/document.getElementById "app"))

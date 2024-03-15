@@ -1,4 +1,4 @@
-// Compiled by ClojureScript 1.10.339 {:language-out :ecmascript5}
+// Compiled by ClojureScript 1.11.60 {:language-out :ecmascript-next, :optimizations :none}
 goog.provide('figwheel.connect');
 goog.require('cljs.core');
 goog.require('figwheel.client');
@@ -14,4 +14,4 @@ return null;
 });
 goog.exportSymbol('figwheel.connect.start', figwheel.connect.start);
 
-//# sourceMappingURL=connect.js.map?rel=1537946274759
+//# sourceMappingURL=connect.js.map?rel=1710474320290

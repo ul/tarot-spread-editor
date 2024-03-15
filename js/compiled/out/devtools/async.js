@@ -1,19 +1,22 @@
-// Compiled by ClojureScript 1.10.339 {:language-out :ecmascript5}
+// Compiled by ClojureScript 1.11.60 {:language-out :ecmascript-next, :optimizations :none}
 goog.provide('devtools.async');
 goog.require('cljs.core');
 goog.require('goog.async.nextTick');
-goog.require('goog.labs.userAgent.browser');
 goog.require('devtools.context');
+goog.require('goog.labs.userAgent.browser');
+goog.scope(function(){
+devtools.async.goog$module$goog$labs$userAgent$browser = goog.module.get('goog.labs.userAgent.browser');
+});
 devtools.async.available_QMARK_ = (function devtools$async$available_QMARK_(){
 return (typeof Promise !== 'undefined');
 });
 devtools.async.fixed_chrome_version_for_async = "65.0.3321";
 devtools.async.needed_QMARK_ = (function devtools$async$needed_QMARK_(){
-return cljs.core.not.call(null,(function (){var and__3938__auto__ = goog.labs.userAgent.browser.isChrome();
-if(cljs.core.truth_(and__3938__auto__)){
-return goog.labs.userAgent.browser.isVersionOrHigher(devtools.async.fixed_chrome_version_for_async);
+return cljs.core.not.call(null,(function (){var and__5043__auto__ = devtools.async.goog$module$goog$labs$userAgent$browser.isChrome.call(null);
+if(cljs.core.truth_(and__5043__auto__)){
+return devtools.async.goog$module$goog$labs$userAgent$browser.isVersionOrHigher.call(null,devtools.async.fixed_chrome_version_for_async);
 } else {
-return and__3938__auto__;
+return and__5043__auto__;
 }
 })());
 });
@@ -28,45 +31,45 @@ throw e;
 }),(0));
 });
 devtools.async.promise_based_set_immediate = (function devtools$async$promise_based_set_immediate(callback){
-var o__29230__auto___47330 = (function (){var o__29230__auto__ = (function (){var o__29230__auto__ = Promise;
-return (o__29230__auto__["resolve"]).call(o__29230__auto__);
+var o__36960__auto___38528 = (function (){var o__36960__auto___38528 = (function (){var o__36960__auto___38528 = Promise;
+return (o__36960__auto___38528["resolve"]).call(o__36960__auto___38528);
 })();
-return (o__29230__auto__["then"]).call(o__29230__auto__,callback);
+return (o__36960__auto___38528["then"]).call(o__36960__auto___38528,callback);
 })();
-(o__29230__auto___47330["catch"]).call(o__29230__auto___47330,devtools.async.rethrow_outside_promise);
+(o__36960__auto___38528["catch"]).call(o__36960__auto___38528,devtools.async.rethrow_outside_promise);
 
 return null;
 });
 devtools.async.install_async_set_immediate_BANG_ = (function devtools$async$install_async_set_immediate_BANG_(){
-devtools.async._STAR_original_set_immediate_STAR_ = goog.async.nextTick.setImmediate_;
+(devtools.async._STAR_original_set_immediate_STAR_ = goog.async.nextTick.setImmediate_);
 
-return goog.async.nextTick.setImmediate_ = devtools.async.promise_based_set_immediate;
+return (goog.async.nextTick.setImmediate_ = devtools.async.promise_based_set_immediate);
 });
 devtools.async.uninstall_async_set_immediate_BANG_ = (function devtools$async$uninstall_async_set_immediate_BANG_(){
-return goog.async.nextTick.setImmediate_ = devtools.async._STAR_original_set_immediate_STAR_;
+return (goog.async.nextTick.setImmediate_ = devtools.async._STAR_original_set_immediate_STAR_);
 });
 devtools.async.installed_QMARK_ = (function devtools$async$installed_QMARK_(){
 return devtools.async._STAR_installed_STAR_;
 });
 devtools.async.install_BANG_ = (function devtools$async$install_BANG_(){
-if(devtools.async._STAR_installed_STAR_){
+if(cljs.core.truth_(devtools.async._STAR_installed_STAR_)){
 return null;
 } else {
-devtools.async._STAR_installed_STAR_ = true;
+(devtools.async._STAR_installed_STAR_ = true);
 
-var G__47331_47332 = Error;
-var target__29235__auto___47333 = G__47331_47332;
-if(cljs.core.truth_(target__29235__auto___47333)){
+var G__38529_38530 = Error;
+var target__36965__auto___38531 = G__38529_38530;
+if(cljs.core.truth_(target__36965__auto___38531)){
 } else {
-throw (new Error(["Assert failed: ",cljs.core.str.cljs$core$IFn$_invoke$arity$1(["unable to locate object path ",cljs.core.str.cljs$core$IFn$_invoke$arity$1(null)," in ",cljs.core.str.cljs$core$IFn$_invoke$arity$1(G__47331_47332)].join('')),"\n","target__29235__auto__"].join('')));
+throw (new Error(["Assert failed: ",["unable to locate object path ",null," in ",cljs.core.str.cljs$core$IFn$_invoke$arity$1(G__38529_38530)].join(''),"\n","target__36965__auto__"].join('')));
 }
 
-(target__29235__auto___47333["stackTraceLimit"] = Infinity);
+(target__36965__auto___38531["stackTraceLimit"] = Infinity);
 
 
 devtools.async.install_async_set_immediate_BANG_.call(null);
 
-if(cljs.core.truth_(devtools.async.needed_QMARK_.call(null))){
+if(devtools.async.needed_QMARK_.call(null)){
 } else {
 devtools.context.get_console.call(null).info(devtools.async.get_not_needed_message.call(null));
 }
@@ -75,8 +78,8 @@ return true;
 }
 });
 devtools.async.uninstall_BANG_ = (function devtools$async$uninstall_BANG_(){
-if(devtools.async._STAR_installed_STAR_){
-devtools.async._STAR_installed_STAR_ = false;
+if(cljs.core.truth_(devtools.async._STAR_installed_STAR_)){
+(devtools.async._STAR_installed_STAR_ = false);
 
 return devtools.async.uninstall_async_set_immediate_BANG_.call(null);
 } else {
@@ -84,4 +87,4 @@ return null;
 }
 });
 
-//# sourceMappingURL=async.js.map?rel=1537946265610
+//# sourceMappingURL=async.js.map?rel=1710474318737

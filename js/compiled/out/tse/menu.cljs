@@ -18,10 +18,12 @@
       (.setCheckable true)
       (.setChecked @checked?))))
 
-(defn make-popup [items node]
+(defn make-popup [items node actions]
   (let [pm (goog.ui.PopupMenu.)]
     (doseq [item items]
       (.addItem pm item))
+    (when-let [on-show (get actions :on-show)]
+      (.listen pm goog.ui.Component.EventType.SHOW #(on-show pm)))
     (doto pm
       (.render)
       (.attach node js/undefined js/undefined true))))

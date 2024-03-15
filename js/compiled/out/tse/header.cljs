@@ -11,7 +11,7 @@
 (def title-style
   {:font-weight 400
    :font-size "120%"
-   :padding "0.5em 1.5em 0.5em 1em"
+   :padding "0.5em 1em"
    :text-transform "uppercase"})
 
 (def link-style
@@ -25,7 +25,8 @@
 
 (def item-style
   {:display "flex"
-   :align-items "center"})
+   :align-items "center"
+   :padding "0.5rem"})
 
 (defn view [{:keys [sub emit]}]
   [:div
@@ -33,6 +34,12 @@
    [:div
     {:style title-style}
     @(sub [:t :app/title])]
+   [:div
+    {:style item-style}
+    [:a
+     {:style link-style
+      :href "/disclaimer"}
+     @(sub [:t :app/disclaimer])]]
    [:div
     {:style item-style}
     [:a

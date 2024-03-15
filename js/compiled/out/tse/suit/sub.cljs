@@ -12,9 +12,11 @@
         deck (sub [:deck/active])]
     (rx/rx
      (let [base-url (str @base-url (get @deck :src) "/")
+           back? (get @deck :back)
            format (get @deck :format)
-           make-url #(str base-url % "." format)]
-       (map-indexed #(-> {:src (make-url %2)} (assoc :index %1)) (get @suit :cards))))))
+           make-url #(str base-url % "." format)
+           active-cards (vec (map-indexed #(-> {:src (make-url %2)} (assoc :index %1)) (get @suit :cards)))]
+       (if back? (conj active-cards {:src (make-url "back") :index -1}) active-cards)))))
 
 (def spec
   {:suit/active-id [:active-suit]

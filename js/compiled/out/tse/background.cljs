@@ -15,10 +15,6 @@
                              :checked? (sub [:config/snap-grid?])
                              :action #(emit [:config/toggle-grid-snap (.isChecked %)])}))
 
-(defn download-menu-item [{:keys [sub emit]}]
-  (tse.menu/make-item {:content (sub [:t :menu/download "Download"])
-                       :action #(emit [:share/download])}))
-
 (defn add-label-menu-item [{:keys [sub emit]}]
   (tse.menu/make-item {:content (sub [:t :menu/add-label "Add label"])
                        :action #(emit [:label-editor/new])}))
@@ -27,14 +23,14 @@
   (tse.menu/make-item {:content (sub [:t :menu/set-background "Set background"])
                        :action #(emit [:background-dialog/open])}))
 
-(defn make-popup-menu [{:keys [sub] :as ctx} node]
+(defn make-popup-menu [{:keys [sub emit] :as ctx} node]
   (tse.menu/make-popup
    [(show-grid-menu-item ctx)
     (snap-grid-menu-item ctx)
-    (download-menu-item ctx)
     (add-label-menu-item ctx)
     (set-background-menu-item ctx)]
-   node))
+   node
+   {:on-show #(emit [:background/show-menu %])}))
 
 (defn init-bg [{:keys [emit] :as ctx} *node]
   (fn [node]
@@ -59,6 +55,8 @@
          (/ (- js/document.body.clientHeight (.-clientTop node)) scale))
     border-box-height))
 
+(def padding 50)
+
 (defn view [_]
   (let [node (rx/cell nil)]
     (fn [{:keys [sub emit] :as ctx}]
@@ -71,7 +69,7 @@
                   :backgroundImage (when (get grid :show?) (grid-css grid))
                   :backgroundColor @(sub [:background/color])
                   :width (background-width @node w scale)
-                  :height (background-height @node h scale)}
+                  :height (background-height @node (+ h padding) scale)}
           :on-click #(emit [:item/unselect-all])
           :on-mousedown #(when (and (zero? (.-button %)) (.-shiftKey %))
                            (let [offset [(.-offsetX %) (.-offsetY %)]

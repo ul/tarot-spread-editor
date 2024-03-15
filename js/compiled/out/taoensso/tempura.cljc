@@ -13,7 +13,7 @@
       [taoensso.encore       :as enc  :refer-macros [have have?]]
       [taoensso.tempura.impl :as impl :refer-macros []])))
 
-(enc/assert-min-encore-version [2 86 1])
+(enc/assert-min-encore-version [3 23 0])
 
 (def ^:dynamic *tr-opts*  nil)
 (def ^:dynamic *tr-scope* nil)
@@ -27,15 +27,16 @@
 
 ;;;;
 
-(def ^:private get-default-resource-compiler
-  "Good general-purpose resource compiler.
+(def get-default-resource-compiler
+  "Implementation detail.
+  Good general-purpose resource compiler.
   Supports output of text, and Hiccup forms with simple Markdown styles."
-  (enc/memoize_
+  (enc/fmemoize
     (fn [{:keys [escape-html?]}]
       (let [esc1 (if escape-html? impl/escape-html             identity)
             esc2 (if escape-html? impl/vec-escape-html-in-strs identity)]
 
-        (enc/memoize_
+        (enc/fmemoize
           (fn [res] ; -> [(fn [vargs]) -> <compiled-resource>]
             (enc/cond! ; Nb no keywords, nils, etc.
               (fn?     res) (-> res) ; Completely arb, full control
@@ -117,12 +118,12 @@
 ;;;;
 
 (def ^:private merge-into-default-opts
-  (enc/memoize_
+  (enc/fmemoize
     (fn [opts dynamic-opts]
       (merge default-tr-opts opts dynamic-opts))))
 
 (def ^:private scoped
-  (enc/memoize_
+  (enc/fmemoize
     (fn [locale ?scope resid]
       (enc/merge-keywords [locale ?scope resid]))))
 
@@ -147,7 +148,7 @@
         acc resids))
     nil locale-splits))
 
-(def ^:private search-resids*-cached (enc/memoize_ search-resids*))
+(def ^:private search-resids*-cached (enc/fmemoize search-resids*))
 
 (defn- search-resids [cache? dict locale-splits ?scope resids]
   (if cache?
@@ -344,7 +345,7 @@
      [header]
      (when header
        (when-let [csvs (not-empty (str/split header #","))]
-         (let [idx_ (volatile! -1)
+         (let [idx_ (enc/counter)
                m-sort-by
                (reduce
                  (fn [acc in]
@@ -353,11 +354,12 @@
                        acc
                        (let [[choice q] (str/split in #";")
                              choice (str/trim choice)
-                             q (or (when q
-                                     (enc/as-?float
-                                       (get (str/split q #"=") 1)))
-                                 1.0)
-                             sort-by [(- q) (vswap! idx_ inc)]]
+                             ^double q
+                             (or (when q
+                                   (enc/as-?float
+                                     (get (str/split q #"=") 1)))
+                               1.0)
+                             sort-by [(- q) (idx_)]]
                          (assoc acc [choice q] sort-by)))))
                  {}
                  csvs)]

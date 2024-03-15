@@ -1,5 +1,6 @@
 (ns tse.background-dialog
-  (:require tse.dialog)
+  (:require tse.dialog
+            [goog.object :as obj])
   (:import goog.ui.TabBar
            goog.ui.Tab
            goog.ui.Component.EventType))
@@ -13,7 +14,8 @@
             (.decorate node)
             (.listen goog.ui.Component.EventType.SELECT
                      (fn [e]
-                       (emit [:background-dialog/select-tab (.. e -target getElement  -dataset -tab)])))))
+                       (let [dataset (.. e -target getElement -dataset)]
+                         (emit [:background-dialog/select-tab (obj/get dataset "tab")]))))))
         (js/console.log "FIXME Dispose TabBar"))
       (reset! *node node))))
 

@@ -1,4 +1,4 @@
-;; Copyright (c) 2015-2018 Andrey Antukh <niwi@niwi.nz>
+;; Copyright (c) Andrey Antukh <niwi@niwi.nz>
 ;; All rights reserved.
 ;;
 ;; Redistribution and use in source and binary forms, with or without
@@ -24,12 +24,15 @@
 
 (ns cuerdas.core
   (:refer-clojure :exclude [contains? empty? repeat regexp?
-                            replace reverse chars keyword
+                            replace reverse chars keyword concat
                             #?@(:clj [unquote format])])
   (:require [clojure.string :as str]
             [clojure.set :refer [map-invert]]
+            [clojure.core :as c]
+
             [clojure.walk :refer [stringify-keys]]
             [cuerdas.regexp :as rx]
+
             #?(:cljs [goog.string :as gstr])
             #?(:cljs [cljs.reader :as edn]
                :clj  [clojure.edn :as edn]))
@@ -38,11 +41,46 @@
 #?(:cljs (def ^:private keyword* cljs.core/keyword)
    :clj  (def ^:private keyword* clojure.core/keyword))
 
+#?(:clj (set! *warn-on-reflection* true))
+
+;; => benchmarking: cljs.core/str
+;; --> WARM:  100000
+;; --> BENCH: 500000
+;; --> TOTAL: 197.82ms
+;; --> MEAN:  395.64ns
+;; => benchmarking: cuerdas.core/concat
+;; --> WARM:  100000
+;; --> BENCH: 500000
+;; --> TOTAL: 20.31ms
+;; --> MEAN:  40.63ns
+
+(declare repeat)
+
+(defmacro concat
+  "A macro variant of the clojure.core/str function that performs
+  considerbaly faster string concatenation operation on CLJS (on
+  JVM/CLJ it only applies basic simplification and then relies on the
+  `clojure.core/str`)."
+  [& params]
+  (let [cljs?  (:ns &env)
+        xform  (comp (partition-by string?)
+                     (filter some?)
+                     (mapcat (fn [part]
+                               (if (string? (first part))
+                                 [(apply c/str part)]
+                                 (cond->> part
+                                   cljs? (map (fn [o] (list 'js* "(~{} ?? \"\")" o))))))))
+        params (into [] xform params)]
+    (if cljs?
+      (let [stmpl (apply c/str "\"\"" (repeat "+~{}" (count params)))]
+        (cons 'js* (cons stmpl params)))
+      (cons `c/str params))))
+
 (defn empty?
   "Checks if a string is empty."
   [s]
-  (when (string? s)
-    (zero? (count s))))
+  (and (string? s)
+       (zero? (count s))))
 
 (defn empty-or-nil?
   "Convenient helper for check emptines or if value is nil."
@@ -53,11 +91,10 @@
 (defn includes?
   "Determines whether a string contains a substring."
   [s subs]
-  (when (string? s)
-    (if (nil? subs)
-      false
-      #?(:clj (.contains (.toString ^Object s) (.toString ^Object subs))
-         :cljs (gstr/contains s subs)))))
+  (and (string? s)
+       (string? subs)
+       #?(:clj  (.contains ^String s subs)
+          :cljs (gstr/contains s subs))))
 
 #?(:clj
    (defn slice
@@ -86,33 +123,28 @@
 
 (defn starts-with?
   "Check if the string starts with prefix."
-  [s ^Object prefix]
-  (when (string? s)
-    (cond
-      (nil? prefix) false
-      (empty? prefix) true
-      :else
-      #?(:clj (let [prefix (.toString prefix)
-                    region (slice s 0 (count prefix))]
-                (= region prefix))
-         :cljs (= (.lastIndexOf s prefix 0) 0)))))
+  [s prefix]
+  (and (string? s)
+       (or (string? prefix)
+           (char? prefix))
+       (or (zero? (count prefix))
+           #?(:clj  (let [region (slice s 0 (count prefix))]
+                      (= region prefix))
+              :cljs (= (.lastIndexOf s prefix 0) 0)))))
 
 (defn ends-with?
   "Check if the string ends with suffix."
-  [s ^Object suffix]
-  (when (string? s)
-    (cond
-      (nil? s) false
-      (nil? suffix) false
-      (empty? suffix) true
-      :else
-      #?(:clj  (let [len (count s)
-                     suffix (.toString suffix)
-                     region (slice s (- len (count suffix)) len)]
-                (= region suffix))
-         :cljs (let [l (- (count s) (count suffix))]
-                 (and (>= l 0)
-                      (= (.indexOf s suffix l) l)))))))
+  [s suffix]
+  (and (string? s)
+       (or (string? suffix)
+           (char? suffix))
+       (or (zero? (count suffix))
+           #?(:clj (let [len (count s)
+                         region (slice s (- len (count suffix)) len)]
+                     (= region suffix))
+              :cljs (let [l (- (count s) (count suffix))]
+                      (and (>= l 0)
+                           (= (.indexOf s suffix l) l)))))))
 
 (defn lower
   "Converts string to all lower-case.
@@ -132,107 +164,73 @@
   (when (string? s)
     (.toUpperCase #?(:clj ^String s :cljs s))))
 
-(defn locale-lower
-  "Converts string to all lower-case respecting
-  the current system locale.
-
-  In the jvm you can provide a concrete locale to
-  use as the second optional argument."
-  ([s]
-   (when (string? s)
-     #?(:cljs (.toLocaleLowerCase s)
-        :clj (.toLowerCase ^String s))))
-  #?(:clj
-     ([s locale]
-      {:pre [(instance? Locale locale)]}
-      (when (string? s)
-        (.toLowerCase ^String s ^Locale locale)))))
-
-(defn locale-upper
-  "Converts string to all upper-case respecting
-  the current system locale.
-
-  In the jvm you can provide a concrete locale to
-  use as the second optional argument."
-  ([s]
-   (when (string? s)
-     #?(:cljs (.toLocaleUpperCase s)
-        :clj (.toUpperCase ^String s))))
-  #?(:clj
-     ([s locale]
-      {:pre [(instance? Locale locale)]}
-      (when (string? s)
-        (.toUpperCase ^String s ^Locale locale)))))
-
-(defn caseless=
-  "Compare strings in a case-insensitive manner.
-
-  This function is locale independent."
-  [s1 s2]
-  (when (string? s1)
-    #?(:clj  (.equalsIgnoreCase ^String s1 ^String s2)
-       :cljs (= (lower s1) (lower s2)))))
-
-(defn locale-caseless=
-  "Compare strings in a case-insensitive manner
-  respecting the current locale.
-
-  An optional locale can be passed as third
-  argument (only on JVM)."
-  ([s1 s2]
-   (when (string? s1)
-     (= (locale-lower s1) (locale-lower s2))))
-  #?(:clj
-     ([s1 s2 locale]
-      {:pre [(instance? Locale locale)]}
-      (when (string? s1)
-        (= (locale-lower s1 locale) (locale-lower s2 locale))))))
-
 (defn blank?
   "Checks if a string is empty or contains only whitespace."
   [^String s]
-  (when (string? s)
-    (or (zero? (count s))
-        (boolean (-> (rx/enhace (re-pattern "^[\\s\\p{Z}]+$"))
-                     (re-matches s))))))
+  (and (string? s)
+       (or (zero? (count s))
+           (boolean (-> (re-pattern "(?u)^[\\s\\p{Z}]+$")
+                        (re-matches s))))))
 
 (defn alpha?
   "Checks if a string contains only alpha characters."
   [s]
-  (when (string? s)
-    (boolean (re-matches #"^[a-zA-Z]+$" s))))
+  (and (string? s)
+       (boolean (re-matches #"^[a-zA-Z]+$" s))))
 
 (defn digits?
   "Checks if a string contains only digit characters."
   [s]
-  (when (string? s)
-    (boolean (re-matches #"^[0-9]+$" s))))
+  (and (string? s)
+       (boolean (re-matches #"^[0-9]+$" s))))
 
 (defn alnum?
   "Checks if a string contains only alphanumeric characters."
   [s]
-  (when (string? s)
-    (boolean (re-matches #"^[a-zA-Z0-9]+$" s))))
+  (and (string? s)
+       (boolean (re-matches #"^[a-zA-Z0-9]+$" s))))
 
 (defn word?
   "Checks if a string contains only the word characters.
   This function will use all the unicode range."
   [s]
-  (when (string? s)
-    (boolean (re-matches (rx/enhace (re-pattern "^[\\p{N}\\p{L}_-]+$")) s))))
+  (and (string? s)
+       (boolean (re-matches (re-pattern "(?u)^[\\p{N}\\p{L}_-]+$") s))))
 
 (defn letters?
   "Checks if string contains only letters.
   This function will use all the unicode range."
   [s]
-  (when (string? s)
-    (boolean (re-matches (rx/enhace (re-pattern "^\\p{L}+$")) s))))
+  (and (string? s)
+       (boolean (re-matches (re-pattern "(?u)^\\p{L}+$") s))))
 
 (defn numeric?
   "Check if a string contains only numeric values."
   [s]
-  (when (string? s)
-    (boolean (re-matches #"^[+-]?([0-9]*\.?[0-9]+|[0-9]+\.?[0-9]*)([eE][+-]?[0-9]+)?$" s))))
+  (and (string? s)
+       (boolean (re-matches #"^[+-]?([0-9]*\.?[0-9]+|[0-9]+\.?[0-9]*)([eE][+-]?[0-9]+)?$" s))))
+
+(defn index-of
+  ([s val]
+   (when (and (string? s)
+              (string? val))
+     (str/index-of s val)))
+
+  ([s val from]
+   (when (and (string? s)
+              (string? val))
+     (str/index-of s val from))))
+
+(defn last-index-of
+  ([s val]
+   (when (and (string? s)
+              (string? val))
+     (str/last-index-of s val)))
+
+  ([s val from]
+   (when (and (string? s)
+              (string? val))
+     (str/last-index-of s val from))))
 
 (declare replace)
 
@@ -274,7 +272,7 @@
   a single space."
   [s]
   (-> (trim s)
-      (replace (rx/enhace (re-pattern "[\\s\\p{Z}]+")) " ")))
+      (replace (re-pattern "(?u)[\\s\\p{Z}]+") " ")))
 
 (def strip trim)
 (def rstrip rtrim)
@@ -282,16 +280,16 @@
 
 (defn strip-prefix
   "Strip prefix in more efficient way."
-  [^String s ^Object prefix]
+  [^String s ^String prefix]
   (if (starts-with? s prefix)
-    (slice s (count (.toString prefix)) (count s))
+    (slice s (count prefix) (count s))
     s))
 
 (defn strip-suffix
   "Strip suffix in more efficient way."
-  [^String s ^Object suffix]
+  [^String s suffix]
   (if (ends-with? s suffix)
-    (slice s 0 (- (count s) (count (.toString suffix))))
+    (slice s 0 (- (count s) (count suffix)))
     s))
 
 (declare join)
@@ -324,7 +322,7 @@
        (rx/regexp? match)
        (if (string? replacement)
          (replace-all s match replacement)
-         (replace-all s match (str/replace-with replacement))))))
+         (replace-all s match (#'str/replace-with replacement))))))
 
 (defn replace
   "Replaces all instance of match with replacement in s.
@@ -427,7 +425,7 @@
 (defn words
   "Returns a vector of the words in the string."
   ([s]
-   (words s (rx/enhace (re-pattern "[\\p{N}\\p{L}_-]+"))))
+   (words s (re-pattern "(?u)[\\p{N}\\p{L}_-]+")))
   ([s re]
    (when (string? s)
      (vec (re-seq re s)))))
@@ -514,8 +512,8 @@
 
 (defn- stylize-split
   [s]
-  (let [re1 (rx/enhace (re-pattern "(\\p{Lu}+[\\p{Ll}\\u0027\\p{Ps}\\p{Pe}]*)"))
-        re2 (rx/enhace (re-pattern "[^\\p{L}\\p{N}\\u0027\\p{Ps}\\p{Pe}]+"))]
+  (let [re1 (re-pattern "(?u)(\\p{Lu}+[\\p{Ll}\\u0027\\p{Ps}\\p{Pe}]*)")
+        re2 (re-pattern "(?u)[^\\p{L}\\p{N}\\u0027\\p{Ps}\\p{Pe}]+")]
     (some-> s
             (name)
             (replace re1 "-$1")
@@ -540,9 +538,10 @@
               (stylize-join first-fn rest-fn join-with)))))
 
 (defn capital
-  "Uppercases the first character of a string or keyword"
+  "Uppercases the first character of a string"
   [s]
-  (when (string? s)
+  (if (empty-or-nil? s)
+    s
     (str (upper (subs s 0 1)) (subs s 1 (count s)))))
 
 (defn camel
@@ -623,8 +622,8 @@
   "Unicode friendly version of `slug` function."
   [s]
   (some-> (lower s)
-          (replace (rx/enhace (re-pattern "[^\\p{L}\\p{N}]+")) " ")
-          (replace (rx/enhace (re-pattern "[\\p{Z}\\s]+")) "-")))
+          (replace (re-pattern "(?u)[^\\p{L}\\p{N}]+") " ")
+          (replace (re-pattern "(?u)[\\p{Z}\\s]+") "-")))
 
 (defn keyword
   "Safer version of clojure keyword, accepting a
@@ -633,50 +632,6 @@
    (keyword* (kebab k)))
   ([n k]
    (keyword* (str n) (kebab k))))
-
-(defn parse-number
-  "General purpose function for parse number like
-  string to number. It works with both integers
-  and floats."
-  [s]
-  (if (nil? s)
-    #?(:cljs js/NaN :clj Double/NaN)
-    (if (numeric? s)
-      (edn/read-string s)
-      #?(:cljs js/NaN :clj Double/NaN))))
-
-(defn parse-double
-  "Return the double value from string."
-  [s]
-  (cond
-    (number? s)
-    (double s)
-
-    (string? s)
-    #?(:cljs (js/parseFloat s)
-       :clj  (try
-               (Double/parseDouble s)
-               (catch Throwable e Double/NaN)))
-
-    :else
-    #?(:clj Double/NaN
-       :cljs js/NaN)))
-
-(defn parse-int
-  "Return the number value in integer form."
-  [s]
-  (cond
-    (number? s)
-    (int s)
-
-    (and (string? s)
-         (re-matches #"-?\d+(\.\d+)?" s))
-    #?(:clj (.longValue (Double. ^String s))
-       :cljs (js/parseInt s 10))
-
-    :else
-    #?(:clj Double/NaN
-       :cljs js/NaN)))
 
 (defn one-of?
   "Returns true if s can be found in coll."
@@ -693,25 +648,26 @@
   "Pads the str with characters until the total string
   length is equal to the passed length parameter. By
   default, pads on the left with the space char."
-  [s & [{:keys [length padding type]
-         :or {length 0 padding " " type :left}}]]
-  (when (string? s)
-    (let [padding (slice padding 0 1)
-          padlen  (- length (count s))
-          padlen  (if (< padlen 0) 0 padlen)]
-      (condp = type
-        :right (str s (repeat padding padlen))
-        :both  (let [first (repeat padding (Math/ceil (/ padlen 2)))
-                     second (repeat padding (Math/floor (/ padlen 2)))]
-                 (str first s second))
-        :left  (str (repeat padding padlen) s)))))
+  ([s] (pad s nil))
+  ([s {:keys [length padding type]
+       :or {length 0 padding " " type :left}}]
+   (when (string? s)
+     (let [padding (slice padding 0 1)
+           padlen  (- length (count s))
+           padlen  (if (< padlen 0) 0 padlen)]
+       (condp = type
+         :right (str s (repeat padding padlen))
+         :both  (let [first (repeat padding (Math/ceil (/ padlen 2)))
+                      second (repeat padding (Math/floor (/ padlen 2)))]
+                  (str first s second))
+         :left  (str (repeat padding padlen) s))))))
 
 (defn collapse-whitespace
   "Converts all adjacent whitespace characters
   to a single space."
   [s]
   (some-> s
-          (replace (rx/enhace (re-pattern "[\\p{Z}\\s]+")) " ")
+          (replace (re-pattern "(?u)[\\p{Z}\\s]+") " ")
           (replace #"^\s+|\s+$" "")))
 
 (defn escape-html
@@ -765,27 +721,20 @@
 (defn substr-between
   "Find string that is nested in between two strings. Return first match"
   [s prefix suffix]
-  (cond
-    (nil? s) nil
-    (nil? prefix) nil
-    (nil? suffix) nil
-    (not (includes? s prefix)) nil
-    (not (includes? s suffix)) nil
-    :else
-    (some-> s
-            (split prefix)
-            second
+  (when (and (includes? s prefix)
+             (includes? s suffix))
+    (some-> (split s prefix)
+            (second)
             (split suffix)
-            first)))
+            (first))))
 
 (defn <<-
-  "Unindent multiline text.
-  Uses either a supplied regex or the shortest
+  "Unindent multiline text. Uses either a supplied regex or the shortest
   beginning-of-line to non-whitespace distance"
   ([s]
    (let [all-indents (->> (rest (lines s)) ;; ignore the first line
                           (remove blank?)
-                          (concat [(last (lines s))]) ;; in case all lines are indented
+                          (c/concat [(last (lines s))]) ;; in case all lines are indented
                           (map #(->> % (re-find #"^( +)") second count)))
          min-indent  (re-pattern (format "^ {%s}"
                                          (apply min all-indents)))]
@@ -836,13 +785,13 @@
        (catch Exception e))))
 
 #?(:clj
-   (defn- interpolate
+   (defn- interpolate-istr
      "Yields a seq of Strings and read forms."
      ([s atom?]
       (lazy-seq
        (if-let [[form rest] (silent-read (subs s (if atom? 2 1)))]
-         (cons form (interpolate (if atom? (subs rest 1) rest)))
-         (cons (subs s 0 2) (interpolate (subs s 2))))))
+         (cons form (interpolate-istr (if atom? (subs rest 1) rest)))
+         (cons (subs s 0 2) (interpolate-istr (subs s 2))))))
      ([^String s]
       (if-let [start (->> ["~{" "~("]
                           (map #(.indexOf s ^String %))
@@ -851,63 +800,108 @@
                           first)]
         (lazy-seq (cons
                    (subs s 0 start)
-                   (interpolate (subs s start) (= \{ (.charAt s (inc start))))))
+                   (interpolate-istr (subs s start) (= \{ (.charAt s (inc start))))))
         [s]))))
 
 #?(:clj
-   (defmacro istr
-     "Accepts one or more strings; emits a `str` invocation that
-     concatenates the string data and evaluated expressions contained
-     within that argument.  Evaluation is controlled using ~{} and ~()
-     forms. The former is used for simple value replacement using
-     clojure.core/str; the latter can be used to embed the results of
-     arbitrary function invocation into the produced string.
+(defmacro istr
+  "A string formating macro that works LIKE ES6 template literals but
+  using clojure construcs and symbols for interpolation delimiters.
 
-     Examples:
+  It accepts one or more strings; emits a `concat` invocation that
+  concatenates the string data and evaluated expressions contained
+  within that argument.
 
-         user=> (def v 30.5)
-         #'user/v
-         user=> (istr \"This trial required ~{v}ml of solution.\")
-         \"This trial required 30.5ml of solution.\"
-         user=> (istr \"There are ~(int v) days in November.\")
-         \"There are 30 days in November.\"
-         user=> (def m {:a [1 2 3]})
-         #'user/m
-         user=> (istr \"The total for your order is $~(->> m :a (apply +)).\")
-         \"The total for your order is $6.\"
-         user=> (<< \"Just split a long interpolated string up into ~(-> m :a (get 0)), \"
-                  \"~(-> m :a (get 1)), or even ~(-> m :a (get 2)) separate strings \"
-                  \"if you don't want a << expression to end up being e.g. ~(* 4 (int v)) \"
-                  \"columns wide.\")
-         \"Just split a long interpolated string up into 1, 2, or even 3 separate strings if you don't want a << expression to end up being e.g. 120 columns wide.\"
+  Evaluation is controlled using ~{} and ~() forms. The former is used
+  for simple value replacement using clojure.core/str; the latter can
+  be used to embed the results of arbitrary function invocation into
+  the produced string.
 
-     Note that quotes surrounding string literals within ~() forms must be
-     escaped."
+  Examples:
+
+    user=> (def v 30.5)
+    user=> (istr \"This trial required ~{v}ml of solution.\")
+    \"This trial required 30.5ml of solution.\"
+    user=> (istr \"There are ~(int v) days in November.\")
+    \"There are 30 days in November.\"
+
+    user=> (def m {:a [1 2 3]})
+    user=> (istr \"The total for your order is $~(->> m :a (apply +)).\")
+    \"The total for your order is $6.\"
+
+    user=> (istr \"Just split a long interpolated string up into ~(-> m :a (get 0)), \"
+                 \"~(-> m :a (get 1)), or even ~(-> m :a (get 2)) separate strings \"
+                 \"if you don't want a << expression to end up being e.g. ~(* 4 (int v)) \"
+                 \"columns wide.\")
+    \"Just split a long interpolated string up into 1, 2, or even 3 separate strings if you don't want a << expression to end up being e.g. 120 columns wide.\"
+
+    Note that quotes surrounding string literals within ~() forms must be
+    escaped."
      [& strings]
-     `(str ~@(interpolate (apply str strings)))))
+     `(cuerdas.core/concat ~@(interpolate-istr (apply str strings))))
+)
 
 #?(:clj
-   (defmacro <<
-     "A backward compatibility alias for `istr` macro."
-     {:deprecated true}
-     [& strings]
-     `(str ~@(interpolate (apply str strings)))))
+(defmacro <<
+  "A backward compatibility alias for `istr` macro."
+  {:deprecated true}
+  [& strings]
+  `(cuerdas.core/concat ~@(interpolate-istr (apply str strings))))
+)
 
-;; --- End String Interpolation
+#?(:clj
+   (defn- interpolate-ffmt
+     [s params]
+     (loop [items  (->> (re-seq #"([^\%]+)*(\%{1,2}(\d+)?)?" s)
+                        (remove (fn [[full seg]] (and (nil? seg) (not full)))))
+            result []
+            index  0]
+       ;; (prn "interpolate-ffmt" items)
+       (if-let [[full segment var? sidx] (first items)]
+         (cond
+           (and var? (= "%%" var?))
+           (recur (rest items)
+                  (conj result (str/replace full "%%" "%"))
+                  index)
 
-;; Backward compatibility aliases.
+           (and var? sidx)
+           (let [cidx (dec (edn/read-string sidx))]
+             (recur (rest items)
+                    (-> result
+                        (conj segment)
+                        (conj (nth params cidx)))
+                    (inc index)))
 
-(def ^:deprecated slugify slug)
-(def ^:deprecated dasherize kebab)
-(def ^:deprecated underscore snake)
-(def ^:deprecated underscored snake)
-(def ^:deprecated classify pascal)
-(def ^:deprecated humanize human)
-(def ^:deprecated titleize title)
-(def ^:deprecated capitalize capital)
-(def ^:deprecated alpha-numeric? alnum?)
-(def ^:deprecated parse-long parse-int)
-(def ^:deprecated parse-float parse-double)
-(def ^:deprecated contains? includes?)
-(def ^:deprecated startswith? starts-with?)
-(def ^:deprecated endswith? ends-with?)
+           var?
+           (recur (rest items)
+                  (-> result
+                      (conj segment)
+                      (conj (nth params index)))
+                  (inc index))
+
+           :else
+           (recur (rest items)
+                  (conj result segment)
+                  (inc index)))
+
+         (remove nil? result)))))
+
+#?(:clj
+(defmacro ffmt
+  "Alternative (to `istr`) string formating macro, that performs simple
+  string formating on the compile time (this means that the string
+  should be known at compile time). Internally it uses the fast string
+  concatenation mechanism implemented in the `concat` macro.
+
+  If you don't need the peculiarities of the `istr` macro, this macro
+  should be prefered.
+
+  It works with two basic forms: sequencial and indexed. Let seen an
+  example:
+
+    (str/ffmt \"url(%)\" my-url) ; sequential
+    (str/ffmt \"url(%1)\" my-url) ; indexed
+  "
+  [s & params]
+  (cons 'cuerdas.core/concat (interpolate-ffmt s (vec params))))
+)

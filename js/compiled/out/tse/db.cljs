@@ -5,7 +5,7 @@
   (rx/cell
    {:decks {}
     :suitcases {}
-    :deck-base-url "http://editor.mantike.pro/decks/"
+    :deck-base-url "https://decks.mantike.pro/"
     :lang :en
     :active-deck "RiderWaiteTarot"
     :active-suit 0
@@ -14,4 +14,5 @@
     :items []
     :background-dialog {:tab "color"
                         :color "#ffffff"}
-    :background {:origin [0 0]}}))
+    :background {:origin [0 0]}
+    :loaded? false}))

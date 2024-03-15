@@ -20,7 +20,14 @@
 (defn set-dimensions [{:keys [db], [dimensions] :args}]
   (swap! db assoc-in [:background :dimensions] dimensions))
 
+(defn show-menu [{:keys [db], [menu] :args}]
+  (let [p (.getPosition menu)
+        x (.-x p)
+        y (.-y p)]
+    (swap! db assoc-in [:background :menu-position] [x y])))
+
 (def spec
   {:background/move move
    :background/resize resize
-   :background/set-dimensions set-dimensions})
+   :background/set-dimensions set-dimensions
+   :background/show-menu show-menu})

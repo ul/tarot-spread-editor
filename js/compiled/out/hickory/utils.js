@@ -1,4 +1,4 @@
-// Compiled by ClojureScript 1.10.339 {:language-out :ecmascript5}
+// Compiled by ClojureScript 1.11.60 {:language-out :ecmascript-next, :optimizations :none}
 goog.provide('hickory.utils');
 goog.require('cljs.core');
 goog.require('clojure.string');
@@ -28,7 +28,7 @@ return cljs.core.keyword.call(null,clojure.string.lower_case.call(null,s));
  * The second and third arguments can be nil or empty strings.
  */
 hickory.utils.render_doctype = (function hickory$utils$render_doctype(name,publicid,systemid){
-return ["<!DOCTYPE ",cljs.core.str.cljs$core$IFn$_invoke$arity$1(name),cljs.core.str.cljs$core$IFn$_invoke$arity$1((cljs.core.truth_(cljs.core.not_empty.call(null,publicid))?[" PUBLIC \"",cljs.core.str.cljs$core$IFn$_invoke$arity$1(publicid),"\""].join(''):null)),cljs.core.str.cljs$core$IFn$_invoke$arity$1((cljs.core.truth_(cljs.core.not_empty.call(null,systemid))?[" \"",cljs.core.str.cljs$core$IFn$_invoke$arity$1(systemid),"\""].join(''):null)),">"].join('');
+return ["<!DOCTYPE ",cljs.core.str.cljs$core$IFn$_invoke$arity$1(name),(cljs.core.truth_(cljs.core.not_empty.call(null,publicid))?[" PUBLIC \"",cljs.core.str.cljs$core$IFn$_invoke$arity$1(publicid),"\""].join(''):null),(cljs.core.truth_(cljs.core.not_empty.call(null,systemid))?[" \"",cljs.core.str.cljs$core$IFn$_invoke$arity$1(systemid),"\""].join(''):null),">"].join('');
 });
 
-//# sourceMappingURL=utils.js.map?rel=1537946282423
+//# sourceMappingURL=utils.js.map?rel=1710474317681

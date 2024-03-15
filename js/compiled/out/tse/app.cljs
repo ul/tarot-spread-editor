@@ -4,14 +4,16 @@
             tse.board
             tse.toolbar
             tse.label-editor
-            tse.background-dialog))
+            tse.background-dialog
+            ))
 
 (def style
   {:flex 1
    :display "flex"
    :flex-direction "column"})
 
-(defn view [ctx]
+(defn view [{:keys [sub] :as ctx}]
+  @(sub [:share/update-fragment])
   [:div
    {:style style}
    [tse.header/view ctx]

@@ -8,6 +8,10 @@
 
 (comment (test/run-tests))
 
+;;;; TODO
+;; - Would be nice to support args in Hiccup attrs forms, ala
+;;   [[:span {:title "%1"} "Foo %2"]], Ref. https://github.com/ptaoussanis/tempura/issues/22
+
 (defn str->?arg-idx [s]
   (case s
     ;; % 0 ; No, prefer minimizing alternatives + allows % literal pass through
@@ -33,9 +37,8 @@
         [(enc/str-replace s uuid-esc "%")]
         (let [arg-idxs (mapv str->?arg-idx ?arg-seq)
               splits   (str/split s re-clojure-arg)
-              splits   (mapv (fn [s] (enc/str-replace s uuid-esc "%")) splits)
-              _        (have (fn [arg-idxs-count splits-count]
-                               (= arg-idxs-count (- splits-count 1))))]
+              splits   (mapv (fn [s] (enc/str-replace s uuid-esc "%")) splits)]
+
           (enc/vinterleave-all splits arg-idxs))))))
 
 (comment
@@ -53,7 +56,7 @@
    (have? string? s)
    (let [parts (str->split-args s)
          ;; Why the undefined check? Vestigial?
-         argval-fn (or argval-fn #?(:clj identity :cljs enc/undefined->nil))]
+         argval-fn (or argval-fn #?(:clj identity :cljs #(if (undefined? %) nil %)))]
 
      (if (= (count parts) 1) ; Optimize common-case:
        (let [[p1] parts]
@@ -184,6 +187,31 @@
 
 ;;;;
 
+(defn attrs-explode-args-in-strs [v] ; TODO Non-recursive
+  (have? vector? v)
+  (let [[v1 ?attrs] v]
+    (if-not (map? ?attrs)
+      v
+      (let [attrs
+            (enc/map-vals
+              (fn [v]
+                (if (string? v)
+                  (let [parts (str->split-args v)]
+                    (if (> (count parts) 1)
+                      parts
+                      v))
+                  v))
+              ?attrs)]
+        ;; TODO Could immediately make this a vargs fn?
+        (if (= attrs ?attrs)
+          v
+          (assoc v 1 attrs))))))
+
+(comment
+  (attrs-explode-args-in-strs [:a     {:foo "hi"    :bar "baz"} "hello"])
+  (attrs-explode-args-in-strs [:a     {:foo "hi %1" :bar "baz"} "hello"])
+  (attrs-explode-args-in-strs [:a [:b {:foo "hi %1" :bar "baz"} "hello"]]))
+
 (defn vec-explode-args-in-strs [v]
   (have? vector? v)
   (reducev-nested
@@ -191,7 +219,7 @@
       (if-not (string? in)
         (conj acc in)
         (let [parts (str->split-args in)
-              parts (mapv (fn [p] (if (string? p) p (symbol (str "%" (inc p)))))
+              parts (mapv (fn [p] (if (string? p) p (symbol (str "%" (inc (long p))))))
                       parts)]
           (into acc parts))))
     v))
@@ -231,8 +259,10 @@
         s (replace-matches s   #"(\*)([^\*\r\n]+)\1" :em)
         s (replace-matches s    #"(_)([^_\r\n]+)\1"  :i)
 
-        ;; This common enough to be worthwhile?
-        s (replace-matches s   #"(~~)([^~\r\n]+)\1"  :s) ; Strikeout
+        ;;; Specials (for arbitrary inline styling, etc.)
+        s (replace-matches s   #"(~~)([^~\r\n]+)\1"  :mark)
+        s (replace-matches s  #"(~1~)([^~\r\n]+)\1"  :span.tspecl1)
+        s (replace-matches s  #"(~2~)([^~\r\n]+)\1"  :span.tspecl2)
 
         s (enc/str-replace s uuid-esc*      "*")
         s (enc/str-replace s uuid-esc_      "_")
@@ -247,7 +277,7 @@
             splits (str/split s (re-pattern (str/join "|" ordered-match-ks)))]
         (enc/vinterleave-all splits ordered-match-vs)))))
 
-(comment (str->split-styles "_hello_ **there** this is a _test_ `*yo`*"))
+(comment (str->split-styles "_hello_ **there** this is a _test_ `*yo`* ~1~hello~1~"))
 
 (defn vec->vtag
   "[\"foo\"] -> [:span \"foo\"] as a convenience."
@@ -309,7 +339,7 @@
   ;; an appropriately prepared input for this fn.
 
   (let [expand-locale
-        (enc/memoize_
+        (enc/fmemoize
           (fn [locale]
             (let [parts (str/split (str/lower-case (name locale)) #"[_-]")]
               (mapv #(keyword (str/join "-" %))
@@ -331,7 +361,7 @@
                     locales)]
               acc)))
 
-        expand-locales*-cached (enc/memoize_ expand-locales*)]
+        expand-locales*-cached (enc/fmemoize expand-locales*)]
 
     ;; Inputs are combinatorial, so can't cache by default:
     (fn [cache? locales]
@@ -353,7 +383,7 @@
      (is (= [[:en-us :en] [:fr-fr :fr]]    ; Never change langs before vars
            (expand-locales nil [:en-us :fr-fr :en])))))
 
-#?(:clj (def ^:private cached-read-edn (enc/memoize_ enc/read-edn)))
+#?(:clj (def ^:private cached-read-edn (enc/fmemoize enc/read-edn)))
 (defn load-resource [rname]
   #?(:clj
      (if-let [edn (enc/slurp-file-resource rname)]
@@ -394,7 +424,7 @@
             {} dict))
 
         as-paths ; For locale normalization, lookup speed, etc.
-        (enc/memoize_ ; Ref transparent
+        (enc/fmemoize ; Ref transparent
           (fn [dict]
             (reduce
               (fn [acc in]
@@ -405,10 +435,10 @@
               {} (node-paths map? dict))))
 
         compile-dictionary*
-        (enc/memoize* 1000 ; Minor caching to help blunt impact on dev benchmarks
+        (enc/memoize 1000 ; Minor caching to help blunt impact on dev benchmarks
           (fn [dict] (-> dict preprocess preprocess as-paths)))
 
-        compile-dictionary*-cached (enc/memoize_ compile-dictionary*)]
+        compile-dictionary*-cached (enc/fmemoize compile-dictionary*)]
 
     ;; We may want resource reloads in dev-mode, so can't cache by default:
     (fn [cache? dict]
