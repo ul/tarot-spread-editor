@@ -34,7 +34,7 @@
         module.exports,
         module,
         module.exports,
-        __webpack_require__
+        __webpack_require__,
       ); // Flag the module as loaded
       /******/
       /******/ /******/ module.l = true; // Return the exports of the module
@@ -322,6 +322,8 @@
           }
         };
 
+        window.Delta = Delta;
+
         Delta.prototype.insert = function (text, attributes) {
           var newOp = {};
           if (text.length === 0) return this;
@@ -477,7 +479,7 @@
             } else {
               var length = Math.min(
                 thisIter.peekLength(),
-                otherIter.peekLength()
+                otherIter.peekLength(),
               );
               var thisOp = thisIter.next(length);
               var otherOp = otherIter.next(length);
@@ -492,7 +494,7 @@
                 var attributes = op.attributes.compose(
                   thisOp.attributes,
                   otherOp.attributes,
-                  typeof thisOp.retain === "number"
+                  typeof thisOp.retain === "number",
                 );
                 if (attributes) newOp.attributes = attributes;
                 delta.push(newOp);
@@ -557,14 +559,14 @@
                   opLength = Math.min(
                     thisIter.peekLength(),
                     otherIter.peekLength(),
-                    length
+                    length,
                   );
                   var thisOp = thisIter.next(opLength);
                   var otherOp = otherIter.next(opLength);
                   if (equal(thisOp.insert, otherOp.insert)) {
                     delta.retain(
                       opLength,
-                      op.attributes.diff(thisOp.attributes, otherOp.attributes)
+                      op.attributes.diff(thisOp.attributes, otherOp.attributes),
                     );
                   } else {
                     delta.push(otherOp)["delete"](opLength);
@@ -626,7 +628,7 @@
             } else {
               var length = Math.min(
                 thisIter.peekLength(),
-                otherIter.peekLength()
+                otherIter.peekLength(),
               );
               var thisOp = thisIter.next(length);
               var otherOp = otherIter.next(length);
@@ -642,8 +644,8 @@
                   op.attributes.transform(
                     thisOp.attributes,
                     otherOp.attributes,
-                    priority
-                  )
+                    priority,
+                  ),
                 );
               }
             }
@@ -788,7 +790,10 @@
         Object.defineProperty(exports, "__esModule", {
           value: true,
         });
-        exports.default = exports.BlockEmbed = exports.bubbleFormats = undefined;
+        exports.default =
+          exports.BlockEmbed =
+          exports.bubbleFormats =
+            undefined;
 
         var _createClass = (function () {
           function defineProperties(target, props) {
@@ -869,7 +874,7 @@
         function _possibleConstructorReturn(self, call) {
           if (!self) {
             throw new ReferenceError(
-              "this hasn't been initialised - super() hasn't been called"
+              "this hasn't been initialised - super() hasn't been called",
             );
           }
           return call &&
@@ -882,7 +887,7 @@
           if (typeof superClass !== "function" && superClass !== null) {
             throw new TypeError(
               "Super expression must either be null or a function, not " +
-                typeof superClass
+                typeof superClass,
             );
           }
           subClass.prototype = Object.create(
@@ -894,7 +899,7 @@
                 writable: true,
                 configurable: true,
               },
-            }
+            },
           );
           if (superClass)
             Object.setPrototypeOf
@@ -914,8 +919,8 @@
               this,
               (BlockEmbed.__proto__ || Object.getPrototypeOf(BlockEmbed)).apply(
                 this,
-                arguments
-              )
+                arguments,
+              ),
             );
           }
 
@@ -927,10 +932,10 @@
                   BlockEmbed.prototype.__proto__ ||
                     Object.getPrototypeOf(BlockEmbed.prototype),
                   "attach",
-                  this
+                  this,
                 ).call(this);
                 this.attributes = new _parchment2.default.Attributor.Store(
-                  this.domNode
+                  this.domNode,
                 );
               },
             },
@@ -941,8 +946,8 @@
                   this.value(),
                   (0, _extend2.default)(
                     this.formats(),
-                    this.attributes.values()
-                  )
+                    this.attributes.values(),
+                  ),
                 );
               },
             },
@@ -951,7 +956,7 @@
               value: function format(name, value) {
                 var attribute = _parchment2.default.query(
                   name,
-                  _parchment2.default.Scope.BLOCK_ATTRIBUTE
+                  _parchment2.default.Scope.BLOCK_ATTRIBUTE,
                 );
                 if (attribute != null) {
                   this.attributes.attribute(attribute, value);
@@ -971,7 +976,7 @@
                   var block = _parchment2.default.create(Block.blotName);
                   this.parent.insertBefore(
                     block,
-                    index === 0 ? this : this.next
+                    index === 0 ? this : this.next,
                   );
                   block.insertAt(0, value.slice(0, -1));
                 } else {
@@ -979,7 +984,7 @@
                     BlockEmbed.prototype.__proto__ ||
                       Object.getPrototypeOf(BlockEmbed.prototype),
                     "insertAt",
-                    this
+                    this,
                   ).call(this, index, value, def);
                 }
               },
@@ -1002,8 +1007,8 @@
               this,
               (Block.__proto__ || Object.getPrototypeOf(Block)).call(
                 this,
-                domNode
-              )
+                domNode,
+              ),
             );
 
             _this2.cache = {};
@@ -1035,7 +1040,7 @@
                   Block.prototype.__proto__ ||
                     Object.getPrototypeOf(Block.prototype),
                   "deleteAt",
-                  this
+                  this,
                 ).call(this, index, length);
                 this.cache = {};
               },
@@ -1047,7 +1052,7 @@
                 if (
                   _parchment2.default.query(
                     name,
-                    _parchment2.default.Scope.BLOCK
+                    _parchment2.default.Scope.BLOCK,
                   )
                 ) {
                   if (index + length === this.length()) {
@@ -1058,13 +1063,13 @@
                     Block.prototype.__proto__ ||
                       Object.getPrototypeOf(Block.prototype),
                     "formatAt",
-                    this
+                    this,
                   ).call(
                     this,
                     index,
                     Math.min(length, this.length() - index - 1),
                     name,
-                    value
+                    value,
                   );
                 }
                 this.cache = {};
@@ -1078,7 +1083,7 @@
                     Block.prototype.__proto__ ||
                       Object.getPrototypeOf(Block.prototype),
                     "insertAt",
-                    this
+                    this,
                   ).call(this, index, value, def);
                 if (value.length === 0) return;
                 var lines = value.split("\n");
@@ -1089,12 +1094,12 @@
                       Block.prototype.__proto__ ||
                         Object.getPrototypeOf(Block.prototype),
                       "insertAt",
-                      this
+                      this,
                     ).call(this, Math.min(index, this.length() - 1), text);
                   } else {
                     this.children.tail.insertAt(
                       this.children.tail.length(),
-                      text
+                      text,
                     );
                   }
                   this.cache = {};
@@ -1115,7 +1120,7 @@
                   Block.prototype.__proto__ ||
                     Object.getPrototypeOf(Block.prototype),
                   "insertBefore",
-                  this
+                  this,
                 ).call(this, blot, ref);
                 if (head instanceof _break2.default) {
                   head.remove();
@@ -1132,7 +1137,7 @@
                       Block.prototype.__proto__ ||
                         Object.getPrototypeOf(Block.prototype),
                       "length",
-                      this
+                      this,
                     ).call(this) + NEWLINE_LENGTH;
                 }
                 return this.cache.length;
@@ -1145,7 +1150,7 @@
                   Block.prototype.__proto__ ||
                     Object.getPrototypeOf(Block.prototype),
                   "moveChildren",
-                  this
+                  this,
                 ).call(this, target, ref);
                 this.cache = {};
               },
@@ -1157,7 +1162,7 @@
                   Block.prototype.__proto__ ||
                     Object.getPrototypeOf(Block.prototype),
                   "optimize",
-                  this
+                  this,
                 ).call(this);
                 this.cache = {};
               },
@@ -1169,7 +1174,7 @@
                   Block.prototype.__proto__ ||
                     Object.getPrototypeOf(Block.prototype),
                   "path",
-                  this
+                  this,
                 ).call(this, index, true);
               },
             },
@@ -1180,7 +1185,7 @@
                   Block.prototype.__proto__ ||
                     Object.getPrototypeOf(Block.prototype),
                   "removeChild",
-                  this
+                  this,
                 ).call(this, child);
                 this.cache = {};
               },
@@ -1210,7 +1215,7 @@
                     Block.prototype.__proto__ ||
                       Object.getPrototypeOf(Block.prototype),
                     "split",
-                    this
+                    this,
                   ).call(this, index, force);
                   this.cache = {};
                   return next;
@@ -1324,7 +1329,7 @@
         function _possibleConstructorReturn(self, call) {
           if (!self) {
             throw new ReferenceError(
-              "this hasn't been initialised - super() hasn't been called"
+              "this hasn't been initialised - super() hasn't been called",
             );
           }
           return call &&
@@ -1337,7 +1342,7 @@
           if (typeof superClass !== "function" && superClass !== null) {
             throw new TypeError(
               "Super expression must either be null or a function, not " +
-                typeof superClass
+                typeof superClass,
             );
           }
           subClass.prototype = Object.create(
@@ -1349,7 +1354,7 @@
                 writable: true,
                 configurable: true,
               },
-            }
+            },
           );
           if (superClass)
             Object.setPrototypeOf
@@ -1367,7 +1372,7 @@
 
             var _this = _possibleConstructorReturn(
               this,
-              (Emitter.__proto__ || Object.getPrototypeOf(Emitter)).call(this)
+              (Emitter.__proto__ || Object.getPrototypeOf(Emitter)).call(this),
             );
 
             _this.on("error", debug.error);
@@ -1383,7 +1388,7 @@
                   Emitter.prototype.__proto__ ||
                     Object.getPrototypeOf(Emitter.prototype),
                   "emit",
-                  this
+                  this,
                 ).apply(this, arguments);
               },
             },
@@ -1467,7 +1472,7 @@
               return sliceIterator(arr, i);
             } else {
               throw new TypeError(
-                "Invalid attempt to destructure non-iterable instance"
+                "Invalid attempt to destructure non-iterable instance",
               );
             }
           };
@@ -1578,7 +1583,7 @@
                   debug.error(
                     "Cannot import " +
                       name +
-                      ". Are you sure it was registered?"
+                      ". Are you sure it was registered?",
                   );
                 }
                 return this.imports[name];
@@ -1665,41 +1670,43 @@
             this.clipboard = this.theme.addModule("clipboard");
             this.history = this.theme.addModule("history");
             this.theme.init();
-            this.emitter.on(_emitter4.default.events.EDITOR_CHANGE, function (
-              type
-            ) {
-              if (type === _emitter4.default.events.TEXT_CHANGE) {
-                _this2.root.classList.toggle(
-                  "ql-blank",
-                  _this2.editor.isBlank()
+            this.emitter.on(
+              _emitter4.default.events.EDITOR_CHANGE,
+              function (type) {
+                if (type === _emitter4.default.events.TEXT_CHANGE) {
+                  _this2.root.classList.toggle(
+                    "ql-blank",
+                    _this2.editor.isBlank(),
+                  );
+                }
+              },
+            );
+            this.emitter.on(
+              _emitter4.default.events.SCROLL_UPDATE,
+              function (source, mutations) {
+                var range = _this2.selection.lastRange;
+                var index =
+                  range && range.length === 0 ? range.index : undefined;
+                modify.call(
+                  _this2,
+                  function () {
+                    return _this2.editor.update(null, mutations, index);
+                  },
+                  source,
                 );
-              }
-            });
-            this.emitter.on(_emitter4.default.events.SCROLL_UPDATE, function (
-              source,
-              mutations
-            ) {
-              var range = _this2.selection.lastRange;
-              var index = range && range.length === 0 ? range.index : undefined;
-              modify.call(
-                _this2,
-                function () {
-                  return _this2.editor.update(null, mutations, index);
-                },
-                source
-              );
-            });
+              },
+            );
             var contents = this.clipboard.convert(
               "<div class='ql-editor' style=\"white-space: normal;\">" +
                 html +
-                "<p><br></p></div>"
+                "<p><br></p></div>",
             );
             this.setContents(contents);
             this.history.clear();
             if (this.options.placeholder) {
               this.root.setAttribute(
                 "data-placeholder",
-                this.options.placeholder
+                this.options.placeholder,
               );
             }
             if (this.options.readOnly) {
@@ -1751,7 +1758,7 @@
                   },
                   source,
                   index,
-                  -1 * length
+                  -1 * length,
                 );
               },
             },
@@ -1802,13 +1809,13 @@
                     } else if (
                       _parchment2.default.query(
                         name,
-                        _parchment2.default.Scope.BLOCK
+                        _parchment2.default.Scope.BLOCK,
                       )
                     ) {
                       change = _this4.editor.formatLine(
                         range.index,
                         range.length,
-                        _defineProperty({}, name, value)
+                        _defineProperty({}, name, value),
                       );
                     } else if (range.length === 0) {
                       _this4.selection.format(name, value);
@@ -1817,16 +1824,16 @@
                       change = _this4.editor.formatText(
                         range.index,
                         range.length,
-                        _defineProperty({}, name, value)
+                        _defineProperty({}, name, value),
                       );
                     }
                     _this4.setSelection(
                       range,
-                      _emitter4.default.sources.SILENT
+                      _emitter4.default.sources.SILENT,
                     );
                     return change;
                   },
-                  source
+                  source,
                 );
               },
             },
@@ -1853,7 +1860,7 @@
                   },
                   source,
                   index,
-                  0
+                  0,
                 );
               },
             },
@@ -1880,7 +1887,7 @@
                   },
                   source,
                   index,
-                  0
+                  0,
                 );
               },
             },
@@ -2056,7 +2063,7 @@
                     return _this7.editor.insertEmbed(index, embed, value);
                   },
                   source,
-                  index
+                  index,
                 );
               },
             },
@@ -2082,7 +2089,7 @@
                   },
                   source,
                   index,
-                  text.length
+                  text.length,
                 );
               },
             },
@@ -2135,7 +2142,7 @@
                     return _this9.editor.removeFormat(index, length);
                   },
                   source,
-                  index
+                  index,
                 );
               },
             },
@@ -2168,7 +2175,7 @@
                     var ret = deleted.compose(applied);
                     return ret;
                   },
-                  source
+                  source,
                 );
               },
             },
@@ -2188,7 +2195,7 @@
 
                   this.selection.setRange(
                     new _selection.Range(index, length),
-                    source
+                    source,
                   );
                 }
                 if (source !== _emitter4.default.sources.SILENT) {
@@ -2238,7 +2245,7 @@
                     return _this11.editor.applyDelta(delta, source);
                   },
                   source,
-                  true
+                  true,
                 );
               },
             },
@@ -2280,7 +2287,7 @@
                 history: true,
               },
             },
-            userConfig
+            userConfig,
           );
           if (!userConfig.theme || userConfig.theme === Quill.DEFAULTS.theme) {
             userConfig.theme = _theme2.default;
@@ -2288,14 +2295,14 @@
             userConfig.theme = Quill.import("themes/" + userConfig.theme);
             if (userConfig.theme == null) {
               throw new Error(
-                "Invalid theme " + userConfig.theme + ". Did you register it?"
+                "Invalid theme " + userConfig.theme + ". Did you register it?",
               );
             }
           }
           var themeConfig = (0, _extend2.default)(
             true,
             {},
-            userConfig.theme.DEFAULTS
+            userConfig.theme.DEFAULTS,
           );
           [themeConfig, userConfig].forEach(function (config) {
             config.modules = config.modules || {};
@@ -2306,7 +2313,7 @@
             });
           });
           var moduleNames = Object.keys(themeConfig.modules).concat(
-            Object.keys(userConfig.modules)
+            Object.keys(userConfig.modules),
           );
           var moduleConfig = moduleNames.reduce(function (config, name) {
             var moduleClass = Quill.import("modules/" + name);
@@ -2314,7 +2321,7 @@
               debug.error(
                 "Cannot load " +
                   name +
-                  " module. Are you sure you registered it?"
+                  " module. Are you sure you registered it?",
               );
             } else {
               config[name] = moduleClass.DEFAULTS || {};
@@ -2337,7 +2344,7 @@
             Quill.DEFAULTS,
             { modules: moduleConfig },
             themeConfig,
-            userConfig
+            userConfig,
           );
           ["bounds", "container", "scrollingContainer"].forEach(function (key) {
             if (typeof userConfig[key] === "string") {
@@ -2346,14 +2353,13 @@
           });
           userConfig.modules = Object.keys(userConfig.modules).reduce(function (
             config,
-            name
+            name,
           ) {
             if (userConfig.modules[name]) {
               config[name] = userConfig.modules[name];
             }
             return config;
-          },
-          {});
+          }, {});
           return userConfig;
         }
 
@@ -2390,7 +2396,7 @@
             ];
             (_emitter = this.emitter).emit.apply(
               _emitter,
-              [_emitter4.default.events.EDITOR_CHANGE].concat(args)
+              [_emitter4.default.events.EDITOR_CHANGE].concat(args),
             );
             if (source !== _emitter4.default.sources.SILENT) {
               var _emitter2;
@@ -2444,34 +2450,34 @@
           var start = void 0,
             end = void 0;
           if (index instanceof _quillDelta2.default) {
-            var _map = [range.index, range.index + range.length].map(function (
-              pos
-            ) {
-              return index.transformPosition(
-                pos,
-                source === _emitter4.default.sources.USER
-              );
-            });
+            var _map = [range.index, range.index + range.length].map(
+              function (pos) {
+                return index.transformPosition(
+                  pos,
+                  source === _emitter4.default.sources.USER,
+                );
+              },
+            );
 
             var _map2 = _slicedToArray(_map, 2);
 
             start = _map2[0];
             end = _map2[1];
           } else {
-            var _map3 = [range.index, range.index + range.length].map(function (
-              pos
-            ) {
-              if (
-                pos < index ||
-                (pos === index && source !== _emitter4.default.sources.USER)
-              )
-                return pos;
-              if (length >= 0) {
-                return pos + length;
-              } else {
-                return Math.max(index, pos + length);
-              }
-            });
+            var _map3 = [range.index, range.index + range.length].map(
+              function (pos) {
+                if (
+                  pos < index ||
+                  (pos === index && source !== _emitter4.default.sources.USER)
+                )
+                  return pos;
+                if (length >= 0) {
+                  return pos + length;
+                } else {
+                  return Math.max(index, pos + length);
+                }
+              },
+            );
 
             var _map4 = _slicedToArray(_map3, 2);
 
@@ -2512,7 +2518,7 @@
         function _possibleConstructorReturn(self, call) {
           if (!self) {
             throw new ReferenceError(
-              "this hasn't been initialised - super() hasn't been called"
+              "this hasn't been initialised - super() hasn't been called",
             );
           }
           return call &&
@@ -2525,7 +2531,7 @@
           if (typeof superClass !== "function" && superClass !== null) {
             throw new TypeError(
               "Super expression must either be null or a function, not " +
-                typeof superClass
+                typeof superClass,
             );
           }
           subClass.prototype = Object.create(
@@ -2537,7 +2543,7 @@
                 writable: true,
                 configurable: true,
               },
-            }
+            },
           );
           if (superClass)
             Object.setPrototypeOf
@@ -2555,8 +2561,8 @@
               this,
               (Embed.__proto__ || Object.getPrototypeOf(Embed)).apply(
                 this,
-                arguments
-              )
+                arguments,
+              ),
             );
           }
 
@@ -2638,7 +2644,7 @@
         function _possibleConstructorReturn(self, call) {
           if (!self) {
             throw new ReferenceError(
-              "this hasn't been initialised - super() hasn't been called"
+              "this hasn't been initialised - super() hasn't been called",
             );
           }
           return call &&
@@ -2651,7 +2657,7 @@
           if (typeof superClass !== "function" && superClass !== null) {
             throw new TypeError(
               "Super expression must either be null or a function, not " +
-                typeof superClass
+                typeof superClass,
             );
           }
           subClass.prototype = Object.create(
@@ -2663,7 +2669,7 @@
                 writable: true,
                 configurable: true,
               },
-            }
+            },
           );
           if (superClass)
             Object.setPrototypeOf
@@ -2681,8 +2687,8 @@
               this,
               (Inline.__proto__ || Object.getPrototypeOf(Inline)).apply(
                 this,
-                arguments
-              )
+                arguments,
+              ),
             );
           }
 
@@ -2696,7 +2702,7 @@
                     Inline.compare(this.statics.blotName, name) < 0 &&
                     _parchment2.default.query(
                       name,
-                      _parchment2.default.Scope.BLOT
+                      _parchment2.default.Scope.BLOT,
                     )
                   ) {
                     var blot = this.isolate(index, length);
@@ -2708,7 +2714,7 @@
                       Inline.prototype.__proto__ ||
                         Object.getPrototypeOf(Inline.prototype),
                       "formatAt",
-                      this
+                      this,
                     ).call(this, index, length, name, value);
                   }
                 },
@@ -2720,18 +2726,18 @@
                     Inline.prototype.__proto__ ||
                       Object.getPrototypeOf(Inline.prototype),
                     "optimize",
-                    this
+                    this,
                   ).call(this);
                   if (
                     this.parent instanceof Inline &&
                     Inline.compare(
                       this.statics.blotName,
-                      this.parent.statics.blotName
+                      this.parent.statics.blotName,
                     ) > 0
                   ) {
                     var parent = this.parent.isolate(
                       this.offset(),
-                      this.length()
+                      this.length(),
                     );
                     this.moveChildren(parent);
                     parent.wrap(this);
@@ -2756,7 +2762,7 @@
                   }
                 },
               },
-            ]
+            ],
           );
 
           return Inline;
@@ -2979,7 +2985,7 @@
         function _possibleConstructorReturn(self, call) {
           if (!self) {
             throw new ReferenceError(
-              "this hasn't been initialised - super() hasn't been called"
+              "this hasn't been initialised - super() hasn't been called",
             );
           }
           return call &&
@@ -2992,7 +2998,7 @@
           if (typeof superClass !== "function" && superClass !== null) {
             throw new TypeError(
               "Super expression must either be null or a function, not " +
-                typeof superClass
+                typeof superClass,
             );
           }
           subClass.prototype = Object.create(
@@ -3004,7 +3010,7 @@
                 writable: true,
                 configurable: true,
               },
-            }
+            },
           );
           if (superClass)
             Object.setPrototypeOf
@@ -3022,8 +3028,8 @@
               this,
               (TextBlot.__proto__ || Object.getPrototypeOf(TextBlot)).apply(
                 this,
-                arguments
-              )
+                arguments,
+              ),
             );
           }
 
@@ -3070,7 +3076,7 @@
           Attributor.prototype.canAdd = function (node, value) {
             var match = Registry.query(
               node,
-              Registry.Scope.BLOT & (this.scope | Registry.Scope.TYPE)
+              Registry.Scope.BLOT & (this.scope | Registry.Scope.TYPE),
             );
             if (
               match != null &&
@@ -3149,7 +3155,7 @@
               return sliceIterator(arr, i);
             } else {
               throw new TypeError(
-                "Invalid attempt to destructure non-iterable instance"
+                "Invalid attempt to destructure non-iterable instance",
               );
             }
           };
@@ -3273,22 +3279,22 @@
 
                       var formats = (0, _extend2.default)(
                         {},
-                        (0, _block.bubbleFormats)(line)
+                        (0, _block.bubbleFormats)(line),
                       );
                       if (line instanceof _block2.default) {
                         var _line$descendant = line.descendant(
                             _parchment2.default.Leaf,
-                            offset
+                            offset,
                           ),
                           _line$descendant2 = _slicedToArray(
                             _line$descendant,
-                            1
+                            1,
                           ),
                           leaf = _line$descendant2[0];
 
                         formats = (0, _extend2.default)(
                           formats,
-                          (0, _block.bubbleFormats)(leaf)
+                          (0, _block.bubbleFormats)(leaf),
                         );
                       }
                       attributes =
@@ -3305,7 +3311,7 @@
                       index,
                       length,
                       name,
-                      attributes[name]
+                      attributes[name],
                     );
                   });
                   return index + length;
@@ -3327,7 +3333,7 @@
               value: function deleteText(index, length) {
                 this.scroll.deleteAt(index, length);
                 return this.update(
-                  new _quillDelta2.default().retain(index).delete(length)
+                  new _quillDelta2.default().retain(index).delete(length),
                 );
               },
             },
@@ -3364,7 +3370,7 @@
                         codeIndex,
                         codeLength,
                         format,
-                        formats[format]
+                        formats[format],
                       );
                     }
                     lengthRemaining -= lineLength;
@@ -3374,7 +3380,7 @@
                 return this.update(
                   new _quillDelta2.default()
                     .retain(index)
-                    .retain(length, (0, _clone2.default)(formats))
+                    .retain(length, (0, _clone2.default)(formats)),
                 );
               },
             },
@@ -3393,13 +3399,13 @@
                     index,
                     length,
                     format,
-                    formats[format]
+                    formats[format],
                   );
                 });
                 return this.update(
                   new _quillDelta2.default()
                     .retain(index)
-                    .retain(length, (0, _clone2.default)(formats))
+                    .retain(length, (0, _clone2.default)(formats)),
                 );
               },
             },
@@ -3443,7 +3449,7 @@
                   leaves = this.scroll.descendants(
                     _parchment2.default.Leaf,
                     index,
-                    length
+                    length,
                   );
                 }
                 var formatsArr = [lines, leaves].map(function (blots) {
@@ -3454,7 +3460,7 @@
                     if (blot == null) return formats;
                     formats = combineFormats(
                       (0, _block.bubbleFormats)(blot),
-                      formats
+                      formats,
                     );
                   }
                   return formats;
@@ -3482,7 +3488,7 @@
                 return this.update(
                   new _quillDelta2.default()
                     .retain(index)
-                    .insert(_defineProperty({}, embed, value))
+                    .insert(_defineProperty({}, embed, value)),
                 );
               },
             },
@@ -3503,13 +3509,13 @@
                     index,
                     text.length,
                     format,
-                    formats[format]
+                    formats[format],
                   );
                 });
                 return this.update(
                   new _quillDelta2.default()
                     .retain(index)
-                    .insert(text, (0, _clone2.default)(formats))
+                    .insert(text, (0, _clone2.default)(formats)),
                 );
               },
             },
@@ -3550,7 +3556,7 @@
                 }
                 var contents = this.getContents(index, length + suffixLength);
                 var diff = contents.diff(
-                  new _quillDelta2.default().insert(text).concat(suffix)
+                  new _quillDelta2.default().insert(text).concat(suffix),
                 );
                 var delta = new _quillDelta2.default()
                   .retain(index)
@@ -3582,11 +3588,11 @@
                   var index = textBlot.offset(this.scroll);
                   var oldValue = mutations[0].oldValue.replace(
                     _cursor2.default.CONTENTS,
-                    ""
+                    "",
                   );
                   var oldText = new _quillDelta2.default().insert(oldValue);
                   var newText = new _quillDelta2.default().insert(
-                    textBlot.value()
+                    textBlot.value(),
                   );
                   var diffDelta = new _quillDelta2.default()
                     .retain(index)
@@ -3605,7 +3611,7 @@
                     !change ||
                     !(0, _deepEqual2.default)(
                       oldDelta.compose(change),
-                      this.delta
+                      this.delta,
                     )
                   ) {
                     change = oldDelta.diff(this.delta, cursorIndex);
@@ -3709,7 +3715,7 @@
               return sliceIterator(arr, i);
             } else {
               throw new TypeError(
-                "Invalid attempt to destructure non-iterable instance"
+                "Invalid attempt to destructure non-iterable instance",
               );
             }
           };
@@ -3820,21 +3826,21 @@
                 // the range now being a cursor has not updated yet without setTimeout
                 setTimeout(
                   _this.update.bind(_this, _emitter4.default.sources.USER),
-                  100
+                  100,
                 );
               });
             });
-            this.emitter.on(_emitter4.default.events.EDITOR_CHANGE, function (
-              type,
-              delta
-            ) {
-              if (
-                type === _emitter4.default.events.TEXT_CHANGE &&
-                delta.length() > 0
-              ) {
-                _this.update(_emitter4.default.sources.SILENT);
-              }
-            });
+            this.emitter.on(
+              _emitter4.default.events.EDITOR_CHANGE,
+              function (type, delta) {
+                if (
+                  type === _emitter4.default.events.TEXT_CHANGE &&
+                  delta.length() > 0
+                ) {
+                  _this.update(_emitter4.default.sources.SILENT);
+                }
+              },
+            );
             this.emitter.on(
               _emitter4.default.events.SCROLL_BEFORE_UPDATE,
               function () {
@@ -3851,12 +3857,12 @@
                         native.start.node,
                         native.start.offset,
                         native.end.node,
-                        native.end.offset
+                        native.end.offset,
                       );
                     } catch (ignored) {}
-                  }
+                  },
                 );
-              }
+              },
             );
             this.update(_emitter4.default.sources.SILENT);
           }
@@ -3885,14 +3891,14 @@
                   !nativeRange.native.collapsed ||
                   _parchment2.default.query(
                     _format,
-                    _parchment2.default.Scope.BLOCK
+                    _parchment2.default.Scope.BLOCK,
                   )
                 )
                   return;
                 if (nativeRange.start.node !== this.cursor.textNode) {
                   var blot = _parchment2.default.find(
                     nativeRange.start.node,
-                    false
+                    false,
                   );
                   if (blot == null) return;
                   // TODO Give blot ability to not split
@@ -3908,7 +3914,7 @@
                 this.scroll.optimize();
                 this.setNativeRange(
                   this.cursor.textNode,
-                  this.cursor.textNode.data.length
+                  this.cursor.textNode.data.length,
                 );
                 this.update();
               },
@@ -4091,7 +4097,7 @@
                 var limit = this.scroll.length() - 1;
 
                 var _scroll$line = this.scroll.line(
-                    Math.min(range.index, limit)
+                    Math.min(range.index, limit),
                   ),
                   _scroll$line2 = _slicedToArray(_scroll$line, 1),
                   first = _scroll$line2[0];
@@ -4099,7 +4105,7 @@
                 var last = first;
                 if (range.length > 0) {
                   var _scroll$line3 = this.scroll.line(
-                    Math.min(range.index + range.length, limit)
+                    Math.min(range.index + range.length, limit),
                   );
 
                   var _scroll$line4 = _slicedToArray(_scroll$line3, 1);
@@ -4137,7 +4143,7 @@
                   startNode,
                   startOffset,
                   endNode,
-                  endOffset
+                  endOffset,
                 );
                 if (
                   startNode != null &&
@@ -4163,14 +4169,14 @@
                     if (startNode.tagName == "BR") {
                       startOffset = [].indexOf.call(
                         startNode.parentNode.childNodes,
-                        startNode
+                        startNode,
                       );
                       startNode = startNode.parentNode;
                     }
                     if (endNode.tagName == "BR") {
                       endOffset = [].indexOf.call(
                         endNode.parentNode.childNodes,
-                        endNode
+                        endNode,
                       );
                       endNode = endNode.parentNode;
                     }
@@ -4233,7 +4239,7 @@
                   }
                   this.setNativeRange.apply(
                     this,
-                    _toConsumableArray(args).concat([force])
+                    _toConsumableArray(args).concat([force]),
                   );
                 } else {
                   this.setNativeRange(null);
@@ -4279,7 +4285,7 @@
                   ];
                   (_emitter = this.emitter).emit.apply(
                     _emitter,
-                    [_emitter4.default.events.EDITOR_CHANGE].concat(args)
+                    [_emitter4.default.events.EDITOR_CHANGE].concat(args),
                   );
                   if (source !== _emitter4.default.sources.SILENT) {
                     var _emitter2;
@@ -4357,7 +4363,7 @@
               return sliceIterator(arr, i);
             } else {
               throw new TypeError(
-                "Invalid attempt to destructure non-iterable instance"
+                "Invalid attempt to destructure non-iterable instance",
               );
             }
           };
@@ -4434,7 +4440,7 @@
         function _possibleConstructorReturn(self, call) {
           if (!self) {
             throw new ReferenceError(
-              "this hasn't been initialised - super() hasn't been called"
+              "this hasn't been initialised - super() hasn't been called",
             );
           }
           return call &&
@@ -4447,7 +4453,7 @@
           if (typeof superClass !== "function" && superClass !== null) {
             throw new TypeError(
               "Super expression must either be null or a function, not " +
-                typeof superClass
+                typeof superClass,
             );
           }
           subClass.prototype = Object.create(
@@ -4459,7 +4465,7 @@
                 writable: true,
                 configurable: true,
               },
-            }
+            },
           );
           if (superClass)
             Object.setPrototypeOf
@@ -4477,8 +4483,8 @@
               this,
               (Code.__proto__ || Object.getPrototypeOf(Code)).apply(
                 this,
-                arguments
-              )
+                arguments,
+              ),
             );
           }
 
@@ -4498,8 +4504,8 @@
               this,
               (CodeBlock.__proto__ || Object.getPrototypeOf(CodeBlock)).apply(
                 this,
-                arguments
-              )
+                arguments,
+              ),
             );
           }
 
@@ -4528,7 +4534,7 @@
 
                   var _descendant = this.descendant(
                       _text2.default,
-                      this.length() - 1
+                      this.length() - 1,
                     ),
                     _descendant2 = _slicedToArray(_descendant, 1),
                     text = _descendant2[0];
@@ -4540,7 +4546,7 @@
                     CodeBlock.prototype.__proto__ ||
                       Object.getPrototypeOf(CodeBlock.prototype),
                     "format",
-                    this
+                    this,
                   ).call(this, name, value);
                 },
               },
@@ -4551,7 +4557,7 @@
                   if (
                     _parchment2.default.query(
                       name,
-                      _parchment2.default.Scope.BLOCK
+                      _parchment2.default.Scope.BLOCK,
                     ) == null ||
                     (name === this.statics.blotName &&
                       value === this.statics.formats(this.domNode))
@@ -4570,7 +4576,7 @@
                       0,
                       index - prevNewline + length - isolateLength,
                       name,
-                      value
+                      value,
                     );
                   }
                 },
@@ -4628,7 +4634,7 @@
                     CodeBlock.prototype.__proto__ ||
                       Object.getPrototypeOf(CodeBlock.prototype),
                     "optimize",
-                    this
+                    this,
                   ).call(this);
                   var next = this.next;
                   if (
@@ -4651,7 +4657,7 @@
                     CodeBlock.prototype.__proto__ ||
                       Object.getPrototypeOf(CodeBlock.prototype),
                     "replace",
-                    this
+                    this,
                   ).call(this, target);
                   [].slice
                     .call(this.domNode.querySelectorAll("*"))
@@ -4675,7 +4681,7 @@
                   var domNode = _get(
                     CodeBlock.__proto__ || Object.getPrototypeOf(CodeBlock),
                     "create",
-                    this
+                    this,
                   ).call(this, value);
                   domNode.setAttribute("spellcheck", false);
                   return domNode;
@@ -4687,7 +4693,7 @@
                   return true;
                 },
               },
-            ]
+            ],
           );
 
           return CodeBlock;
@@ -4765,7 +4771,7 @@
         function _possibleConstructorReturn(self, call) {
           if (!self) {
             throw new ReferenceError(
-              "this hasn't been initialised - super() hasn't been called"
+              "this hasn't been initialised - super() hasn't been called",
             );
           }
           return call &&
@@ -4778,7 +4784,7 @@
           if (typeof superClass !== "function" && superClass !== null) {
             throw new TypeError(
               "Super expression must either be null or a function, not " +
-                typeof superClass
+                typeof superClass,
             );
           }
           subClass.prototype = Object.create(
@@ -4790,7 +4796,7 @@
                 writable: true,
                 configurable: true,
               },
-            }
+            },
           );
           if (superClass)
             Object.setPrototypeOf
@@ -4808,8 +4814,8 @@
               this,
               (Break.__proto__ || Object.getPrototypeOf(Break)).apply(
                 this,
-                arguments
-              )
+                arguments,
+              ),
             );
           }
 
@@ -4824,7 +4830,7 @@
                       Break.prototype.__proto__ ||
                         Object.getPrototypeOf(Break.prototype),
                       "insertInto",
-                      this
+                      this,
                     ).call(this, parent, ref);
                   } else {
                     this.remove();
@@ -4851,7 +4857,7 @@
                   return undefined;
                 },
               },
-            ]
+            ],
           );
 
           return Break;
@@ -4906,7 +4912,7 @@
               return sliceIterator(arr, i);
             } else {
               throw new TypeError(
-                "Invalid attempt to destructure non-iterable instance"
+                "Invalid attempt to destructure non-iterable instance",
               );
             }
           };
@@ -4987,7 +4993,7 @@
         function _possibleConstructorReturn(self, call) {
           if (!self) {
             throw new ReferenceError(
-              "this hasn't been initialised - super() hasn't been called"
+              "this hasn't been initialised - super() hasn't been called",
             );
           }
           return call &&
@@ -5000,7 +5006,7 @@
           if (typeof superClass !== "function" && superClass !== null) {
             throw new TypeError(
               "Super expression must either be null or a function, not " +
-                typeof superClass
+                typeof superClass,
             );
           }
           subClass.prototype = Object.create(
@@ -5012,7 +5018,7 @@
                 writable: true,
                 configurable: true,
               },
-            }
+            },
           );
           if (superClass)
             Object.setPrototypeOf
@@ -5036,8 +5042,8 @@
               this,
               (Scroll.__proto__ || Object.getPrototypeOf(Scroll)).call(
                 this,
-                domNode
-              )
+                domNode,
+              ),
             );
 
             _this.emitter = config.emitter;
@@ -5045,12 +5051,11 @@
             if (Array.isArray(config.whitelist)) {
               _this.whitelist = config.whitelist.reduce(function (
                 whitelist,
-                format
+                format,
               ) {
                 whitelist[format] = true;
                 return whitelist;
-              },
-              {});
+              }, {});
             }
             _this.optimize();
             _this.enable();
@@ -5074,7 +5079,7 @@
                   Scroll.prototype.__proto__ ||
                     Object.getPrototypeOf(Scroll.prototype),
                   "deleteAt",
-                  this
+                  this,
                 ).call(this, index, length);
                 if (
                   last != null &&
@@ -5115,7 +5120,7 @@
                   Scroll.prototype.__proto__ ||
                     Object.getPrototypeOf(Scroll.prototype),
                   "formatAt",
-                  this
+                  this,
                 ).call(this, index, length, format, value);
                 this.optimize();
               },
@@ -5134,11 +5139,11 @@
                     def == null ||
                     _parchment2.default.query(
                       value,
-                      _parchment2.default.Scope.BLOCK
+                      _parchment2.default.Scope.BLOCK,
                     ) == null
                   ) {
                     var blot = _parchment2.default.create(
-                      this.statics.defaultChild
+                      this.statics.defaultChild,
                     );
                     this.appendChild(blot);
                     if (def == null && value.endsWith("\n")) {
@@ -5154,7 +5159,7 @@
                     Scroll.prototype.__proto__ ||
                       Object.getPrototypeOf(Scroll.prototype),
                     "insertAt",
-                    this
+                    this,
                   ).call(this, index, value, def);
                 }
                 this.optimize();
@@ -5167,7 +5172,7 @@
                   blot.statics.scope === _parchment2.default.Scope.INLINE_BLOT
                 ) {
                   var wrapper = _parchment2.default.create(
-                    this.statics.defaultChild
+                    this.statics.defaultChild,
                   );
                   wrapper.appendChild(blot);
                   blot = wrapper;
@@ -5176,7 +5181,7 @@
                   Scroll.prototype.__proto__ ||
                     Object.getPrototypeOf(Scroll.prototype),
                   "insertBefore",
-                  this
+                  this,
                 ).call(this, blot, ref);
               },
             },
@@ -5210,18 +5215,22 @@
                 var getLines = function getLines(blot, index, length) {
                   var lines = [],
                     lengthLeft = length;
-                  blot.children.forEachAt(index, length, function (
-                    child,
+                  blot.children.forEachAt(
                     index,
-                    length
-                  ) {
-                    if (isLine(child)) {
-                      lines.push(child);
-                    } else if (child instanceof _parchment2.default.Container) {
-                      lines = lines.concat(getLines(child, index, lengthLeft));
-                    }
-                    lengthLeft -= length;
-                  });
+                    length,
+                    function (child, index, length) {
+                      if (isLine(child)) {
+                        lines.push(child);
+                      } else if (
+                        child instanceof _parchment2.default.Container
+                      ) {
+                        lines = lines.concat(
+                          getLines(child, index, lengthLeft),
+                        );
+                      }
+                      lengthLeft -= length;
+                    },
+                  );
                   return lines;
                 };
                 return getLines(this, index, length);
@@ -5240,12 +5249,12 @@
                   Scroll.prototype.__proto__ ||
                     Object.getPrototypeOf(Scroll.prototype),
                   "optimize",
-                  this
+                  this,
                 ).call(this, mutations);
                 if (mutations.length > 0) {
                   this.emitter.emit(
                     _emitter2.default.events.SCROLL_OPTIMIZE,
-                    mutations
+                    mutations,
                   );
                 }
               },
@@ -5257,7 +5266,7 @@
                   Scroll.prototype.__proto__ ||
                     Object.getPrototypeOf(Scroll.prototype),
                   "path",
-                  this
+                  this,
                 )
                   .call(this, index)
                   .slice(1); // Exclude self
@@ -5278,20 +5287,20 @@
                   this.emitter.emit(
                     _emitter2.default.events.SCROLL_BEFORE_UPDATE,
                     source,
-                    mutations
+                    mutations,
                   );
                 }
                 _get(
                   Scroll.prototype.__proto__ ||
                     Object.getPrototypeOf(Scroll.prototype),
                   "update",
-                  this
+                  this,
                 ).call(this, mutations.concat([])); // pass copy
                 if (mutations.length > 0) {
                   this.emitter.emit(
                     _emitter2.default.events.SCROLL_UPDATE,
                     source,
-                    mutations
+                    mutations,
                   );
                 }
               },
@@ -5373,7 +5382,7 @@
             circular,
             depth,
             prototype,
-            includeNonEnumerable
+            includeNonEnumerable,
           ) {
             if (typeof circular === "object") {
               depth = circular.depth;
@@ -5417,7 +5426,7 @@
                     },
                     function (err) {
                       reject(_clone(err, depth - 1));
-                    }
+                    },
                   );
                 });
               } else if (clone.__isArray(parent)) {
@@ -5487,7 +5496,7 @@
                   var symbol = symbols[i];
                   var descriptor = Object.getOwnPropertyDescriptor(
                     parent,
-                    symbol
+                    symbol,
                   );
                   if (
                     descriptor &&
@@ -5511,7 +5520,7 @@
                   var propertyName = allPropertyNames[i];
                   var descriptor = Object.getOwnPropertyDescriptor(
                     parent,
-                    propertyName
+                    propertyName,
                   );
                   if (descriptor && descriptor.enumerable) {
                     continue;
@@ -5598,14 +5607,13 @@
               if (!keepNull) {
                 attributes = Object.keys(attributes).reduce(function (
                   copy,
-                  key
+                  key,
                 ) {
                   if (attributes[key] != null) {
                     copy[key] = attributes[key];
                   }
                   return copy;
-                },
-                {});
+                }, {});
               }
               for (var key in a) {
                 if (a[key] !== undefined && b[key] === undefined) {
@@ -5639,12 +5647,11 @@
               if (!priority) return b; // b simply overwrites us without priority
               var attributes = Object.keys(b).reduce(function (
                 attributes,
-                key
+                key,
               ) {
                 if (a[key] === undefined) attributes[key] = b[key]; // null is a valid value
                 return attributes;
-              },
-              {});
+              }, {});
               return Object.keys(attributes).length > 0
                 ? attributes
                 : undefined;
@@ -5802,13 +5809,13 @@
             if (index === 0 && length === this.length()) {
               return this.remove();
             }
-            this.children.forEachAt(index, length, function (
-              child,
-              offset,
-              length
-            ) {
-              child.deleteAt(offset, length);
-            });
+            this.children.forEachAt(
+              index,
+              length,
+              function (child, offset, length) {
+                child.deleteAt(offset, length);
+              },
+            );
           };
           ContainerBlot.prototype.descendant = function (criteria, index) {
             var _a = this.children.find(index),
@@ -5828,7 +5835,7 @@
           ContainerBlot.prototype.descendants = function (
             criteria,
             index,
-            length
+            length,
           ) {
             if (index === void 0) {
               index = 0;
@@ -5838,24 +5845,24 @@
             }
             var descendants = [],
               lengthLeft = length;
-            this.children.forEachAt(index, length, function (
-              child,
+            this.children.forEachAt(
               index,
-              length
-            ) {
-              if (
-                (criteria.blotName == null && criteria(child)) ||
-                (criteria.blotName != null && child instanceof criteria)
-              ) {
-                descendants.push(child);
-              }
-              if (child instanceof ContainerBlot) {
-                descendants = descendants.concat(
-                  child.descendants(criteria, index, lengthLeft)
-                );
-              }
-              lengthLeft -= length;
-            });
+              length,
+              function (child, index, length) {
+                if (
+                  (criteria.blotName == null && criteria(child)) ||
+                  (criteria.blotName != null && child instanceof criteria)
+                ) {
+                  descendants.push(child);
+                }
+                if (child instanceof ContainerBlot) {
+                  descendants = descendants.concat(
+                    child.descendants(criteria, index, lengthLeft),
+                  );
+                }
+                lengthLeft -= length;
+              },
+            );
             return descendants;
           };
           ContainerBlot.prototype.detach = function () {
@@ -5868,15 +5875,15 @@
             index,
             length,
             name,
-            value
+            value,
           ) {
-            this.children.forEachAt(index, length, function (
-              child,
-              offset,
-              length
-            ) {
-              child.formatAt(offset, length, name, value);
-            });
+            this.children.forEachAt(
+              index,
+              length,
+              function (child, offset, length) {
+                child.formatAt(offset, length, name, value);
+              },
+            );
           };
           ContainerBlot.prototype.insertAt = function (index, value, def) {
             var _a = this.children.find(index),
@@ -5903,7 +5910,7 @@
                 "Cannot insert " +
                   childBlot.statics.blotName +
                   " into " +
-                  this.statics.blotName
+                  this.statics.blotName,
               );
             }
             childBlot.insertInto(this, refBlot);
@@ -5915,7 +5922,7 @@
           };
           ContainerBlot.prototype.moveChildren = function (
             targetParent,
-            refNode
+            refNode,
           ) {
             this.children.forEach(function (child) {
               targetParent.insertBefore(child, refNode);
@@ -5967,14 +5974,14 @@
             }
             var after = this.clone();
             this.parent.insertBefore(after, this.next);
-            this.children.forEachAt(index, this.length(), function (
-              child,
-              offset,
-              length
-            ) {
-              child = child.split(offset, force);
-              after.appendChild(child);
-            });
+            this.children.forEachAt(
+              index,
+              this.length(),
+              function (child, offset, length) {
+                child = child.split(offset, force);
+                after.appendChild(child);
+              },
+            );
             return after;
           };
           ContainerBlot.prototype.unwrap = function () {
@@ -6140,7 +6147,7 @@
             var replacement = _super.prototype.replaceWith.call(
               this,
               name,
-              value
+              value,
             );
             this.attributes.copy(replacement);
             return replacement;
@@ -6220,7 +6227,7 @@
           LeafBlot.prototype.position = function (index, inclusive) {
             var offset = [].indexOf.call(
               this.parent.domNode.childNodes,
-              this.domNode
+              this.domNode,
             );
             if (index > 0) offset += 1;
             return [this.parent.domNode, offset];
@@ -6270,7 +6277,7 @@
         function _possibleConstructorReturn(self, call) {
           if (!self) {
             throw new ReferenceError(
-              "this hasn't been initialised - super() hasn't been called"
+              "this hasn't been initialised - super() hasn't been called",
             );
           }
           return call &&
@@ -6283,7 +6290,7 @@
           if (typeof superClass !== "function" && superClass !== null) {
             throw new TypeError(
               "Super expression must either be null or a function, not " +
-                typeof superClass
+                typeof superClass,
             );
           }
           subClass.prototype = Object.create(
@@ -6295,7 +6302,7 @@
                 writable: true,
                 configurable: true,
               },
-            }
+            },
           );
           if (superClass)
             Object.setPrototypeOf
@@ -6313,8 +6320,8 @@
               this,
               (Container.__proto__ || Object.getPrototypeOf(Container)).apply(
                 this,
-                arguments
-              )
+                arguments,
+              ),
             );
           }
 
@@ -6373,7 +6380,7 @@
               return sliceIterator(arr, i);
             } else {
               throw new TypeError(
-                "Invalid attempt to destructure non-iterable instance"
+                "Invalid attempt to destructure non-iterable instance",
               );
             }
           };
@@ -6446,7 +6453,7 @@
         function _possibleConstructorReturn(self, call) {
           if (!self) {
             throw new ReferenceError(
-              "this hasn't been initialised - super() hasn't been called"
+              "this hasn't been initialised - super() hasn't been called",
             );
           }
           return call &&
@@ -6459,7 +6466,7 @@
           if (typeof superClass !== "function" && superClass !== null) {
             throw new TypeError(
               "Super expression must either be null or a function, not " +
-                typeof superClass
+                typeof superClass,
             );
           }
           subClass.prototype = Object.create(
@@ -6471,7 +6478,7 @@
                 writable: true,
                 configurable: true,
               },
-            }
+            },
           );
           if (superClass)
             Object.setPrototypeOf
@@ -6498,8 +6505,8 @@
               this,
               (Cursor.__proto__ || Object.getPrototypeOf(Cursor)).call(
                 this,
-                domNode
-              )
+                domNode,
+              ),
             );
 
             _this.selection = selection;
@@ -6525,7 +6532,7 @@
                     Cursor.prototype.__proto__ ||
                       Object.getPrototypeOf(Cursor.prototype),
                     "format",
-                    this
+                    this,
                   ).call(this, name, value);
                 }
                 var target = this,
@@ -6553,7 +6560,7 @@
                   Cursor.prototype.__proto__ ||
                     Object.getPrototypeOf(Cursor.prototype),
                   "index",
-                  this
+                  this,
                 ).call(this, node, offset);
               },
             },
@@ -6576,7 +6583,7 @@
                   Cursor.prototype.__proto__ ||
                     Object.getPrototypeOf(Cursor.prototype),
                   "remove",
-                  this
+                  this,
                 ).call(this);
                 this.parent = null;
               },
@@ -6610,7 +6617,7 @@
                 ) {
                   this.domNode.parentNode.insertBefore(
                     this.domNode.lastChild,
-                    this.domNode
+                    this.domNode,
                   );
                 }
                 if (this.textNode.data !== Cursor.CONTENTS) {
@@ -6623,7 +6630,7 @@
                     this.textNode.data = text;
                     this.parent.insertBefore(
                       _parchment2.default.create(this.textNode),
-                      this
+                      this,
                     );
                     this.textNode = document.createTextNode(Cursor.CONTENTS);
                     this.domNode.appendChild(this.textNode);
@@ -6637,7 +6644,7 @@
                     var _map = [start, end].map(function (offset) {
                       return Math.max(
                         0,
-                        Math.min(restoreText.data.length, offset - 1)
+                        Math.min(restoreText.data.length, offset - 1),
                       );
                     });
 
@@ -6650,9 +6657,9 @@
                       restoreText,
                       start,
                       restoreText,
-                      end
+                      end,
                     );
-                  }
+                  },
                 );
               },
             },
@@ -6698,7 +6705,10 @@
         Object.defineProperty(exports, "__esModule", {
           value: true,
         });
-        exports.ColorStyle = exports.ColorClass = exports.ColorAttributor = undefined;
+        exports.ColorStyle =
+          exports.ColorClass =
+          exports.ColorAttributor =
+            undefined;
 
         var _createClass = (function () {
           function defineProperties(target, props) {
@@ -6755,7 +6765,7 @@
         function _possibleConstructorReturn(self, call) {
           if (!self) {
             throw new ReferenceError(
-              "this hasn't been initialised - super() hasn't been called"
+              "this hasn't been initialised - super() hasn't been called",
             );
           }
           return call &&
@@ -6768,7 +6778,7 @@
           if (typeof superClass !== "function" && superClass !== null) {
             throw new TypeError(
               "Super expression must either be null or a function, not " +
-                typeof superClass
+                typeof superClass,
             );
           }
           subClass.prototype = Object.create(
@@ -6780,7 +6790,7 @@
                 writable: true,
                 configurable: true,
               },
-            }
+            },
           );
           if (superClass)
             Object.setPrototypeOf
@@ -6799,7 +6809,7 @@
               (
                 ColorAttributor.__proto__ ||
                 Object.getPrototypeOf(ColorAttributor)
-              ).apply(this, arguments)
+              ).apply(this, arguments),
             );
           }
 
@@ -6811,7 +6821,7 @@
                   ColorAttributor.prototype.__proto__ ||
                     Object.getPrototypeOf(ColorAttributor.prototype),
                   "value",
-                  this
+                  this,
                 ).call(this, domNode);
                 if (!value.startsWith("rgb(")) return value;
                 value = value.replace(/^[^\d]+/, "").replace(/[^\d]+$/, "");
@@ -6821,7 +6831,7 @@
                     .split(",")
                     .map(function (component) {
                       return ("00" + parseInt(component).toString(16)).slice(
-                        -2
+                        -2,
                       );
                     })
                     .join("")
@@ -6838,7 +6848,7 @@
           "ql-color",
           {
             scope: _parchment2.default.Scope.INLINE,
-          }
+          },
         );
         var ColorStyle = new ColorAttributor("color", "color", {
           scope: _parchment2.default.Scope.INLINE,
@@ -6914,7 +6924,7 @@
         function _possibleConstructorReturn(self, call) {
           if (!self) {
             throw new ReferenceError(
-              "this hasn't been initialised - super() hasn't been called"
+              "this hasn't been initialised - super() hasn't been called",
             );
           }
           return call &&
@@ -6927,7 +6937,7 @@
           if (typeof superClass !== "function" && superClass !== null) {
             throw new TypeError(
               "Super expression must either be null or a function, not " +
-                typeof superClass
+                typeof superClass,
             );
           }
           subClass.prototype = Object.create(
@@ -6939,7 +6949,7 @@
                 writable: true,
                 configurable: true,
               },
-            }
+            },
           );
           if (superClass)
             Object.setPrototypeOf
@@ -6957,8 +6967,8 @@
               this,
               (Link.__proto__ || Object.getPrototypeOf(Link)).apply(
                 this,
-                arguments
-              )
+                arguments,
+              ),
             );
           }
 
@@ -6973,7 +6983,7 @@
                       Link.prototype.__proto__ ||
                         Object.getPrototypeOf(Link.prototype),
                       "format",
-                      this
+                      this,
                     ).call(this, name, value);
                   value = this.constructor.sanitize(value);
                   this.domNode.setAttribute("href", value);
@@ -6987,7 +6997,7 @@
                   var node = _get(
                     Link.__proto__ || Object.getPrototypeOf(Link),
                     "create",
-                    this
+                    this,
                   ).call(this, value);
                   value = this.sanitize(value);
                   node.setAttribute("href", value);
@@ -7009,7 +7019,7 @@
                     : this.SANITIZED_URL;
                 },
               },
-            ]
+            ],
           );
 
           return Link;
@@ -7184,12 +7194,12 @@
                 item.classList.add("ql-selected");
                 this.select.selectedIndex = [].indexOf.call(
                   item.parentNode.children,
-                  item
+                  item,
                 );
                 if (item.hasAttribute("data-value")) {
                   this.label.setAttribute(
                     "data-value",
-                    item.getAttribute("data-value")
+                    item.getAttribute("data-value"),
                   );
                 } else {
                   this.label.removeAttribute("data-value");
@@ -7197,7 +7207,7 @@
                 if (item.hasAttribute("data-label")) {
                   this.label.setAttribute(
                     "data-label",
-                    item.getAttribute("data-label")
+                    item.getAttribute("data-label"),
                   );
                 } else {
                   this.label.removeAttribute("data-label");
@@ -7224,8 +7234,10 @@
               value: function update() {
                 var option = void 0;
                 if (this.select.selectedIndex > -1) {
-                  var item = this.container.querySelector(".ql-picker-options")
-                    .children[this.select.selectedIndex];
+                  var item =
+                    this.container.querySelector(".ql-picker-options").children[
+                      this.select.selectedIndex
+                    ];
                   option = this.select.options[this.select.selectedIndex];
                   this.selectItem(item);
                 } else {
@@ -7303,11 +7315,11 @@
               key: "addModule",
               value: function addModule(name) {
                 var moduleClass = this.quill.constructor.import(
-                  "modules/" + name
+                  "modules/" + name,
                 );
                 this.modules[name] = new moduleClass(
                   this.quill,
-                  this.options.modules[name] || {}
+                  this.options.modules[name] || {},
                 );
                 return this.modules[name];
               },
@@ -7385,7 +7397,7 @@
               return sliceIterator(arr, i);
             } else {
               throw new TypeError(
-                "Invalid attempt to destructure non-iterable instance"
+                "Invalid attempt to destructure non-iterable instance",
               );
             }
           };
@@ -7453,7 +7465,7 @@
         function _possibleConstructorReturn(self, call) {
           if (!self) {
             throw new ReferenceError(
-              "this hasn't been initialised - super() hasn't been called"
+              "this hasn't been initialised - super() hasn't been called",
             );
           }
           return call &&
@@ -7466,7 +7478,7 @@
           if (typeof superClass !== "function" && superClass !== null) {
             throw new TypeError(
               "Super expression must either be null or a function, not " +
-                typeof superClass
+                typeof superClass,
             );
           }
           subClass.prototype = Object.create(
@@ -7478,7 +7490,7 @@
                 writable: true,
                 configurable: true,
               },
-            }
+            },
           );
           if (superClass)
             Object.setPrototypeOf
@@ -7499,11 +7511,13 @@
               value: function match(evt, binding) {
                 binding = normalize(binding);
                 if (
-                  ["altKey", "ctrlKey", "metaKey", "shiftKey"].some(function (
-                    key
-                  ) {
-                    return !!binding[key] !== evt[key] && binding[key] !== null;
-                  })
+                  ["altKey", "ctrlKey", "metaKey", "shiftKey"].some(
+                    function (key) {
+                      return (
+                        !!binding[key] !== evt[key] && binding[key] !== null
+                      );
+                    },
+                  )
                 ) {
                   return false;
                 }
@@ -7520,8 +7534,8 @@
               (Keyboard.__proto__ || Object.getPrototypeOf(Keyboard)).call(
                 this,
                 quill,
-                options
-              )
+                options,
+              ),
             );
 
             _this.bindings = {};
@@ -7532,7 +7546,7 @@
             });
             _this.addBinding(
               { key: Keyboard.keys.ENTER, shiftKey: null },
-              handleEnter
+              handleEnter,
             );
             _this.addBinding(
               {
@@ -7541,41 +7555,41 @@
                 ctrlKey: null,
                 altKey: null,
               },
-              function () {}
+              function () {},
             );
             if (/Firefox/i.test(navigator.userAgent)) {
               // Need to handle delete and backspace for Firefox in the general case #1171
               _this.addBinding(
                 { key: Keyboard.keys.BACKSPACE },
                 { collapsed: true },
-                handleBackspace
+                handleBackspace,
               );
               _this.addBinding(
                 { key: Keyboard.keys.DELETE },
                 { collapsed: true },
-                handleDelete
+                handleDelete,
               );
             } else {
               _this.addBinding(
                 { key: Keyboard.keys.BACKSPACE },
                 { collapsed: true, prefix: /^.?$/ },
-                handleBackspace
+                handleBackspace,
               );
               _this.addBinding(
                 { key: Keyboard.keys.DELETE },
                 { collapsed: true, suffix: /^.?$/ },
-                handleDelete
+                handleDelete,
               );
             }
             _this.addBinding(
               { key: Keyboard.keys.BACKSPACE },
               { collapsed: false },
-              handleDeleteRange
+              handleDeleteRange,
             );
             _this.addBinding(
               { key: Keyboard.keys.DELETE },
               { collapsed: false },
-              handleDeleteRange
+              handleDeleteRange,
             );
             _this.addBinding(
               {
@@ -7586,7 +7600,7 @@
                 shiftKey: null,
               },
               { collapsed: true, offset: 0 },
-              handleBackspace
+              handleBackspace,
             );
             _this.listen();
             return _this;
@@ -7609,7 +7623,7 @@
                 if (binding == null || binding.key == null) {
                   return debug.warn(
                     "Attempted to add invalid keyboard binding",
-                    binding
+                    binding,
                   );
                 }
                 if (typeof context === "function") {
@@ -7634,7 +7648,7 @@
                   var bindings = (_this2.bindings[which] || []).filter(
                     function (binding) {
                       return Keyboard.match(evt, binding);
-                    }
+                    },
                   );
                   if (bindings.length === 0) return;
                   var range = _this2.quill.getSelection();
@@ -7707,8 +7721,10 @@
                             return curContext.format[name] != null;
                           if (binding.format[name] === false)
                             return curContext.format[name] == null;
-                          return (0,
-                          _deepEqual2.default)(binding.format[name], curContext.format[name]);
+                          return (0, _deepEqual2.default)(
+                            binding.format[name],
+                            curContext.format[name],
+                          );
                         })
                       ) {
                         return false;
@@ -7789,19 +7805,19 @@
                   this.quill.format(
                     "indent",
                     "-1",
-                    _quill2.default.sources.USER
+                    _quill2.default.sources.USER,
                   );
                 } else if (context.format.blockquote != null) {
                   this.quill.format(
                     "blockquote",
                     false,
-                    _quill2.default.sources.USER
+                    _quill2.default.sources.USER,
                   );
                 } else if (context.format.list != null) {
                   this.quill.format(
                     "list",
                     false,
-                    _quill2.default.sources.USER
+                    _quill2.default.sources.USER,
                   );
                 }
               },
@@ -7817,7 +7833,7 @@
                 this.quill.deleteText(
                   range.index - 1,
                   1,
-                  _quill2.default.sources.USER
+                  _quill2.default.sources.USER,
                 );
               },
             },
@@ -7830,11 +7846,11 @@
                 this.quill.insertText(
                   range.index,
                   "\t",
-                  _quill2.default.sources.USER
+                  _quill2.default.sources.USER,
                 );
                 this.quill.setSelection(
                   range.index + 1,
-                  _quill2.default.sources.SILENT
+                  _quill2.default.sources.SILENT,
                 );
               },
             },
@@ -7849,7 +7865,7 @@
                   this.quill.format(
                     "indent",
                     false,
-                    _quill2.default.sources.USER
+                    _quill2.default.sources.USER,
                   );
                 }
               },
@@ -7869,7 +7885,7 @@
                 this.quill.update(_quill2.default.sources.USER);
                 this.quill.setSelection(
                   range.index + 1,
-                  _quill2.default.sources.SILENT
+                  _quill2.default.sources.SILENT,
                 );
                 this.quill.selection.scrollIntoView();
               },
@@ -7886,11 +7902,11 @@
                   1,
                   "header",
                   false,
-                  _quill2.default.sources.USER
+                  _quill2.default.sources.USER,
                 );
                 this.quill.setSelection(
                   range.index + 1,
-                  _quill2.default.sources.SILENT
+                  _quill2.default.sources.SILENT,
                 );
                 this.quill.selection.scrollIntoView();
               },
@@ -7928,11 +7944,11 @@
                   1,
                   "list",
                   value,
-                  _quill2.default.sources.USER
+                  _quill2.default.sources.USER,
                 );
                 this.quill.setSelection(
                   range.index - length,
-                  _quill2.default.sources.SILENT
+                  _quill2.default.sources.SILENT,
                 );
               },
             },
@@ -7946,12 +7962,12 @@
                 this.quill.format(
                   "code-block",
                   false,
-                  _quill2.default.sources.USER
+                  _quill2.default.sources.USER,
                 );
                 this.quill.deleteText(
                   range.index - 2,
                   1,
-                  _quill2.default.sources.USER
+                  _quill2.default.sources.USER,
                 );
               },
             },
@@ -7985,14 +8001,14 @@
           this.quill.deleteText(
             range.index - length,
             length,
-            _quill2.default.sources.USER
+            _quill2.default.sources.USER,
           );
           if (Object.keys(formats).length > 0) {
             this.quill.formatLine(
               range.index - length,
               length,
               formats,
-              _quill2.default.sources.USER
+              _quill2.default.sources.USER,
             );
           }
           this.quill.selection.scrollIntoView();
@@ -8027,14 +8043,14 @@
           this.quill.deleteText(
             range.index,
             length,
-            _quill2.default.sources.USER
+            _quill2.default.sources.USER,
           );
           if (Object.keys(formats).length > 0) {
             this.quill.formatLine(
               range.index + nextLength - 1,
               length,
               formats,
-              _quill2.default.sources.USER
+              _quill2.default.sources.USER,
             );
           }
         }
@@ -8053,31 +8069,30 @@
           }
           var lineFormats = Object.keys(context.format).reduce(function (
             lineFormats,
-            format
+            format,
           ) {
             if (
               _parchment2.default.query(
                 format,
-                _parchment2.default.Scope.BLOCK
+                _parchment2.default.Scope.BLOCK,
               ) &&
               !Array.isArray(context.format[format])
             ) {
               lineFormats[format] = context.format[format];
             }
             return lineFormats;
-          },
-          {});
+          }, {});
           this.quill.insertText(
             range.index,
             "\n",
             lineFormats,
-            _quill2.default.sources.USER
+            _quill2.default.sources.USER,
           );
           // Earlier scroll.deleteAt might have messed up our selection,
           // so insertText's built in selection preservation is not reliable
           this.quill.setSelection(
             range.index + 1,
-            _quill2.default.sources.SILENT
+            _quill2.default.sources.SILENT,
           );
           this.quill.selection.scrollIntoView();
           Object.keys(context.format).forEach(function (name) {
@@ -8087,7 +8102,7 @@
             _this3.quill.format(
               name,
               context.format[name],
-              _quill2.default.sources.USER
+              _quill2.default.sources.USER,
             );
           });
         }
@@ -8104,11 +8119,11 @@
 
               var _quill$scroll$descend = this.quill.scroll.descendant(
                   CodeBlock,
-                  index
+                  index,
                 ),
                 _quill$scroll$descend2 = _slicedToArray(
                   _quill$scroll$descend,
-                  2
+                  2,
                 ),
                 block = _quill$scroll$descend2[0],
                 offset = _quill$scroll$descend2[1];
@@ -8145,7 +8160,7 @@
               this.quill.setSelection(
                 index,
                 length,
-                _quill2.default.sources.SILENT
+                _quill2.default.sources.SILENT,
               );
             },
           };
@@ -8159,7 +8174,7 @@
               this.quill.format(
                 format,
                 !context.format[format],
-                _quill2.default.sources.USER
+                _quill2.default.sources.USER,
               );
             },
           };
@@ -8334,12 +8349,11 @@
             var _this = this;
             return Object.keys(this.attributes).reduce(function (
               attributes,
-              name
+              name,
             ) {
               attributes[name] = _this.attributes[name].value(_this.domNode);
               return attributes;
-            },
-            {});
+            }, {});
           };
           return AttributorStore;
         })();
@@ -8442,7 +8456,7 @@
           ShadowBlot.create = function (value) {
             if (this.tagName == null) {
               throw new Registry.ParchmentError(
-                "Blot definition missing tagName"
+                "Blot definition missing tagName",
               );
             }
             var node;
@@ -8487,7 +8501,7 @@
             index,
             length,
             name,
-            value
+            value,
           ) {
             var blot = this.isolate(index, length);
             if (Registry.query(name, Registry.Scope.BLOT) != null && value) {
@@ -8517,7 +8531,7 @@
             if (this.next == null || this.domNode.nextSibling != refDomNode) {
               parentBlot.domNode.insertBefore(
                 this.domNode,
-                typeof refDomNode !== "undefined" ? refDomNode : null
+                typeof refDomNode !== "undefined" ? refDomNode : null,
               );
             }
             this.parent = parentBlot;
@@ -8667,7 +8681,7 @@
           _cursor2.default,
           _inline2.default,
           _scroll2.default,
-          _text2.default
+          _text2.default,
         );
 
         module.exports = _quill2.default;
@@ -8681,7 +8695,10 @@
         Object.defineProperty(exports, "__esModule", {
           value: true,
         });
-        exports.AlignStyle = exports.AlignClass = exports.AlignAttribute = undefined;
+        exports.AlignStyle =
+          exports.AlignClass =
+          exports.AlignAttribute =
+            undefined;
 
         var _parchment = __webpack_require__(0);
 
@@ -8699,17 +8716,17 @@
         var AlignAttribute = new _parchment2.default.Attributor.Attribute(
           "align",
           "align",
-          config
+          config,
         );
         var AlignClass = new _parchment2.default.Attributor.Class(
           "align",
           "ql-align",
-          config
+          config,
         );
         var AlignStyle = new _parchment2.default.Attributor.Style(
           "align",
           "text-align",
-          config
+          config,
         );
 
         exports.AlignAttribute = AlignAttribute;
@@ -8742,14 +8759,14 @@
           "ql-bg",
           {
             scope: _parchment2.default.Scope.INLINE,
-          }
+          },
         );
         var BackgroundStyle = new _color.ColorAttributor(
           "background",
           "background-color",
           {
             scope: _parchment2.default.Scope.INLINE,
-          }
+          },
         );
 
         exports.BackgroundClass = BackgroundClass;
@@ -8764,7 +8781,10 @@
         Object.defineProperty(exports, "__esModule", {
           value: true,
         });
-        exports.DirectionStyle = exports.DirectionClass = exports.DirectionAttribute = undefined;
+        exports.DirectionStyle =
+          exports.DirectionClass =
+          exports.DirectionAttribute =
+            undefined;
 
         var _parchment = __webpack_require__(0);
 
@@ -8782,17 +8802,17 @@
         var DirectionAttribute = new _parchment2.default.Attributor.Attribute(
           "direction",
           "dir",
-          config
+          config,
         );
         var DirectionClass = new _parchment2.default.Attributor.Class(
           "direction",
           "ql-direction",
-          config
+          config,
         );
         var DirectionStyle = new _parchment2.default.Attributor.Style(
           "direction",
           "direction",
-          config
+          config,
         );
 
         exports.DirectionAttribute = DirectionAttribute;
@@ -8865,7 +8885,7 @@
         function _possibleConstructorReturn(self, call) {
           if (!self) {
             throw new ReferenceError(
-              "this hasn't been initialised - super() hasn't been called"
+              "this hasn't been initialised - super() hasn't been called",
             );
           }
           return call &&
@@ -8878,7 +8898,7 @@
           if (typeof superClass !== "function" && superClass !== null) {
             throw new TypeError(
               "Super expression must either be null or a function, not " +
-                typeof superClass
+                typeof superClass,
             );
           }
           subClass.prototype = Object.create(
@@ -8890,7 +8910,7 @@
                 writable: true,
                 configurable: true,
               },
-            }
+            },
           );
           if (superClass)
             Object.setPrototypeOf
@@ -8906,7 +8926,7 @@
         var FontClass = new _parchment2.default.Attributor.Class(
           "font",
           "ql-font",
-          config
+          config,
         );
 
         var FontStyleAttributor = (function (_Parchment$Attributor) {
@@ -8920,7 +8940,7 @@
               (
                 FontStyleAttributor.__proto__ ||
                 Object.getPrototypeOf(FontStyleAttributor)
-              ).apply(this, arguments)
+              ).apply(this, arguments),
             );
           }
 
@@ -8932,7 +8952,7 @@
                   FontStyleAttributor.prototype.__proto__ ||
                     Object.getPrototypeOf(FontStyleAttributor.prototype),
                   "value",
-                  this
+                  this,
                 )
                   .call(this, node)
                   .replace(/["']/g, "");
@@ -8973,7 +8993,7 @@
           {
             scope: _parchment2.default.Scope.INLINE,
             whitelist: ["40px", "50px", "70px", "90px", "100px"],
-          }
+          },
         );
         var SizeStyle = new _parchment2.default.Attributor.Style(
           "size",
@@ -8981,7 +9001,7 @@
           {
             scope: _parchment2.default.Scope.INLINE,
             whitelist: ["40px", "50px", "70px", "90px", "100px"],
-          }
+          },
         );
 
         exports.SizeClass = SizeClass;
@@ -9096,7 +9116,7 @@
         function _possibleConstructorReturn(self, call) {
           if (!self) {
             throw new ReferenceError(
-              "this hasn't been initialised - super() hasn't been called"
+              "this hasn't been initialised - super() hasn't been called",
             );
           }
           return call &&
@@ -9109,7 +9129,7 @@
           if (typeof superClass !== "function" && superClass !== null) {
             throw new TypeError(
               "Super expression must either be null or a function, not " +
-                typeof superClass
+                typeof superClass,
             );
           }
           subClass.prototype = Object.create(
@@ -9121,7 +9141,7 @@
                 writable: true,
                 configurable: true,
               },
-            }
+            },
           );
           if (superClass)
             Object.setPrototypeOf
@@ -9140,45 +9160,43 @@
               (History.__proto__ || Object.getPrototypeOf(History)).call(
                 this,
                 quill,
-                options
-              )
+                options,
+              ),
             );
 
             _this.lastRecorded = 0;
             _this.ignoreChange = false;
             _this.clear();
-            _this.quill.on(_quill2.default.events.EDITOR_CHANGE, function (
-              eventName,
-              delta,
-              oldDelta,
-              source
-            ) {
-              if (
-                eventName !== _quill2.default.events.TEXT_CHANGE ||
-                _this.ignoreChange
-              )
-                return;
-              if (
-                !_this.options.userOnly ||
-                source === _quill2.default.sources.USER
-              ) {
-                _this.record(delta, oldDelta);
-              } else {
-                _this.transform(delta);
-              }
-            });
+            _this.quill.on(
+              _quill2.default.events.EDITOR_CHANGE,
+              function (eventName, delta, oldDelta, source) {
+                if (
+                  eventName !== _quill2.default.events.TEXT_CHANGE ||
+                  _this.ignoreChange
+                )
+                  return;
+                if (
+                  !_this.options.userOnly ||
+                  source === _quill2.default.sources.USER
+                ) {
+                  _this.record(delta, oldDelta);
+                } else {
+                  _this.transform(delta);
+                }
+              },
+            );
             _this.quill.keyboard.addBinding(
               { key: "Z", shortKey: true },
-              _this.undo.bind(_this)
+              _this.undo.bind(_this),
             );
             _this.quill.keyboard.addBinding(
               { key: "Z", shortKey: true, shiftKey: true },
-              _this.redo.bind(_this)
+              _this.redo.bind(_this),
             );
             if (/Win/i.test(navigator.platform)) {
               _this.quill.keyboard.addBinding(
                 { key: "Y", shortKey: true },
-                _this.redo.bind(_this)
+                _this.redo.bind(_this),
               );
             }
             return _this;
@@ -9194,7 +9212,7 @@
                 this.ignoreChange = true;
                 this.quill.updateContents(
                   delta[source],
-                  _quill2.default.sources.USER
+                  _quill2.default.sources.USER,
                 );
                 this.ignoreChange = false;
                 var index = getLastChangeIndex(delta[source]);
@@ -9284,7 +9302,7 @@
               return (
                 _parchment2.default.query(
                   attr,
-                  _parchment2.default.Scope.BLOCK
+                  _parchment2.default.Scope.BLOCK,
                 ) != null
               );
             });
@@ -9355,7 +9373,7 @@
             value: function value(predicate) {
               if (this === null) {
                 throw new TypeError(
-                  "Array.prototype.find called on null or undefined"
+                  "Array.prototype.find called on null or undefined",
                 );
               }
               if (typeof predicate !== "function") {
@@ -9449,7 +9467,7 @@
         function _possibleConstructorReturn(self, call) {
           if (!self) {
             throw new ReferenceError(
-              "this hasn't been initialised - super() hasn't been called"
+              "this hasn't been initialised - super() hasn't been called",
             );
           }
           return call &&
@@ -9462,7 +9480,7 @@
           if (typeof superClass !== "function" && superClass !== null) {
             throw new TypeError(
               "Super expression must either be null or a function, not " +
-                typeof superClass
+                typeof superClass,
             );
           }
           subClass.prototype = Object.create(
@@ -9474,7 +9492,7 @@
                 writable: true,
                 configurable: true,
               },
-            }
+            },
           );
           if (superClass)
             Object.setPrototypeOf
@@ -9492,8 +9510,8 @@
               this,
               (Bold.__proto__ || Object.getPrototypeOf(Bold)).apply(
                 this,
-                arguments
-              )
+                arguments,
+              ),
             );
           }
 
@@ -9507,7 +9525,7 @@
                     Bold.prototype.__proto__ ||
                       Object.getPrototypeOf(Bold.prototype),
                     "optimize",
-                    this
+                    this,
                   ).call(this);
                   if (this.domNode.tagName !== this.statics.tagName[0]) {
                     this.replaceWith(this.statics.blotName);
@@ -9522,7 +9540,7 @@
                   return _get(
                     Bold.__proto__ || Object.getPrototypeOf(Bold),
                     "create",
-                    this
+                    this,
                   ).call(this);
                 },
               },
@@ -9532,7 +9550,7 @@
                   return true;
                 },
               },
-            ]
+            ],
           );
 
           return Bold;
@@ -9552,7 +9570,13 @@
         Object.defineProperty(exports, "__esModule", {
           value: true,
         });
-        exports.matchText = exports.matchSpacing = exports.matchNewline = exports.matchBlot = exports.matchAttributor = exports.default = undefined;
+        exports.matchText =
+          exports.matchSpacing =
+          exports.matchNewline =
+          exports.matchBlot =
+          exports.matchAttributor =
+          exports.default =
+            undefined;
 
         var _typeof =
           typeof Symbol === "function" && typeof Symbol.iterator === "symbol"
@@ -9602,7 +9626,7 @@
               return sliceIterator(arr, i);
             } else {
               throw new TypeError(
-                "Invalid attempt to destructure non-iterable instance"
+                "Invalid attempt to destructure non-iterable instance",
               );
             }
           };
@@ -9699,7 +9723,7 @@
         function _possibleConstructorReturn(self, call) {
           if (!self) {
             throw new ReferenceError(
-              "this hasn't been initialised - super() hasn't been called"
+              "this hasn't been initialised - super() hasn't been called",
             );
           }
           return call &&
@@ -9712,7 +9736,7 @@
           if (typeof superClass !== "function" && superClass !== null) {
             throw new TypeError(
               "Super expression must either be null or a function, not " +
-                typeof superClass
+                typeof superClass,
             );
           }
           subClass.prototype = Object.create(
@@ -9724,7 +9748,7 @@
                 writable: true,
                 configurable: true,
               },
-            }
+            },
           );
           if (superClass)
             Object.setPrototypeOf
@@ -9782,23 +9806,23 @@
               (Clipboard.__proto__ || Object.getPrototypeOf(Clipboard)).call(
                 this,
                 quill,
-                options
-              )
+                options,
+              ),
             );
 
             _this.quill.root.addEventListener(
               "paste",
-              _this.onPaste.bind(_this)
+              _this.onPaste.bind(_this),
             );
             _this.container = _this.quill.addContainer("ql-clipboard");
             _this.container.setAttribute("contenteditable", true);
             _this.container.setAttribute("tabindex", -1);
             _this.matchers = [];
-            CLIPBOARD_CONFIG.concat(_this.options.matchers).forEach(function (
-              pair
-            ) {
-              _this.addMatcher.apply(_this, _toConsumableArray(pair));
-            });
+            CLIPBOARD_CONFIG.concat(_this.options.matchers).forEach(
+              function (pair) {
+                _this.addMatcher.apply(_this, _toConsumableArray(pair));
+              },
+            );
             return _this;
           }
 
@@ -9824,7 +9848,7 @@
                 var delta = traverse(
                   this.container,
                   elementMatchers,
-                  textMatchers
+                  textMatchers,
                 );
                 // Remove trailing newline
                 if (
@@ -9834,7 +9858,7 @@
                   delta = delta.compose(
                     new _quillDelta2.default()
                       .retain(delta.length() - 1)
-                      .delete(1)
+                      .delete(1),
                   );
                 }
                 debug.log("convert", this.container.innerHTML, delta);
@@ -9856,7 +9880,7 @@
                   var paste = this.convert(html);
                   return this.quill.updateContents(
                     new _quillDelta2.default().retain(index).concat(paste),
-                    source
+                    source,
                   );
                 }
               },
@@ -9876,12 +9900,12 @@
                   delta = delta.concat(_this2.convert()).delete(range.length);
                   _this2.quill.updateContents(
                     delta,
-                    _quill2.default.sources.USER
+                    _quill2.default.sources.USER,
                   );
                   // range.length contributes to delta.length()
                   _this2.quill.setSelection(
                     delta.length() - range.length,
-                    _quill2.default.sources.SILENT
+                    _quill2.default.sources.SILENT,
                   );
                   _this2.quill.scrollingContainer.scrollTop = scrollTop;
                   _this2.quill.selection.scrollIntoView();
@@ -9914,7 +9938,7 @@
                           // TODO use weakmap
                           node[DOM_KEY] = node[DOM_KEY] || [];
                           node[DOM_KEY].push(matcher);
-                        }
+                        },
                       );
                       break;
                   }
@@ -9949,8 +9973,8 @@
                   (0, _extend3.default)(
                     {},
                     _defineProperty({}, format, value),
-                    op.attributes
-                  )
+                    op.attributes,
+                  ),
                 );
               }
             }, new _quillDelta2.default());
@@ -9998,27 +10022,25 @@
                 var childrenDelta = traverse(
                   childNode,
                   elementMatchers,
-                  textMatchers
+                  textMatchers,
                 );
                 if (childNode.nodeType === node.ELEMENT_NODE) {
                   childrenDelta = elementMatchers.reduce(function (
                     childrenDelta,
-                    matcher
+                    matcher,
                   ) {
                     return matcher(childNode, childrenDelta);
-                  },
-                  childrenDelta);
+                  }, childrenDelta);
                   childrenDelta = (childNode[DOM_KEY] || []).reduce(function (
                     childrenDelta,
-                    matcher
+                    matcher,
                   ) {
                     return matcher(childNode, childrenDelta);
-                  },
-                  childrenDelta);
+                  }, childrenDelta);
                 }
                 return delta.concat(childrenDelta);
               },
-              new _quillDelta2.default()
+              new _quillDelta2.default(),
             );
           } else {
             return new _quillDelta2.default();
@@ -10040,7 +10062,7 @@
             .forEach(function (name) {
               var attr = _parchment2.default.query(
                 name,
-                _parchment2.default.Scope.ATTRIBUTE
+                _parchment2.default.Scope.ATTRIBUTE,
               );
               if (attr != null) {
                 formats[attr.attrName] = attr.value(node);
@@ -10071,7 +10093,7 @@
               embed[match.blotName] = value;
               delta = new _quillDelta2.default().insert(
                 embed,
-                match.formats(node)
+                match.formats(node),
               );
             }
           } else if (typeof match.formats === "function") {
@@ -10112,7 +10134,7 @@
           return delta.compose(
             new _quillDelta2.default()
               .retain(delta.length() - 1)
-              .retain(1, { indent: indent })
+              .retain(1, { indent: indent }),
           );
         }
 
@@ -10257,7 +10279,7 @@
               return sliceIterator(arr, i);
             } else {
               throw new TypeError(
-                "Invalid attempt to destructure non-iterable instance"
+                "Invalid attempt to destructure non-iterable instance",
               );
             }
           };
@@ -10327,7 +10349,7 @@
         function _possibleConstructorReturn(self, call) {
           if (!self) {
             throw new ReferenceError(
-              "this hasn't been initialised - super() hasn't been called"
+              "this hasn't been initialised - super() hasn't been called",
             );
           }
           return call &&
@@ -10340,7 +10362,7 @@
           if (typeof superClass !== "function" && superClass !== null) {
             throw new TypeError(
               "Super expression must either be null or a function, not " +
-                typeof superClass
+                typeof superClass,
             );
           }
           subClass.prototype = Object.create(
@@ -10352,7 +10374,7 @@
                 writable: true,
                 configurable: true,
               },
-            }
+            },
           );
           if (superClass)
             Object.setPrototypeOf
@@ -10373,8 +10395,8 @@
               (Toolbar.__proto__ || Object.getPrototypeOf(Toolbar)).call(
                 this,
                 quill,
-                options
-              )
+                options,
+              ),
             );
 
             if (Array.isArray(_this.options.container)) {
@@ -10382,7 +10404,7 @@
               addControls(container, _this.options.container);
               quill.container.parentNode.insertBefore(
                 container,
-                quill.container
+                quill.container,
               );
               _this.container = container;
             } else if (typeof _this.options.container === "string") {
@@ -10396,7 +10418,7 @@
               return (
                 (_ret = debug.error(
                   "Container required for toolbar",
-                  _this.options
+                  _this.options,
                 )),
                 _possibleConstructorReturn(_this, _ret)
               );
@@ -10411,21 +10433,21 @@
               _this.container.querySelectorAll("button, select"),
               function (input) {
                 _this.attach(input);
-              }
+              },
             );
-            _this.quill.on(_quill2.default.events.EDITOR_CHANGE, function (
-              type,
-              range
-            ) {
-              if (type === _quill2.default.events.SELECTION_CHANGE) {
-                _this.update(range);
-              }
-            });
+            _this.quill.on(
+              _quill2.default.events.EDITOR_CHANGE,
+              function (type, range) {
+                if (type === _quill2.default.events.SELECTION_CHANGE) {
+                  _this.update(range);
+                }
+              },
+            );
             _this.quill.on(_quill2.default.events.SCROLL_OPTIMIZE, function () {
               var _this$quill$selection = _this.quill.selection.getRange(),
                 _this$quill$selection2 = _slicedToArray(
                   _this$quill$selection,
-                  1
+                  1,
                 ),
                 range = _this$quill$selection2[0]; // quill.getSelection triggers update
 
@@ -10446,11 +10468,12 @@
               value: function attach(input) {
                 var _this2 = this;
 
-                var format = [].find.call(input.classList, function (
-                  className
-                ) {
-                  return className.indexOf("ql-") === 0;
-                });
+                var format = [].find.call(
+                  input.classList,
+                  function (className) {
+                    return className.indexOf("ql-") === 0;
+                  },
+                );
                 if (!format) return;
                 format = format.slice("ql-".length);
                 if (input.tagName === "BUTTON") {
@@ -10464,7 +10487,7 @@
                     debug.warn(
                       "ignoring attaching to disabled format",
                       format,
-                      input
+                      input,
                     );
                     return;
                   }
@@ -10472,7 +10495,7 @@
                     debug.warn(
                       "ignoring attaching to nonexistent format",
                       format,
-                      input
+                      input,
                     );
                     return;
                   }
@@ -10501,7 +10524,7 @@
                   var _quill$selection$getR = _this2.quill.selection.getRange(),
                     _quill$selection$getR2 = _slicedToArray(
                       _quill$selection$getR,
-                      1
+                      1,
                     ),
                     range = _quill$selection$getR2[0];
 
@@ -10518,13 +10541,13 @@
                         .retain(range.index)
                         .delete(range.length)
                         .insert(_defineProperty({}, format, value)),
-                      _quill2.default.sources.USER
+                      _quill2.default.sources.USER,
                     );
                   } else {
                     _this2.quill.format(
                       format,
                       value,
-                      _quill2.default.sources.USER
+                      _quill2.default.sources.USER,
                     );
                   }
                   _this2.update(range);
@@ -10554,7 +10577,7 @@
                         value = value.replace(/\"/g, '\\"');
                       }
                       option = input.querySelector(
-                        'option[value="' + value + '"]'
+                        'option[value="' + value + '"]',
                       );
                     }
                     if (option == null) {
@@ -10580,7 +10603,7 @@
                     } else {
                       input.classList.toggle(
                         "ql-active",
-                        formats[format] != null
+                        formats[format] != null,
                       );
                     }
                   }
@@ -10658,7 +10681,7 @@
                   if (
                     _parchment2.default.query(
                       name,
-                      _parchment2.default.Scope.INLINE
+                      _parchment2.default.Scope.INLINE,
                     ) != null
                   ) {
                     _this3.quill.format(name, false);
@@ -10674,7 +10697,7 @@
                 this.quill.format(
                   "align",
                   "right",
-                  _quill2.default.sources.USER
+                  _quill2.default.sources.USER,
                 );
               } else if (!value && align === "right") {
                 this.quill.format("align", false, _quill2.default.sources.USER);
@@ -10682,7 +10705,7 @@
               this.quill.format(
                 "direction",
                 value,
-                _quill2.default.sources.USER
+                _quill2.default.sources.USER,
               );
             },
             indent: function indent(value) {
@@ -10695,7 +10718,7 @@
                 this.quill.format(
                   "indent",
                   indent + modifier,
-                  _quill2.default.sources.USER
+                  _quill2.default.sources.USER,
                 );
               }
             },
@@ -10716,13 +10739,13 @@
                   this.quill.format(
                     "list",
                     false,
-                    _quill2.default.sources.USER
+                    _quill2.default.sources.USER,
                   );
                 } else {
                   this.quill.format(
                     "list",
                     "unchecked",
-                    _quill2.default.sources.USER
+                    _quill2.default.sources.USER,
                   );
                 }
               } else {
@@ -10833,7 +10856,7 @@
         function _possibleConstructorReturn(self, call) {
           if (!self) {
             throw new ReferenceError(
-              "this hasn't been initialised - super() hasn't been called"
+              "this hasn't been initialised - super() hasn't been called",
             );
           }
           return call &&
@@ -10846,7 +10869,7 @@
           if (typeof superClass !== "function" && superClass !== null) {
             throw new TypeError(
               "Super expression must either be null or a function, not " +
-                typeof superClass
+                typeof superClass,
             );
           }
           subClass.prototype = Object.create(
@@ -10858,7 +10881,7 @@
                 writable: true,
                 configurable: true,
               },
-            }
+            },
           );
           if (superClass)
             Object.setPrototypeOf
@@ -10923,8 +10946,8 @@
               (BaseTheme.__proto__ || Object.getPrototypeOf(BaseTheme)).call(
                 this,
                 quill,
-                options
-              )
+                options,
+              ),
             );
 
             var listener = function listener(e) {
@@ -10959,7 +10982,7 @@
                   BaseTheme.prototype.__proto__ ||
                     Object.getPrototypeOf(BaseTheme.prototype),
                   "addModule",
-                  this
+                  this,
                 ).call(this, name);
                 if (name === "toolbar") {
                   this.extendToolbar(module);
@@ -11012,7 +11035,7 @@
                       fillSelect(
                         select,
                         COLORS,
-                        format === "background" ? "#ffffff" : "#000000"
+                        format === "background" ? "#ffffff" : "#000000",
                       );
                     }
                     return new _colorPicker2.default(select, icons[format]);
@@ -11059,14 +11082,14 @@
                     var _this3 = this;
 
                     var fileInput = this.container.querySelector(
-                      "input.ql-image[type=file]"
+                      "input.ql-image[type=file]",
                     );
                     if (fileInput == null) {
                       fileInput = document.createElement("input");
                       fileInput.setAttribute("type", "file");
                       fileInput.setAttribute(
                         "accept",
-                        "image/png, image/gif, image/jpeg, image/bmp, image/x-icon"
+                        "image/png, image/gif, image/jpeg, image/bmp, image/x-icon",
                       );
                       fileInput.classList.add("ql-image");
                       fileInput.addEventListener("change", function () {
@@ -11082,7 +11105,7 @@
                                 .retain(range.index)
                                 .delete(range.length)
                                 .insert({ image: e.target.result }),
-                              _emitter2.default.sources.USER
+                              _emitter2.default.sources.USER,
                             );
                             fileInput.value = "";
                           };
@@ -11099,7 +11122,7 @@
                 },
               },
             },
-          }
+          },
         );
 
         var BaseTooltip = (function (_Tooltip) {
@@ -11112,7 +11135,7 @@
               this,
               (
                 BaseTooltip.__proto__ || Object.getPrototypeOf(BaseTooltip)
-              ).call(this, quill, boundsContainer)
+              ).call(this, quill, boundsContainer),
             );
 
             _this4.textbox = _this4.root.querySelector('input[type="text"]');
@@ -11163,12 +11186,12 @@
                   this.textbox.value = "";
                 }
                 this.position(
-                  this.quill.getBounds(this.quill.selection.savedRange)
+                  this.quill.getBounds(this.quill.selection.savedRange),
                 );
                 this.textbox.select();
                 this.textbox.setAttribute(
                   "placeholder",
-                  this.textbox.getAttribute("data-" + mode) || ""
+                  this.textbox.getAttribute("data-" + mode) || "",
                 );
                 this.root.setAttribute("data-mode", mode);
               },
@@ -11193,7 +11216,7 @@
                         this.linkRange,
                         "link",
                         value,
-                        _emitter2.default.sources.USER
+                        _emitter2.default.sources.USER,
                       );
                       delete this.linkRange;
                     } else {
@@ -11201,7 +11224,7 @@
                       this.quill.format(
                         "link",
                         value,
-                        _emitter2.default.sources.USER
+                        _emitter2.default.sources.USER,
                       );
                     }
                     this.quill.root.scrollTop = scrollTop;
@@ -11210,10 +11233,10 @@
                   case "video": {
                     var match =
                       value.match(
-                        /^(https?):\/\/(www\.)?youtube\.com\/watch.*v=([a-zA-Z0-9_-]+)/
+                        /^(https?):\/\/(www\.)?youtube\.com\/watch.*v=([a-zA-Z0-9_-]+)/,
                       ) ||
                       value.match(
-                        /^(https?):\/\/(www\.)?youtu\.be\/([a-zA-Z0-9_-]+)/
+                        /^(https?):\/\/(www\.)?youtu\.be\/([a-zA-Z0-9_-]+)/,
                       );
                     if (match) {
                       value =
@@ -11223,7 +11246,7 @@
                         "?showinfo=0";
                     } else if (
                       (match = value.match(
-                        /^(https?):\/\/(www\.)?vimeo\.com\/(\d+)/
+                        /^(https?):\/\/(www\.)?vimeo\.com\/(\d+)/,
                       ))
                     ) {
                       // eslint-disable-line no-cond-assign
@@ -11243,18 +11266,18 @@
                         index,
                         this.root.getAttribute("data-mode"),
                         value,
-                        _emitter2.default.sources.USER
+                        _emitter2.default.sources.USER,
                       );
                       if (this.root.getAttribute("data-mode") === "formula") {
                         this.quill.insertText(
                           index + 1,
                           " ",
-                          _emitter2.default.sources.USER
+                          _emitter2.default.sources.USER,
                         );
                       }
                       this.quill.setSelection(
                         index + 2,
-                        _emitter2.default.sources.USER
+                        _emitter2.default.sources.USER,
                       );
                     }
                     break;
@@ -11355,7 +11378,7 @@
         function _possibleConstructorReturn(self, call) {
           if (!self) {
             throw new ReferenceError(
-              "this hasn't been initialised - super() hasn't been called"
+              "this hasn't been initialised - super() hasn't been called",
             );
           }
           return call &&
@@ -11368,7 +11391,7 @@
           if (typeof superClass !== "function" && superClass !== null) {
             throw new TypeError(
               "Super expression must either be null or a function, not " +
-                typeof superClass
+                typeof superClass,
             );
           }
           subClass.prototype = Object.create(
@@ -11380,7 +11403,7 @@
                 writable: true,
                 configurable: true,
               },
-            }
+            },
           );
           if (superClass)
             Object.setPrototypeOf
@@ -11398,7 +11421,7 @@
               this,
               (
                 ColorPicker.__proto__ || Object.getPrototypeOf(ColorPicker)
-              ).call(this, select)
+              ).call(this, select),
             );
 
             _this.label.innerHTML = label;
@@ -11419,7 +11442,7 @@
                   ColorPicker.prototype.__proto__ ||
                     Object.getPrototypeOf(ColorPicker.prototype),
                   "buildItem",
-                  this
+                  this,
                 ).call(this, option);
                 item.style.backgroundColor = option.getAttribute("value") || "";
                 return item;
@@ -11432,7 +11455,7 @@
                   ColorPicker.prototype.__proto__ ||
                     Object.getPrototypeOf(ColorPicker.prototype),
                   "selectItem",
-                  this
+                  this,
                 ).call(this, item, trigger);
                 var colorLabel = this.label.querySelector(".ql-color-label");
                 var value = item ? item.getAttribute("data-value") || "" : "";
@@ -11517,7 +11540,7 @@
         function _possibleConstructorReturn(self, call) {
           if (!self) {
             throw new ReferenceError(
-              "this hasn't been initialised - super() hasn't been called"
+              "this hasn't been initialised - super() hasn't been called",
             );
           }
           return call &&
@@ -11530,7 +11553,7 @@
           if (typeof superClass !== "function" && superClass !== null) {
             throw new TypeError(
               "Super expression must either be null or a function, not " +
-                typeof superClass
+                typeof superClass,
             );
           }
           subClass.prototype = Object.create(
@@ -11542,7 +11565,7 @@
                 writable: true,
                 configurable: true,
               },
-            }
+            },
           );
           if (superClass)
             Object.setPrototypeOf
@@ -11560,8 +11583,8 @@
               this,
               (IconPicker.__proto__ || Object.getPrototypeOf(IconPicker)).call(
                 this,
-                select
-              )
+                select,
+              ),
             );
 
             _this.container.classList.add("ql-icon-picker");
@@ -11569,7 +11592,7 @@
               _this.container.querySelectorAll(".ql-picker-item"),
               function (item) {
                 item.innerHTML = icons[item.getAttribute("data-value") || ""];
-              }
+              },
             );
             _this.defaultItem = _this.container.querySelector(".ql-selected");
             _this.selectItem(_this.defaultItem);
@@ -11584,7 +11607,7 @@
                   IconPicker.prototype.__proto__ ||
                     Object.getPrototypeOf(IconPicker.prototype),
                   "selectItem",
-                  this
+                  this,
                 ).call(this, item, trigger);
                 item = item || this.defaultItem;
                 this.label.innerHTML = item.innerHTML;
@@ -11668,7 +11691,8 @@
                 this.root.style.left = left + "px";
                 this.root.style.top = top + "px";
                 this.root.classList.remove("ql-flip");
-                var containerBounds = this.boundsContainer.getBoundingClientRect();
+                var containerBounds =
+                  this.boundsContainer.getBoundingClientRect();
                 var rootBounds = this.root.getBoundingClientRect();
                 var shift = 0;
                 if (rootBounds.right > containerBounds.right) {
@@ -11993,7 +12017,7 @@
           event,
           fn,
           context,
-          once
+          once,
         ) {
           var evt = prefix ? prefix + event : event;
 
@@ -12050,7 +12074,7 @@
          * @api public
          */
         EventEmitter.prototype.removeAllListeners = function removeAllListeners(
-          event
+          event,
         ) {
           var evt;
 
@@ -12470,11 +12494,11 @@
             if (
               text1.substring(
                 text1.length - pointermid,
-                text1.length - pointerend
+                text1.length - pointerend,
               ) ==
               text2.substring(
                 text2.length - pointermid,
-                text2.length - pointerend
+                text2.length - pointerend,
               )
             ) {
               pointermin = pointermid;
@@ -12520,7 +12544,7 @@
             // Start with a 1/4 length substring at position i as a seed.
             var seed = longtext.substring(
               i,
-              i + Math.floor(longtext.length / 4)
+              i + Math.floor(longtext.length / 4),
             );
             var j = -1;
             var best_common = "";
@@ -12531,11 +12555,11 @@
             while ((j = shorttext.indexOf(seed, j + 1)) != -1) {
               var prefixLength = diff_commonPrefix(
                 longtext.substring(i),
-                shorttext.substring(j)
+                shorttext.substring(j),
               );
               var suffixLength = diff_commonSuffix(
                 longtext.substring(0, i),
-                shorttext.substring(0, j)
+                shorttext.substring(0, j),
               );
               if (best_common.length < suffixLength + prefixLength) {
                 best_common =
@@ -12564,13 +12588,13 @@
           var hm1 = diff_halfMatchI_(
             longtext,
             shorttext,
-            Math.ceil(longtext.length / 4)
+            Math.ceil(longtext.length / 4),
           );
           // Check again based on the third quarter.
           var hm2 = diff_halfMatchI_(
             longtext,
             shorttext,
-            Math.ceil(longtext.length / 2)
+            Math.ceil(longtext.length / 2),
           );
           var hm;
           if (!hm1 && !hm2) {
@@ -12638,9 +12662,8 @@
                         diffs[pointer - count_delete - count_insert - 1][0] ==
                           DIFF_EQUAL
                       ) {
-                        diffs[
-                          pointer - count_delete - count_insert - 1
-                        ][1] += text_insert.substring(0, commonlength);
+                        diffs[pointer - count_delete - count_insert - 1][1] +=
+                          text_insert.substring(0, commonlength);
                       } else {
                         diffs.splice(0, 0, [
                           DIFF_EQUAL,
@@ -12656,15 +12679,15 @@
                     if (commonlength !== 0) {
                       diffs[pointer][1] =
                         text_insert.substring(
-                          text_insert.length - commonlength
+                          text_insert.length - commonlength,
                         ) + diffs[pointer][1];
                       text_insert = text_insert.substring(
                         0,
-                        text_insert.length - commonlength
+                        text_insert.length - commonlength,
                       );
                       text_delete = text_delete.substring(
                         0,
-                        text_delete.length - commonlength
+                        text_delete.length - commonlength,
                       );
                     }
                   }
@@ -12673,20 +12696,20 @@
                     diffs.splice(
                       pointer - count_insert,
                       count_delete + count_insert,
-                      [DIFF_INSERT, text_insert]
+                      [DIFF_INSERT, text_insert],
                     );
                   } else if (count_insert === 0) {
                     diffs.splice(
                       pointer - count_delete,
                       count_delete + count_insert,
-                      [DIFF_DELETE, text_delete]
+                      [DIFF_DELETE, text_delete],
                     );
                   } else {
                     diffs.splice(
                       pointer - count_delete - count_insert,
                       count_delete + count_insert,
                       [DIFF_DELETE, text_delete],
-                      [DIFF_INSERT, text_insert]
+                      [DIFF_INSERT, text_insert],
                     );
                   }
                   pointer =
@@ -12731,7 +12754,7 @@
               // This is a single edit surrounded by equalities.
               if (
                 diffs[pointer][1].substring(
-                  diffs[pointer][1].length - diffs[pointer - 1][1].length
+                  diffs[pointer][1].length - diffs[pointer - 1][1].length,
                 ) == diffs[pointer - 1][1]
               ) {
                 // Shift the edit over the previous equality.
@@ -12739,7 +12762,7 @@
                   diffs[pointer - 1][1] +
                   diffs[pointer][1].substring(
                     0,
-                    diffs[pointer][1].length - diffs[pointer - 1][1].length
+                    diffs[pointer][1].length - diffs[pointer - 1][1].length,
                   );
                 diffs[pointer + 1][1] =
                   diffs[pointer - 1][1] + diffs[pointer + 1][1];
@@ -13111,7 +13134,7 @@
             index,
             length,
             name,
-            value
+            value,
           ) {
             if (
               this.formats()[name] != null ||
@@ -13215,7 +13238,7 @@
             index,
             length,
             name,
-            value
+            value,
           ) {
             this.update();
             _super.prototype.formatAt.call(this, index, length, name, value);
@@ -13263,7 +13286,7 @@
             for (var i = 0; remaining.length > 0; i += 1) {
               if (i >= MAX_OPTIMIZE_ITERATIONS) {
                 throw new Error(
-                  "[Parchment] Maximum optimize iterations reached"
+                  "[Parchment] Maximum optimize iterations reached",
                 );
               }
               remaining.forEach(function (mutation) {
@@ -13321,7 +13344,7 @@
             if (this.domNode[Registry.DATA_KEY].mutations != null) {
               _super.prototype.update.call(
                 this,
-                this.domNode[Registry.DATA_KEY].mutations
+                this.domNode[Registry.DATA_KEY].mutations,
               );
             }
             this.optimize(mutations);
@@ -13578,13 +13601,13 @@
                 callback(
                   cur,
                   index - curIndex,
-                  Math.min(length, curIndex + curLength - index)
+                  Math.min(length, curIndex + curLength - index),
                 );
               } else {
                 callback(
                   cur,
                   0,
-                  Math.min(curLength, index + length - curIndex)
+                  Math.min(curLength, index + length - curIndex),
                 );
               }
               curIndex += curLength;
@@ -13742,7 +13765,7 @@
             "attributors/style/font": _font.FontStyle,
             "attributors/style/size": _size.SizeStyle,
           },
-          true
+          true,
         );
 
         _core2.default.register(
@@ -13787,7 +13810,7 @@
             "ui/color-picker": _colorPicker2.default,
             "ui/tooltip": _tooltip2.default,
           },
-          true
+          true,
         );
 
         module.exports = _core2.default;
@@ -13836,7 +13859,7 @@
               return sliceIterator(arr, i);
             } else {
               throw new TypeError(
-                "Invalid attempt to destructure non-iterable instance"
+                "Invalid attempt to destructure non-iterable instance",
               );
             }
           };
@@ -13915,7 +13938,7 @@
         function _possibleConstructorReturn(self, call) {
           if (!self) {
             throw new ReferenceError(
-              "this hasn't been initialised - super() hasn't been called"
+              "this hasn't been initialised - super() hasn't been called",
             );
           }
           return call &&
@@ -13928,7 +13951,7 @@
           if (typeof superClass !== "function" && superClass !== null) {
             throw new TypeError(
               "Super expression must either be null or a function, not " +
-                typeof superClass
+                typeof superClass,
             );
           }
           subClass.prototype = Object.create(
@@ -13940,7 +13963,7 @@
                 writable: true,
                 configurable: true,
               },
-            }
+            },
           );
           if (superClass)
             Object.setPrototypeOf
@@ -13973,8 +13996,8 @@
               (SnowTheme.__proto__ || Object.getPrototypeOf(SnowTheme)).call(
                 this,
                 quill,
-                options
-              )
+                options,
+              ),
             );
 
             _this.quill.container.classList.add("ql-snow");
@@ -13988,11 +14011,11 @@
                 toolbar.container.classList.add("ql-snow");
                 this.buildButtons(
                   [].slice.call(toolbar.container.querySelectorAll("button")),
-                  _icons2.default
+                  _icons2.default,
                 );
                 this.buildPickers(
                   [].slice.call(toolbar.container.querySelectorAll("select")),
-                  _icons2.default
+                  _icons2.default,
                 );
                 this.tooltip = new SnowTooltip(this.quill, this.options.bounds);
                 if (toolbar.container.querySelector(".ql-link")) {
@@ -14001,9 +14024,9 @@
                     function (range, context) {
                       toolbar.handlers["link"].call(
                         toolbar,
-                        !context.format.link
+                        !context.format.link,
                       );
-                    }
+                    },
                   );
                 }
               },
@@ -14041,7 +14064,7 @@
                 },
               },
             },
-          }
+          },
         );
 
         var SnowTooltip = (function (_BaseTooltip) {
@@ -14054,7 +14077,7 @@
               this,
               (
                 SnowTooltip.__proto__ || Object.getPrototypeOf(SnowTooltip)
-              ).call(this, quill, bounds)
+              ).call(this, quill, bounds),
             );
 
             _this2.preview = _this2.root.querySelector("a.ql-preview");
@@ -14071,7 +14094,7 @@
                   SnowTooltip.prototype.__proto__ ||
                     Object.getPrototypeOf(SnowTooltip.prototype),
                   "listen",
-                  this
+                  this,
                 ).call(this);
                 this.root
                   .querySelector("a.ql-action")
@@ -14093,7 +14116,7 @@
                         range,
                         "link",
                         false,
-                        _emitter2.default.sources.USER
+                        _emitter2.default.sources.USER,
                       );
                       delete _this3.linkRange;
                     }
@@ -14108,13 +14131,14 @@
                       range.length === 0 &&
                       source === _emitter2.default.sources.USER
                     ) {
-                      var _quill$scroll$descend = _this3.quill.scroll.descendant(
-                          _link2.default,
-                          range.index
-                        ),
+                      var _quill$scroll$descend =
+                          _this3.quill.scroll.descendant(
+                            _link2.default,
+                            range.index,
+                          ),
                         _quill$scroll$descend2 = _slicedToArray(
                           _quill$scroll$descend,
-                          2
+                          2,
                         ),
                         link = _quill$scroll$descend2[0],
                         offset = _quill$scroll$descend2[1];
@@ -14122,14 +14146,14 @@
                       if (link != null) {
                         _this3.linkRange = new _selection.Range(
                           range.index - offset,
-                          link.length()
+                          link.length(),
                         );
                         var preview = _link2.default.formats(link.domNode);
                         _this3.preview.textContent = preview;
                         _this3.preview.setAttribute("href", preview);
                         _this3.show();
                         _this3.position(
-                          _this3.quill.getBounds(_this3.linkRange)
+                          _this3.quill.getBounds(_this3.linkRange),
                         );
                         return;
                       }
@@ -14137,7 +14161,7 @@
                       delete _this3.linkRange;
                     }
                     _this3.hide();
-                  }
+                  },
                 );
               },
             },
@@ -14148,7 +14172,7 @@
                   SnowTooltip.prototype.__proto__ ||
                     Object.getPrototypeOf(SnowTooltip.prototype),
                   "show",
-                  this
+                  this,
                 ).call(this);
                 this.root.removeAttribute("data-mode");
               },
@@ -14194,7 +14218,7 @@
         function _possibleConstructorReturn(self, call) {
           if (!self) {
             throw new ReferenceError(
-              "this hasn't been initialised - super() hasn't been called"
+              "this hasn't been initialised - super() hasn't been called",
             );
           }
           return call &&
@@ -14207,7 +14231,7 @@
           if (typeof superClass !== "function" && superClass !== null) {
             throw new TypeError(
               "Super expression must either be null or a function, not " +
-                typeof superClass
+                typeof superClass,
             );
           }
           subClass.prototype = Object.create(
@@ -14219,7 +14243,7 @@
                 writable: true,
                 configurable: true,
               },
-            }
+            },
           );
           if (superClass)
             Object.setPrototypeOf
@@ -14237,8 +14261,8 @@
               this,
               (Blockquote.__proto__ || Object.getPrototypeOf(Blockquote)).apply(
                 this,
-                arguments
-              )
+                arguments,
+              ),
             );
           }
 
@@ -14294,7 +14318,7 @@
         function _possibleConstructorReturn(self, call) {
           if (!self) {
             throw new ReferenceError(
-              "this hasn't been initialised - super() hasn't been called"
+              "this hasn't been initialised - super() hasn't been called",
             );
           }
           return call &&
@@ -14307,7 +14331,7 @@
           if (typeof superClass !== "function" && superClass !== null) {
             throw new TypeError(
               "Super expression must either be null or a function, not " +
-                typeof superClass
+                typeof superClass,
             );
           }
           subClass.prototype = Object.create(
@@ -14319,7 +14343,7 @@
                 writable: true,
                 configurable: true,
               },
-            }
+            },
           );
           if (superClass)
             Object.setPrototypeOf
@@ -14337,8 +14361,8 @@
               this,
               (Header.__proto__ || Object.getPrototypeOf(Header)).apply(
                 this,
-                arguments
-              )
+                arguments,
+              ),
             );
           }
 
@@ -14426,7 +14450,7 @@
         function _possibleConstructorReturn(self, call) {
           if (!self) {
             throw new ReferenceError(
-              "this hasn't been initialised - super() hasn't been called"
+              "this hasn't been initialised - super() hasn't been called",
             );
           }
           return call &&
@@ -14439,7 +14463,7 @@
           if (typeof superClass !== "function" && superClass !== null) {
             throw new TypeError(
               "Super expression must either be null or a function, not " +
-                typeof superClass
+                typeof superClass,
             );
           }
           subClass.prototype = Object.create(
@@ -14451,7 +14475,7 @@
                 writable: true,
                 configurable: true,
               },
-            }
+            },
           );
           if (superClass)
             Object.setPrototypeOf
@@ -14471,8 +14495,8 @@
               this,
               (Image.__proto__ || Object.getPrototypeOf(Image)).apply(
                 this,
-                arguments
-              )
+                arguments,
+              ),
             );
           }
 
@@ -14493,7 +14517,7 @@
                       Image.prototype.__proto__ ||
                         Object.getPrototypeOf(Image.prototype),
                       "format",
-                      this
+                      this,
                     ).call(this, name, value);
                   }
                 },
@@ -14506,7 +14530,7 @@
                   var node = _get(
                     Image.__proto__ || Object.getPrototypeOf(Image),
                     "create",
-                    this
+                    this,
                   ).call(this, value);
                   if (typeof value === "string") {
                     node.setAttribute("src", this.sanitize(value));
@@ -14548,7 +14572,7 @@
                   return domNode.getAttribute("src");
                 },
               },
-            ]
+            ],
           );
 
           return Image;
@@ -14625,7 +14649,7 @@
         function _possibleConstructorReturn(self, call) {
           if (!self) {
             throw new ReferenceError(
-              "this hasn't been initialised - super() hasn't been called"
+              "this hasn't been initialised - super() hasn't been called",
             );
           }
           return call &&
@@ -14638,7 +14662,7 @@
           if (typeof superClass !== "function" && superClass !== null) {
             throw new TypeError(
               "Super expression must either be null or a function, not " +
-                typeof superClass
+                typeof superClass,
             );
           }
           subClass.prototype = Object.create(
@@ -14650,7 +14674,7 @@
                 writable: true,
                 configurable: true,
               },
-            }
+            },
           );
           if (superClass)
             Object.setPrototypeOf
@@ -14669,7 +14693,7 @@
               (
                 IdentAttributor.__proto__ ||
                 Object.getPrototypeOf(IdentAttributor)
-              ).apply(this, arguments)
+              ).apply(this, arguments),
             );
           }
 
@@ -14689,7 +14713,7 @@
                     IdentAttributor.prototype.__proto__ ||
                       Object.getPrototypeOf(IdentAttributor.prototype),
                     "add",
-                    this
+                    this,
                   ).call(this, node, value);
                 }
               },
@@ -14702,13 +14726,13 @@
                     IdentAttributor.prototype.__proto__ ||
                       Object.getPrototypeOf(IdentAttributor.prototype),
                     "canAdd",
-                    this
+                    this,
                   ).call(this, node, value) ||
                   _get(
                     IdentAttributor.prototype.__proto__ ||
                       Object.getPrototypeOf(IdentAttributor.prototype),
                     "canAdd",
-                    this
+                    this,
                   ).call(this, node, parseInt(value))
                 );
               },
@@ -14722,8 +14746,8 @@
                       IdentAttributor.prototype.__proto__ ||
                         Object.getPrototypeOf(IdentAttributor.prototype),
                       "value",
-                      this
-                    ).call(this, node)
+                      this,
+                    ).call(this, node),
                   ) || undefined
                 ); // Don't return NaN
               },
@@ -14767,7 +14791,7 @@
         function _possibleConstructorReturn(self, call) {
           if (!self) {
             throw new ReferenceError(
-              "this hasn't been initialised - super() hasn't been called"
+              "this hasn't been initialised - super() hasn't been called",
             );
           }
           return call &&
@@ -14780,7 +14804,7 @@
           if (typeof superClass !== "function" && superClass !== null) {
             throw new TypeError(
               "Super expression must either be null or a function, not " +
-                typeof superClass
+                typeof superClass,
             );
           }
           subClass.prototype = Object.create(
@@ -14792,7 +14816,7 @@
                 writable: true,
                 configurable: true,
               },
-            }
+            },
           );
           if (superClass)
             Object.setPrototypeOf
@@ -14810,8 +14834,8 @@
               this,
               (Italic.__proto__ || Object.getPrototypeOf(Italic)).apply(
                 this,
-                arguments
-              )
+                arguments,
+              ),
             );
           }
 
@@ -14911,7 +14935,7 @@
         function _possibleConstructorReturn(self, call) {
           if (!self) {
             throw new ReferenceError(
-              "this hasn't been initialised - super() hasn't been called"
+              "this hasn't been initialised - super() hasn't been called",
             );
           }
           return call &&
@@ -14924,7 +14948,7 @@
           if (typeof superClass !== "function" && superClass !== null) {
             throw new TypeError(
               "Super expression must either be null or a function, not " +
-                typeof superClass
+                typeof superClass,
             );
           }
           subClass.prototype = Object.create(
@@ -14936,7 +14960,7 @@
                 writable: true,
                 configurable: true,
               },
-            }
+            },
           );
           if (superClass)
             Object.setPrototypeOf
@@ -14954,8 +14978,8 @@
               this,
               (ListItem.__proto__ || Object.getPrototypeOf(ListItem)).apply(
                 this,
-                arguments
-              )
+                arguments,
+              ),
             );
           }
 
@@ -14967,14 +14991,14 @@
                 value: function format(name, value) {
                   if (name === List.blotName && !value) {
                     this.replaceWith(
-                      _parchment2.default.create(this.statics.scope)
+                      _parchment2.default.create(this.statics.scope),
                     );
                   } else {
                     _get(
                       ListItem.prototype.__proto__ ||
                         Object.getPrototypeOf(ListItem.prototype),
                       "format",
-                      this
+                      this,
                     ).call(this, name, value);
                   }
                 },
@@ -14989,7 +15013,7 @@
                       ListItem.prototype.__proto__ ||
                         Object.getPrototypeOf(ListItem.prototype),
                       "remove",
-                      this
+                      this,
                     ).call(this);
                   }
                 },
@@ -15007,7 +15031,7 @@
                       ListItem.prototype.__proto__ ||
                         Object.getPrototypeOf(ListItem.prototype),
                       "replaceWith",
-                      this
+                      this,
                     ).call(this, name, value);
                   }
                 },
@@ -15022,11 +15046,11 @@
                     : _get(
                         ListItem.__proto__ || Object.getPrototypeOf(ListItem),
                         "formats",
-                        this
+                        this,
                       ).call(this, domNode);
                 },
               },
-            ]
+            ],
           );
 
           return ListItem;
@@ -15046,7 +15070,7 @@
                 var node = _get(
                   List.__proto__ || Object.getPrototypeOf(List),
                   "create",
-                  this
+                  this,
                 ).call(this, tagName);
                 if (value === "checked" || value === "unchecked") {
                   node.setAttribute("data-checked", value === "checked");
@@ -15079,8 +15103,8 @@
               this,
               (List.__proto__ || Object.getPrototypeOf(List)).call(
                 this,
-                domNode
-              )
+                domNode,
+              ),
             );
 
             domNode.addEventListener("click", function (e) {
@@ -15112,7 +15136,7 @@
                 return _defineProperty(
                   {},
                   this.statics.blotName,
-                  this.statics.formats(this.domNode)
+                  this.statics.formats(this.domNode),
                 );
               },
             },
@@ -15124,7 +15148,7 @@
                     List.prototype.__proto__ ||
                       Object.getPrototypeOf(List.prototype),
                     "insertBefore",
-                    this
+                    this,
                   ).call(this, blot, ref);
                 } else {
                   var index = ref == null ? this.length() : ref.offset(this);
@@ -15140,7 +15164,7 @@
                   List.prototype.__proto__ ||
                     Object.getPrototypeOf(List.prototype),
                   "optimize",
-                  this
+                  this,
                 ).call(this);
                 var next = this.next;
                 if (
@@ -15161,7 +15185,7 @@
               value: function replace(target) {
                 if (target.statics.blotName !== this.statics.blotName) {
                   var item = _parchment2.default.create(
-                    this.statics.defaultChild
+                    this.statics.defaultChild,
                   );
                   target.moveChildren(item);
                   this.appendChild(item);
@@ -15170,7 +15194,7 @@
                   List.prototype.__proto__ ||
                     Object.getPrototypeOf(List.prototype),
                   "replace",
-                  this
+                  this,
                 ).call(this, target);
               },
             },
@@ -15253,7 +15277,7 @@
         function _possibleConstructorReturn(self, call) {
           if (!self) {
             throw new ReferenceError(
-              "this hasn't been initialised - super() hasn't been called"
+              "this hasn't been initialised - super() hasn't been called",
             );
           }
           return call &&
@@ -15266,7 +15290,7 @@
           if (typeof superClass !== "function" && superClass !== null) {
             throw new TypeError(
               "Super expression must either be null or a function, not " +
-                typeof superClass
+                typeof superClass,
             );
           }
           subClass.prototype = Object.create(
@@ -15278,7 +15302,7 @@
                 writable: true,
                 configurable: true,
               },
-            }
+            },
           );
           if (superClass)
             Object.setPrototypeOf
@@ -15296,8 +15320,8 @@
               this,
               (Script.__proto__ || Object.getPrototypeOf(Script)).apply(
                 this,
-                arguments
-              )
+                arguments,
+              ),
             );
           }
 
@@ -15313,7 +15337,7 @@
                   return _get(
                     Script.__proto__ || Object.getPrototypeOf(Script),
                     "create",
-                    this
+                    this,
                   ).call(this, value);
                 }
               },
@@ -15363,7 +15387,7 @@
         function _possibleConstructorReturn(self, call) {
           if (!self) {
             throw new ReferenceError(
-              "this hasn't been initialised - super() hasn't been called"
+              "this hasn't been initialised - super() hasn't been called",
             );
           }
           return call &&
@@ -15376,7 +15400,7 @@
           if (typeof superClass !== "function" && superClass !== null) {
             throw new TypeError(
               "Super expression must either be null or a function, not " +
-                typeof superClass
+                typeof superClass,
             );
           }
           subClass.prototype = Object.create(
@@ -15388,7 +15412,7 @@
                 writable: true,
                 configurable: true,
               },
-            }
+            },
           );
           if (superClass)
             Object.setPrototypeOf
@@ -15406,8 +15430,8 @@
               this,
               (Strike.__proto__ || Object.getPrototypeOf(Strike)).apply(
                 this,
-                arguments
-              )
+                arguments,
+              ),
             );
           }
 
@@ -15446,7 +15470,7 @@
         function _possibleConstructorReturn(self, call) {
           if (!self) {
             throw new ReferenceError(
-              "this hasn't been initialised - super() hasn't been called"
+              "this hasn't been initialised - super() hasn't been called",
             );
           }
           return call &&
@@ -15459,7 +15483,7 @@
           if (typeof superClass !== "function" && superClass !== null) {
             throw new TypeError(
               "Super expression must either be null or a function, not " +
-                typeof superClass
+                typeof superClass,
             );
           }
           subClass.prototype = Object.create(
@@ -15471,7 +15495,7 @@
                 writable: true,
                 configurable: true,
               },
-            }
+            },
           );
           if (superClass)
             Object.setPrototypeOf
@@ -15489,8 +15513,8 @@
               this,
               (Underline.__proto__ || Object.getPrototypeOf(Underline)).apply(
                 this,
-                arguments
-              )
+                arguments,
+              ),
             );
           }
 
@@ -15569,7 +15593,7 @@
         function _possibleConstructorReturn(self, call) {
           if (!self) {
             throw new ReferenceError(
-              "this hasn't been initialised - super() hasn't been called"
+              "this hasn't been initialised - super() hasn't been called",
             );
           }
           return call &&
@@ -15582,7 +15606,7 @@
           if (typeof superClass !== "function" && superClass !== null) {
             throw new TypeError(
               "Super expression must either be null or a function, not " +
-                typeof superClass
+                typeof superClass,
             );
           }
           subClass.prototype = Object.create(
@@ -15594,7 +15618,7 @@
                 writable: true,
                 configurable: true,
               },
-            }
+            },
           );
           if (superClass)
             Object.setPrototypeOf
@@ -15614,8 +15638,8 @@
               this,
               (Video.__proto__ || Object.getPrototypeOf(Video)).apply(
                 this,
-                arguments
-              )
+                arguments,
+              ),
             );
           }
 
@@ -15636,7 +15660,7 @@
                       Video.prototype.__proto__ ||
                         Object.getPrototypeOf(Video.prototype),
                       "format",
-                      this
+                      this,
                     ).call(this, name, value);
                   }
                 },
@@ -15649,7 +15673,7 @@
                   var node = _get(
                     Video.__proto__ || Object.getPrototypeOf(Video),
                     "create",
-                    this
+                    this,
                   ).call(this, value);
                   node.setAttribute("frameborder", "0");
                   node.setAttribute("allowfullscreen", true);
@@ -15680,7 +15704,7 @@
                   return domNode.getAttribute("src");
                 },
               },
-            ]
+            ],
           );
 
           return Video;
@@ -15766,7 +15790,7 @@
         function _possibleConstructorReturn(self, call) {
           if (!self) {
             throw new ReferenceError(
-              "this hasn't been initialised - super() hasn't been called"
+              "this hasn't been initialised - super() hasn't been called",
             );
           }
           return call &&
@@ -15779,7 +15803,7 @@
           if (typeof superClass !== "function" && superClass !== null) {
             throw new TypeError(
               "Super expression must either be null or a function, not " +
-                typeof superClass
+                typeof superClass,
             );
           }
           subClass.prototype = Object.create(
@@ -15791,7 +15815,7 @@
                 writable: true,
                 configurable: true,
               },
-            }
+            },
           );
           if (superClass)
             Object.setPrototypeOf
@@ -15809,7 +15833,7 @@
               this,
               (
                 FormulaBlot.__proto__ || Object.getPrototypeOf(FormulaBlot)
-              ).apply(this, arguments)
+              ).apply(this, arguments),
             );
           }
 
@@ -15830,7 +15854,7 @@
                   var node = _get(
                     FormulaBlot.__proto__ || Object.getPrototypeOf(FormulaBlot),
                     "create",
-                    this
+                    this,
                   ).call(this, value);
                   if (typeof value === "string") {
                     window.katex.render(value, node);
@@ -15846,7 +15870,7 @@
                   return domNode.getAttribute("data-value");
                 },
               },
-            ]
+            ],
           );
 
           return FormulaBlot;
@@ -15873,7 +15897,7 @@
 
             var _this2 = _possibleConstructorReturn(
               this,
-              (Formula.__proto__ || Object.getPrototypeOf(Formula)).call(this)
+              (Formula.__proto__ || Object.getPrototypeOf(Formula)).call(this),
             );
 
             if (window.katex == null) {
@@ -15966,7 +15990,7 @@
         function _possibleConstructorReturn(self, call) {
           if (!self) {
             throw new ReferenceError(
-              "this hasn't been initialised - super() hasn't been called"
+              "this hasn't been initialised - super() hasn't been called",
             );
           }
           return call &&
@@ -15979,7 +16003,7 @@
           if (typeof superClass !== "function" && superClass !== null) {
             throw new TypeError(
               "Super expression must either be null or a function, not " +
-                typeof superClass
+                typeof superClass,
             );
           }
           subClass.prototype = Object.create(
@@ -15991,7 +16015,7 @@
                 writable: true,
                 configurable: true,
               },
-            }
+            },
           );
           if (superClass)
             Object.setPrototypeOf
@@ -16010,7 +16034,7 @@
               (
                 SyntaxCodeBlock.__proto__ ||
                 Object.getPrototypeOf(SyntaxCodeBlock)
-              ).apply(this, arguments)
+              ).apply(this, arguments),
             );
           }
 
@@ -16024,7 +16048,7 @@
                   SyntaxCodeBlock.prototype.__proto__ ||
                     Object.getPrototypeOf(SyntaxCodeBlock.prototype),
                   "replaceWith",
-                  this
+                  this,
                 ).call(this, block);
               },
             },
@@ -16053,7 +16077,7 @@
           "hljs",
           {
             scope: _parchment2.default.Scope.INLINE,
-          }
+          },
         );
 
         var Syntax = (function (_Module) {
@@ -16077,13 +16101,13 @@
               (Syntax.__proto__ || Object.getPrototypeOf(Syntax)).call(
                 this,
                 quill,
-                options
-              )
+                options,
+              ),
             );
 
             if (typeof _this2.options.highlight !== "function") {
               throw new Error(
-                "Syntax module requires highlight.js. Please include the library on the page before Quill."
+                "Syntax module requires highlight.js. Please include the library on the page before Quill.",
               );
             }
             var timer = null;
@@ -16095,7 +16119,7 @@
                   _this2.highlight();
                   timer = null;
                 }, 100);
-              }
+              },
             );
             _this2.highlight();
             return _this2;
@@ -16118,7 +16142,7 @@
                 if (range != null) {
                   this.quill.setSelection(
                     range,
-                    _quill2.default.sources.SILENT
+                    _quill2.default.sources.SILENT,
                   );
                 }
               },
@@ -16222,7 +16246,7 @@
         function _possibleConstructorReturn(self, call) {
           if (!self) {
             throw new ReferenceError(
-              "this hasn't been initialised - super() hasn't been called"
+              "this hasn't been initialised - super() hasn't been called",
             );
           }
           return call &&
@@ -16235,7 +16259,7 @@
           if (typeof superClass !== "function" && superClass !== null) {
             throw new TypeError(
               "Super expression must either be null or a function, not " +
-                typeof superClass
+                typeof superClass,
             );
           }
           subClass.prototype = Object.create(
@@ -16247,7 +16271,7 @@
                 writable: true,
                 configurable: true,
               },
-            }
+            },
           );
           if (superClass)
             Object.setPrototypeOf
@@ -16277,7 +16301,7 @@
               this,
               (
                 BubbleTheme.__proto__ || Object.getPrototypeOf(BubbleTheme)
-              ).call(this, quill, options)
+              ).call(this, quill, options),
             );
 
             _this.quill.container.classList.add("ql-bubble");
@@ -16290,16 +16314,16 @@
               value: function extendToolbar(toolbar) {
                 this.tooltip = new BubbleTooltip(
                   this.quill,
-                  this.options.bounds
+                  this.options.bounds,
                 );
                 this.tooltip.root.appendChild(toolbar.container);
                 this.buildButtons(
                   [].slice.call(toolbar.container.querySelectorAll("button")),
-                  _icons2.default
+                  _icons2.default,
                 );
                 this.buildPickers(
                   [].slice.call(toolbar.container.querySelectorAll("select")),
-                  _icons2.default
+                  _icons2.default,
                 );
               },
             },
@@ -16326,7 +16350,7 @@
                 },
               },
             },
-          }
+          },
         );
 
         var BubbleTooltip = (function (_BaseTooltip) {
@@ -16339,48 +16363,46 @@
               this,
               (
                 BubbleTooltip.__proto__ || Object.getPrototypeOf(BubbleTooltip)
-              ).call(this, quill, bounds)
+              ).call(this, quill, bounds),
             );
 
-            _this2.quill.on(_emitter2.default.events.EDITOR_CHANGE, function (
-              type,
-              range,
-              oldRange,
-              source
-            ) {
-              if (type !== _emitter2.default.events.SELECTION_CHANGE) return;
-              if (
-                range != null &&
-                range.length > 0 &&
-                source === _emitter2.default.sources.USER
-              ) {
-                _this2.show();
-                // Lock our width so we will expand beyond our offsetParent boundaries
-                _this2.root.style.left = "0px";
-                _this2.root.style.width = "";
-                _this2.root.style.width = _this2.root.offsetWidth + "px";
-                var lines = _this2.quill.getLines(range.index, range.length);
-                if (lines.length === 1) {
-                  _this2.position(_this2.quill.getBounds(range));
-                } else {
-                  var lastLine = lines[lines.length - 1];
-                  var index = _this2.quill.getIndex(lastLine);
-                  var length = Math.min(
-                    lastLine.length() - 1,
-                    range.index + range.length - index
-                  );
-                  var _bounds = _this2.quill.getBounds(
-                    new _selection.Range(index, length)
-                  );
-                  _this2.position(_bounds);
+            _this2.quill.on(
+              _emitter2.default.events.EDITOR_CHANGE,
+              function (type, range, oldRange, source) {
+                if (type !== _emitter2.default.events.SELECTION_CHANGE) return;
+                if (
+                  range != null &&
+                  range.length > 0 &&
+                  source === _emitter2.default.sources.USER
+                ) {
+                  _this2.show();
+                  // Lock our width so we will expand beyond our offsetParent boundaries
+                  _this2.root.style.left = "0px";
+                  _this2.root.style.width = "";
+                  _this2.root.style.width = _this2.root.offsetWidth + "px";
+                  var lines = _this2.quill.getLines(range.index, range.length);
+                  if (lines.length === 1) {
+                    _this2.position(_this2.quill.getBounds(range));
+                  } else {
+                    var lastLine = lines[lines.length - 1];
+                    var index = _this2.quill.getIndex(lastLine);
+                    var length = Math.min(
+                      lastLine.length() - 1,
+                      range.index + range.length - index,
+                    );
+                    var _bounds = _this2.quill.getBounds(
+                      new _selection.Range(index, length),
+                    );
+                    _this2.position(_bounds);
+                  }
+                } else if (
+                  document.activeElement !== _this2.textbox &&
+                  _this2.quill.hasFocus()
+                ) {
+                  _this2.hide();
                 }
-              } else if (
-                document.activeElement !== _this2.textbox &&
-                _this2.quill.hasFocus()
-              ) {
-                _this2.hide();
-              }
-            });
+              },
+            );
             return _this2;
           }
 
@@ -16394,7 +16416,7 @@
                   BubbleTooltip.prototype.__proto__ ||
                     Object.getPrototypeOf(BubbleTooltip.prototype),
                   "listen",
-                  this
+                  this,
                 ).call(this);
                 this.root
                   .querySelector(".ql-close")
@@ -16412,7 +16434,7 @@
                         _this3.position(_this3.quill.getBounds(range));
                       }
                     }, 1);
-                  }
+                  },
                 );
               },
             },
@@ -16429,7 +16451,7 @@
                   BubbleTooltip.prototype.__proto__ ||
                     Object.getPrototypeOf(BubbleTooltip.prototype),
                   "position",
-                  this
+                  this,
                 ).call(this, reference);
                 var arrow = this.root.querySelector(".ql-tooltip-arrow");
                 arrow.style.marginLeft = "";
@@ -16713,6 +16735,6 @@
         /***/
       },
       /******/
-    ]
+    ],
   );
 });

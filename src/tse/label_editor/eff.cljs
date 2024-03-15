@@ -11,7 +11,7 @@
 (defn edit-label [{:keys [db sub], [id] :args}]
   (let [editor (get-in @db [:label-editor :editor])
         label @(sub [:item/entity id])]
-    (.setContents editor (get label :quill-content))
+    (.setContents editor (-> (get label :quill-content) (clj->js) (js/Delta.)))
     (swap! db update :label-editor assoc :visible? true :id id)))
 
 (defn save-label [{:keys [db emit]}]
@@ -23,7 +23,7 @@
                      (map hickory.core/as-hiccup))
         ;; extra pixel to prevent accidental word wrap
         dimensions (mapv inc (tse.utils/measure-html html))
-        quill-content (.getContents editor)]
+        quill-content (-> (.getContents editor) (aget "ops") (js->clj))]
     (swap! db update :label-editor assoc :visible? false :id nil)
     (emit [(if id :label/update :label/add)
            {:content content
