@@ -2664,4 +2664,11 @@
   :format   "jpg",
   :back     true,
   :width    211,
-  :height   360}]
+  :height   360}
+ {:name    {:en "Lebenskreise-Karten"}
+  :src      "LebenskreiseKarten",
+  :suitcase "lebenskreise",
+  :format   "jpg",
+  :back     false,
+  :width    772,
+  :height   1008}]

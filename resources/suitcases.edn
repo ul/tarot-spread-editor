@@ -312,4 +312,14 @@
                 {:name  {:en "Swords" :ru "Мечи"}
                  :cards "s:01...14"}
                 {:name  {:en "Pentacles" :ru "Пентакли"}
-                 :cards "p:01...14"}]}
+                 :cards "p:01...14"}]
+ "lebenskreise" [{:name {:en "Major" :ru "Старшие Арканы"}
+                  :cards "m:01...16"}
+                 {:name  {:en "Air" :ru "Воздух"}
+                  :cards "m:17...28"}
+                 {:name  {:en "Water" :ru "Вода"}
+                  :cards "m:29...40"}
+                 {:name  {:en "Fire" :ru "Огонь"}
+                  :cards "m:41...52"}
+                 {:name  {:en "Earth" :ru "Земля"}
+                  :cards "m:53...64"}]}
