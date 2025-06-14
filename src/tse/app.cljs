@@ -4,8 +4,7 @@
             tse.board
             tse.toolbar
             tse.label-editor
-            tse.background-dialog
-            ))
+            tse.background-dialog))
 
 (def style
   {:flex 1

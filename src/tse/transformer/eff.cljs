@@ -41,9 +41,9 @@
   (letfn [(onmove [e]
             (emit [:transformer/move-selection [(.-clientX e) (.-clientY e)]]))
           (onend [e]
-                 (.removeEventListener js/window "mousemove" onmove)
-                 (.removeEventListener js/window "mouseup" onend)
-                 (emit [:transformer/end-selection [(.-clientX e) (.-clientY e)]]))]
+            (.removeEventListener js/window "mousemove" onmove)
+            (.removeEventListener js/window "mouseup" onend)
+            (emit [:transformer/end-selection [(.-clientX e) (.-clientY e)]]))]
     (.addEventListener js/window "mousemove" onmove)
     (.addEventListener js/window "mouseup" onend)
     (swap! db assoc-in [:transformer :selector] {:start start :offset (math/v- start client)})))

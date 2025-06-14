@@ -35,12 +35,12 @@
         cache (volatile! {})]
     (letfn [(invalidate [v sub] (invalidate* cache v sub))
             (register [key f]
-                      (invalidate-all cache key)
-                      (register* key->fn key f))
+              (invalidate-all cache key)
+              (register* key->fn key f))
             (register-cursor [key path]
-                             (register key (fn [{:keys [db]}] (rx/cursor db path))))
+              (register key (fn [{:keys [db]}] (rx/cursor db path))))
             (subscribe [v]
-                       (subscribe* db subscribe key->fn cache invalidate v))]
+              (subscribe* db subscribe key->fn cache invalidate v))]
       {:register-subscription register
        :register-cursor register-cursor
        :subscribe subscribe

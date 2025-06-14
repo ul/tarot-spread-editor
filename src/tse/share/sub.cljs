@@ -6,7 +6,7 @@
 
 (def serialize-keys [:active-deck :active-suit :canvas :grid :background :lang :items])
 
-(defn update-fragment [{:keys [db sub] }]
+(defn update-fragment [{:keys [db sub]}]
   (let [state (rx/rx (select-keys @db serialize-keys))
         loaded? (rx/rx (-> @db :loaded?))]
     (rx/rx
