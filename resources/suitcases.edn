@@ -71,7 +71,7 @@
                 {:name  {:en "Pentacles" :ru "Пентакли"}
                  :cards "p:01...14"}]
  "osho"        [{:name  {:en "Major" :ru "Старшие Арканы"}
-                 :cards "m:01...22"}
+                 :cards "m:00...22"}
                 {:name  {:en "Wands" :ru "Жезлы"}
                  :cards "w:01...14"}
                 {:name  {:en "Cups" :ru "Кубки"}
