@@ -1,13 +1,11 @@
 /target
 /resources/public/js/compiled
+/resources/public/*.min.json
 .cljs_rhino_repl
 .lein-failures
 figwheel_server.log
 .nrepl-port
 .nrepl-history
-*.min.json
-decks.coffee
-suitcases.coffee
 /checkouts
 .DS_Store
 /.rebel_readline_history
