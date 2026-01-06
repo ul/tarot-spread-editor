@@ -16,7 +16,11 @@
             on-mousedown
             (fn [e]
               (.stopPropagation e)
-              (emit [:item/toggle-selected id (.-shiftKey e)]))]
+              (emit [:item/toggle-selected id (.-shiftKey e)]))
+            on-touchstart
+            (fn [e]
+              (.stopPropagation e)
+              (emit [:item/toggle-selected id false]))]
         [:div.ql-editor
          {:style
           {:position "absolute"
@@ -25,9 +29,11 @@
            :will-change "transform"
            :padding "0"
            :width w
-           :height h}
+           :height h
+           :touch-action "none"}
           :ref ref
-          :on-mousedown on-mousedown}
+          :on-mousedown on-mousedown
+          :on-touch-start on-touchstart}
          [:div
           {:style
            {:transform (str/format "scale(%s)" (/ w w0))

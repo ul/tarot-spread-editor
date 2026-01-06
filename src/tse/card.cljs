@@ -20,7 +20,11 @@
             on-mousedown
             (fn [e]
               (.stopPropagation e)
-              (emit [:item/toggle-selected id (.-shiftKey e)]))]
+              (emit [:item/toggle-selected id (.-shiftKey e)]))
+            on-touchstart
+            (fn [e]
+              (.stopPropagation e)
+              (emit [:item/toggle-selected id false]))]
         [:img
          {:src src
           :ref ref
@@ -29,6 +33,8 @@
            :transform (str/format "translate(%spx, %spx) rotate(%srad)" (+ x offset-x) y angle)
            :will-change "transform"
            :zIndex z-index
-           :height h}
+           :height h
+           :touch-action "none"}
           :on-load on-load
-          :on-mousedown on-mousedown}]))))
+          :on-mousedown on-mousedown
+          :on-touch-start on-touchstart}]))))

@@ -31,7 +31,8 @@
                  :transform (str "scale(" @(sub [:canvas/scale]) ")")
                  :will-change "transform"
                  :user-select "none"
-                 :-webkit-user-select "none"}}
+                 :-webkit-user-select "none"
+                 :touch-action "manipulation"}}
         [tse.background/view ctx]
         (for [id @(sub [:item/layer-indices :cards])]
           ^{:key id}

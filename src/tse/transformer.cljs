@@ -86,7 +86,8 @@
                :height 24
                :border-radius 24
                :background-color "rgba(128,128,128,0.5)"
-               :border "2px solid rgba(128,128,128,0.5)"}}]
+               :border "2px solid rgba(128,128,128,0.5)"
+               :touch-action "none"}}]
             [:div
              {:ref interact-ref
               :style
@@ -97,7 +98,8 @@
                :width w
                :height h
                :background-color "rgba(128,128,128,0.1)"
-               :border "2px solid rgba(128,128,128,0.5)"}
+               :border "2px solid rgba(128,128,128,0.5)"
+               :touch-action "none"}
               :on-dblclick #(emit [:item/edit])}
              (when @(sub [:transformer/shift-mode?])
                [:button.pure-button
