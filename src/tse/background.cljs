@@ -43,16 +43,30 @@
 (defn grid-css [grid]
   (str/format "repeating-linear-gradient(0deg,transparent,transparent %(step)spx,#CCC %(step)spx,#CCC calc(%(step)spx + 1px)),repeating-linear-gradient(-90deg,transparent,transparent %(step)spx,#CCC %(step)spx,#CCC calc(%(step)spx + 1px))" grid))
 
+;; Cache body dimensions to avoid layout thrashing during drag
+(defonce ^:private cached-body-width (volatile! 0))
+(defonce ^:private cached-body-height (volatile! 0))
+
+(defn- update-body-dimensions! []
+  (vreset! cached-body-width js/document.body.clientWidth)
+  (vreset! cached-body-height js/document.body.clientHeight))
+
+(defonce ^:private _resize-listener
+  (do
+    (update-body-dimensions!)
+    (.addEventListener js/window "resize" update-body-dimensions!)
+    true))
+
 (defn background-width [node border-box-width scale]
   (if node
     (max border-box-width
-         (/ (- js/document.body.clientWidth (.-clientLeft node)) scale))
+         (/ (- @cached-body-width (.-clientLeft node)) scale))
     border-box-width))
 
 (defn background-height [node border-box-height scale]
   (if node
     (max border-box-height
-         (/ (- js/document.body.clientHeight (.-clientTop node)) scale))
+         (/ (- @cached-body-height (.-clientTop node)) scale))
     border-box-height))
 
 (def padding 50)

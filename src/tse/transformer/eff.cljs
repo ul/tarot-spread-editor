@@ -2,9 +2,12 @@
   (:require [tse.math :as math]
             [tse.utils :refer [update-selected]]))
 
-(defn move [{:keys [db sub], [dv] :args}]
-  (swap! db update :items update-selected update :origin
-         (fn [v] (-> dv (math/v% @(sub [:canvas/scale])) (math/v+ v) math/v0))))
+(defn move [{:keys [db sub], [[dx dy]] :args}]
+  (let [scale @(sub [:canvas/scale])]
+    (swap! db update :items update-selected update :origin
+           (fn [[x y]]
+             [(max 0 (+ x (/ dx scale)))
+              (max 0 (+ y (/ dy scale)))]))))
 
 (defn resize [{:keys [db sub], [^js/DomRect rect ^js/DomRect deltaRect] :args}]
   (let [dv [(.-left deltaRect) (.-top deltaRect)]
