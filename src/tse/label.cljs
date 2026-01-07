@@ -20,7 +20,7 @@
             on-touchstart
             (fn [e]
               (.stopPropagation e)
-              (emit [:item/toggle-selected id false]))]
+              (emit [:item/toggle-selected id (> (.. e -touches -length) 1)]))]
         [:div.ql-editor
          {:style
           {:position "absolute"
