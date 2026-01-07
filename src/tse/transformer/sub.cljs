@@ -14,8 +14,8 @@
          :angle 0}
         @trans)))))
 
-(defn shift-mode? [{:keys [sub db]}]
-  (rx/rx (get @(sub [:transformer/entity]) :shift-mode?)))
+(defn shift-mode? [{:keys [db]}]
+  (rx/rx (get-in @db [:transformer :shift-mode?])))
 
 (defn dragging? [{:keys [db]}]
   (rx/rx (get-in @db [:transformer :dragging?])))

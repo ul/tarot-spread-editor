@@ -23,17 +23,21 @@
                              :onmove (fn [^js/InteractEvent e]
                                        (emit [:transformer/move [(.-dx e) (.-dy e)]]))
                              :onend #(emit [:transformer/end-drag])})
-            (add-watch shift-mode? :shift-mode?
-                       (fn [_ _ _ shift-mode?]
-                         (.resizable ^js/Interactable (js/window.interact node)
-                                     (if shift-mode?
-                                       #js {:preserveAspectRatio true
-                                            :edges #js {:left true :top true :right true :bottom true}
-                                            :onstart #(emit [:transformer/start-drag])
-                                            :onmove (fn [^js/InteractEvent e]
-                                                      (emit [:transformer/resize (.-rect e) (.-deltaRect e)]))
-                                            :onend #(emit [:transformer/end-drag])}
-                                       false))))
+            (let [apply-resizable
+                  (fn [shift-mode?]
+                    (.resizable ^js/Interactable (js/window.interact node)
+                                (if shift-mode?
+                                  #js {:preserveAspectRatio true
+                                       :edges #js {:left true :top true :right true :bottom true}
+                                       :onstart #(emit [:transformer/start-drag])
+                                       :onmove (fn [^js/InteractEvent e]
+                                                 (emit [:transformer/resize (.-rect e) (.-deltaRect e)]))
+                                       :onend #(emit [:transformer/end-drag])}
+                                  false)))]
+              (apply-resizable @shift-mode?)
+              (add-watch shift-mode? :shift-mode?
+                         (fn [_ _ _ shift-mode?]
+                           (apply-resizable shift-mode?))))
             (add-watch grid :transformer
                        (fn [_ _ _ {:keys [snap? step]}]
                          (if (.. ^js/Interactable (js/window.interact node) -_element -parentNode)
