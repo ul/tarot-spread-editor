@@ -32,12 +32,18 @@
    node
    {:on-show #(emit [:background/show-menu %])}))
 
-(defn init-bg [{:keys [emit] :as ctx} *node]
+(def long-press-delay 500)
+
+(defn init-bg [{:keys [emit] :as ctx} *node *popup]
   (fn [node]
     (when (not= node @*node)
       (if node
-        (make-popup-menu ctx node)
-        (js/console.log "FIXME Dispose popup menu"))
+        (reset! *popup (make-popup-menu ctx node))
+        (do
+          (when @*popup
+            (.dispose @*popup)
+            (reset! *popup nil))
+          (js/console.log "FIXME Dispose popup menu")))
       (reset! *node node))))
 
 (defn grid-css [grid]
@@ -72,13 +78,19 @@
 (def padding 50)
 
 (defn view [_]
-  (let [node (rx/cell nil)]
+  (let [node (rx/cell nil)
+        popup (rx/cell nil)
+        long-press-timer (volatile! nil)
+        cancel-long-press! (fn []
+                             (when-let [timer @long-press-timer]
+                               (js/clearTimeout timer)
+                               (vreset! long-press-timer nil)))]
     (fn [{:keys [sub emit] :as ctx}]
       (let [[_ _ w h] @(sub [:item/big-box])
             grid @(sub [:config/grid])
             scale @(sub [:canvas/scale])]
         [:div
-         {:ref (init-bg ctx node)
+         {:ref (init-bg ctx node popup)
           :style {:position "absolute"
                   :backgroundImage (when (get grid :show?) (grid-css grid))
                   :backgroundColor @(sub [:background/color])
@@ -93,5 +105,17 @@
                                  node-offset [(.-left node-rect) (.-top node-rect)]]
                              (emit [:transformer/start-selection
                                     (tse.math/v+ offset (tse.math/v- target-offset node-offset))
-                                    [(.-clientX %) (.-clientY %)]])))}
+                                    [(.-clientX %) (.-clientY %)]])))
+          :on-touch-start (fn [e]
+                            (when (and @popup (= 1 (.. e -touches -length)))
+                              (let [touch (aget (.-touches e) 0)
+                                    x (.-clientX touch)
+                                    y (.-clientY touch)]
+                                (vreset! long-press-timer
+                                         (js/setTimeout
+                                          #(.showAt @popup x y)
+                                          long-press-delay)))))
+          :on-touch-move cancel-long-press!
+          :on-touch-end cancel-long-press!
+          :on-touch-cancel cancel-long-press!}
          [tse.background-image/view ctx]]))))
