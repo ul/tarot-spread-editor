@@ -17,7 +17,8 @@
           (do
             (.draggable ^js/Interactable (js/window.interact node)
                         #js {:inertia false
-                             :autoScroll true
+                             :autoScroll #js {:enabled true
+                                              :margin 200}
                              :onstart #(emit [:transformer/start-drag])
                              :onmove (fn [^js/InteractEvent e]
                                        (emit [:transformer/move [(.-dx e) (.-dy e)]]))

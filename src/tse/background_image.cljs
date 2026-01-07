@@ -9,7 +9,8 @@
         (let [^js/Interactable interact (js/window.interact node)]
           (doto interact
             (.draggable #js {:inertia false
-                             :autoScroll true
+                             :autoScroll #js {:enabled true
+                                              :margin 200}
                              :onstart #(emit [:transformer/start-drag])
                              :onmove (fn [^js/InteractEvent e]
                                        (when-not (.-shiftKey e)
