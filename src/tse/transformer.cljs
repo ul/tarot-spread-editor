@@ -18,16 +18,20 @@
             (.draggable ^js/Interactable (js/window.interact node)
                         #js {:inertia false
                              :autoScroll true
+                             :onstart #(emit [:transformer/start-drag])
                              :onmove (fn [^js/InteractEvent e]
-                                       (emit [:transformer/move [(.-dx e) (.-dy e)]]))})
+                                       (emit [:transformer/move [(.-dx e) (.-dy e)]]))
+                             :onend #(emit [:transformer/end-drag])})
             (add-watch shift-mode? :shift-mode?
                        (fn [_ _ _ shift-mode?]
                          (.resizable ^js/Interactable (js/window.interact node)
                                      (if shift-mode?
                                        #js {:preserveAspectRatio true
                                             :edges #js {:left true :top true :right true :bottom true}
+                                            :onstart #(emit [:transformer/start-drag])
                                             :onmove (fn [^js/InteractEvent e]
-                                                      (emit [:transformer/resize (.-rect e) (.-deltaRect e)]))}
+                                                      (emit [:transformer/resize (.-rect e) (.-deltaRect e)]))
+                                            :onend #(emit [:transformer/end-drag])}
                                        false))))
             (add-watch grid :transformer
                        (fn [_ _ _ {:keys [snap? step]}]
@@ -51,8 +55,9 @@
       (if node
         (let [^js/Interactable interact (js/window.interact node)]
           (.draggable interact #js {:inertia false
+                                    :onstart #(emit [:transformer/start-drag])
                                     :onmove (fn [^js/InteractEvent e] (emit [:transformer/rotate [(.-dx e) (.-dy e)]]))
-                                    :onend #(emit [:transformer/end-rotation])}))
+                                    :onend (fn [] (emit [:transformer/end-rotation]) (emit [:transformer/end-drag]))}))
         (js/console.log "FIXME: Dispose Interactable"))
       (reset! *node node))))
 

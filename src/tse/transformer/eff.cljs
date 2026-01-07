@@ -74,6 +74,12 @@
 (defn shift-mode [{:keys [db], [shift-mode?] :args}]
   (swap! db assoc-in [:transformer :shift-mode?] shift-mode?))
 
+(defn start-drag [{:keys [db]}]
+  (swap! db assoc-in [:transformer :dragging?] true))
+
+(defn end-drag [{:keys [db]}]
+  (swap! db assoc-in [:transformer :dragging?] false))
+
 (def spec
   {:transformer/move move
    :transformer/resize resize
@@ -82,4 +88,6 @@
    :transformer/start-selection start-selection
    :transformer/move-selection move-selection
    :transformer/end-selection end-selection
-   :transformer/shift-mode shift-mode})
+   :transformer/shift-mode shift-mode
+   :transformer/start-drag start-drag
+   :transformer/end-drag end-drag})

@@ -10,14 +10,18 @@
           (doto interact
             (.draggable #js {:inertia false
                              :autoScroll true
+                             :onstart #(emit [:transformer/start-drag])
                              :onmove (fn [^js/InteractEvent e]
                                        (when-not (.-shiftKey e)
-                                         (emit [:background/move [(.-dx e) (.-dy e)]])))})
+                                         (emit [:background/move [(.-dx e) (.-dy e)]])))
+                             :onend #(emit [:transformer/end-drag])})
             (.resizable #js {:preserveAspectRatio false
                              :edges #js {:left true :top true :right true :bottom true}
+                             :onstart #(emit [:transformer/start-drag])
                              :onmove (fn [^js/InteractEvent e]
                                        (when-not (.-shiftKey e)
-                                         (emit [:background/resize (.-rect e) (.-deltaRect e)])))})))
+                                         (emit [:background/resize (.-rect e) (.-deltaRect e)])))
+                             :onend #(emit [:transformer/end-drag])})))
         (js/console.log "FIXME Dispose Interactable"))
       (reset! *node node))))
 

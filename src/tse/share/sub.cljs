@@ -8,9 +8,10 @@
 
 (defn update-fragment [{:keys [db sub]}]
   (let [state (rx/rx (select-keys @db serialize-keys))
-        loaded? (rx/rx (-> @db :loaded?))]
+        loaded? (rx/rx (-> @db :loaded?))
+        dragging? (sub [:transformer/dragging?])]
     (rx/rx
-     (when @loaded?
+     (when (and @loaded? (not @dragging?))
        (let [hash (->> @state (t/write w) js/encodeURIComponent)
              loc js/window.location
              uri (str (.-pathname loc) (.-search loc) "#" hash)]

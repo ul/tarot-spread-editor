@@ -17,6 +17,10 @@
 (defn shift-mode? [{:keys [sub db]}]
   (rx/rx (get @(sub [:transformer/entity]) :shift-mode?)))
 
+(defn dragging? [{:keys [db]}]
+  (rx/rx (get-in @db [:transformer :dragging?])))
+
 (def spec
   {:transformer/entity get-entity
-   :transformer/shift-mode? shift-mode?})
+   :transformer/shift-mode? shift-mode?
+   :transformer/dragging? dragging?})
