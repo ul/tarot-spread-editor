@@ -73,7 +73,6 @@
 ;; view
 
 (defn menu [dispatch state enum-items position good-query? hint]
-  ;; FIXME @position is not captured in (when ...) clause
   (let [position @position]
     [:.menu-wrapper
      {:class (when (= :open @state) "open")}

@@ -38,9 +38,13 @@
 (defn set-editor [{:keys [db], [editor] :args}]
   (swap! db update :label-editor assoc :editor editor))
 
+(defn dispose-editor [{:keys [db]}]
+  (swap! db update :label-editor dissoc :editor))
+
 (def spec
   {:label-editor/new new-label
    :label-editor/edit edit-label
    :label-editor/save save-label
    :label-editor/cancel cancel
-   :label-editor/set-editor set-editor})
+   :label-editor/set-editor set-editor
+   :label-editor/dispose-editor dispose-editor})

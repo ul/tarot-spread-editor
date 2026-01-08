@@ -123,21 +123,14 @@
                          :left (- w 28)}
                  :on-click #(emit [:item/remove-selected])}
                 [:i.fa.fa-times]])]]))
-       ;; FIXME move calc to sub
-       (let [{{:keys [start end offset]} :selector} @(sub [:transformer/entity])
-             scale @(sub [:canvas/scale])]
-         (when end
-           (let [end (math/v+ end offset)
-                 [x1 y1 x2 y2] (math/selector-box scale start end)
-                 w (- x2 x1)
-                 h (- y2 y1)]
-             [:div
-              {:style
-               {:position "absolute"
-                :zIndex 100000
-                :transform (str/format "translate(%spx, %spx)" x1 y1)
-                :will-change "transform"
-                :background-color "rgba(128,128,128,0.1)"
-                :border "2px solid rgba(128,128,128,0.5)"
-                :width w
-                :height h}}])))])))
+       (when-let [{:keys [x y w h]} @(sub [:transformer/selector-box])]
+         [:div
+          {:style
+           {:position "absolute"
+            :zIndex 100000
+            :transform (str/format "translate(%spx, %spx)" x y)
+            :will-change "transform"
+            :background-color "rgba(128,128,128,0.1)"
+            :border "2px solid rgba(128,128,128,0.5)"
+            :width w
+            :height h}}])])))

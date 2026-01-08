@@ -20,7 +20,17 @@
 (defn dragging? [{:keys [db]}]
   (rx/rx (get-in @db [:transformer :dragging?])))
 
+(defn selector-box [{:keys [sub]}]
+  (rx/rx
+   (let [{{:keys [start end offset]} :selector} @(sub [:transformer/entity])
+         scale @(sub [:canvas/scale])]
+     (when end
+       (let [end (math/v+ end offset)
+             [x1 y1 x2 y2] (math/selector-box scale start end)]
+         {:x x1 :y y1 :w (- x2 x1) :h (- y2 y1)})))))
+
 (def spec
   {:transformer/entity get-entity
    :transformer/shift-mode? shift-mode?
-   :transformer/dragging? dragging?})
+   :transformer/dragging? dragging?
+   :transformer/selector-box selector-box})

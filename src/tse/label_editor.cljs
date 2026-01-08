@@ -24,7 +24,7 @@
     (when (not= node @*node)
       (if node
         (emit [:label-editor/set-editor (js/Quill. node editor-options)])
-        (js/console.log "FIXME Dispose Quill"))
+        (emit [:label-editor/dispose-editor]))
       (reset! *node node))))
 
 (defn content-editor [ctx]

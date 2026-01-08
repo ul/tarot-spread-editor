@@ -37,13 +37,9 @@
 (defn init-bg [{:keys [emit] :as ctx} *node *popup]
   (fn [node]
     (when (not= node @*node)
-      (if node
-        (reset! *popup (make-popup-menu ctx node))
-        (do
-          (when @*popup
-            (.dispose @*popup)
-            (reset! *popup nil))
-          (js/console.log "FIXME Dispose popup menu")))
+      (when-let [p @*popup]
+        (.dispose p))
+      (reset! *popup (when node (make-popup-menu ctx node)))
       (reset! *node node))))
 
 (defn grid-css [grid]

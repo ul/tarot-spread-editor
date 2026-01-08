@@ -5,18 +5,19 @@
            goog.ui.Tab
            goog.ui.Component.EventType))
 
-(defn init-tab-bar [{:keys [emit]} *node]
+(defn init-tab-bar [{:keys [emit]} *node *bar]
   (fn [node]
     (when (not= node @*node)
-      (if node
-        (let [bar (goog.ui.TabBar.)]
-          (doto bar
-            (.decorate node)
-            (.listen goog.ui.Component.EventType.SELECT
-                     (fn [e]
-                       (let [dataset (.. e -target getElement -dataset)]
-                         (emit [:background-dialog/select-tab (obj/get dataset "tab")]))))))
-        (js/console.log "FIXME Dispose TabBar"))
+      (when-let [b @*bar]
+        (.dispose b))
+      (reset! *bar
+              (when node
+                (doto (goog.ui.TabBar.)
+                  (.decorate node)
+                  (.listen goog.ui.Component.EventType.SELECT
+                           (fn [e]
+                             (let [dataset (.. e -target getElement -dataset)]
+                               (emit [:background-dialog/select-tab (obj/get dataset "tab")])))))))
       (reset! *node node))))
 
 (defn link-widget [{:keys [emit]}]
@@ -48,7 +49,7 @@
      :style {:width "100%"}}]])
 
 (defn background-dialog [ctx]
-  (let [ref (init-tab-bar ctx (atom nil))]
+  (let [ref (init-tab-bar ctx (atom nil) (atom nil))]
     (fn [{:keys [sub]}]
       (let [tab @(sub [:background-dialog/tab])]
         [:div
