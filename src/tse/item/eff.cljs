@@ -39,10 +39,14 @@
                (-> selected first (get-in [1 :layer]) (= :labels)))
       (emit [:label-editor/edit (ffirst selected)]))))
 
+(defn update-pointers [{db :db, [delta] :args}]
+  (swap! db update :pointers + delta))
+
 (def spec
   {:item/toggle-selected toggle-selected
    :item/remove-selected remove-selected
    :item/remove-all remove-all
    :item/unselect-all unselect-all
    :item/raise-selected raise-selected
+   :item/update-pointers update-pointers
    :item/edit edit-item})

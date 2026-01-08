@@ -13,14 +13,9 @@
              [w0 h0] :original-dimensions
              :keys [content angle z-index]}
             @(sub [:item/entity id])
-            on-mousedown
+            on-pointer-down
             (fn [e]
-              (.stopPropagation e)
-              (emit [:item/toggle-selected id (.-shiftKey e)]))
-            on-touchstart
-            (fn [e]
-              (.stopPropagation e)
-              (emit [:item/toggle-selected id (> (.. e -touches -length) 1)]))]
+              (emit [:item/toggle-selected id (or (.-shiftKey e) (> @(sub [:item/pointers]) 1))]))]
         [:div.ql-editor
          {:style
           {:position "absolute"
@@ -32,8 +27,7 @@
            :height h
            :touch-action "none"}
           :ref ref
-          :on-mousedown on-mousedown
-          :on-touch-start on-touchstart}
+          :on-pointerdown on-pointer-down}
          [:div
           {:style
            {:transform (str/format "scale(%s)" (/ w w0))

@@ -17,14 +17,9 @@
             on-load
             (fn [e]
               (reset! ratio (/ (.. e -target -width) (.. e -target -height))))
-            on-mousedown
+            on-pointer-down
             (fn [e]
-              (.stopPropagation e)
-              (emit [:item/toggle-selected id (.-shiftKey e)]))
-            on-touchstart
-            (fn [e]
-              (.stopPropagation e)
-              (emit [:item/toggle-selected id (> (.. e -touches -length) 1)]))]
+              (emit [:item/toggle-selected id (or (.-shiftKey e) (> @(sub [:item/pointers]) 1))]))]
         [:img
          {:src src
           :ref ref
@@ -36,5 +31,4 @@
            :height h
            :touch-action "none"}
           :on-load on-load
-          :on-mousedown on-mousedown
-          :on-touch-start on-touchstart}]))))
+          :on-pointer-down on-pointer-down}]))))

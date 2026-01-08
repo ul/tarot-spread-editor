@@ -63,5 +63,6 @@
    :item/entity get-entity
    :item/selected all-selected
    :item/selected-indexed all-selected-indexed
+   :item/pointers [:pointers]
    :item/big-box big-box
    :item/next-z-index next-z-index})
