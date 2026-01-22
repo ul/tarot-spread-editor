@@ -8,12 +8,12 @@
 (defn show-grid-menu-item [{:keys [sub emit]}]
   (tse.menu/make-check-item {:content (sub [:t :menu/show-grid? "Show grid?"])
                              :checked? (sub [:config/show-grid?])
-                             :action #(emit [:config/toggle-grid-show (.isChecked %)])}))
+                             :action #(emit [:config/toggle-grid-show (.isChecked ^goog.ui.MenuItem %)])}))
 
 (defn snap-grid-menu-item [{:keys [sub emit]}]
   (tse.menu/make-check-item {:content (sub [:t :menu/snap-grid? "Snap to grid?"])
                              :checked? (sub [:config/snap-grid?])
-                             :action #(emit [:config/toggle-grid-snap (.isChecked %)])}))
+                             :action #(emit [:config/toggle-grid-snap (.isChecked ^goog.ui.MenuItem %)])}))
 
 (defn add-label-menu-item [{:keys [sub emit]}]
   (tse.menu/make-item {:content (sub [:t :menu/add-label "Add label"])
@@ -73,9 +73,10 @@
 
 (def padding 50)
 
-(defn view [_]
+(defn view [ctx]
   (let [node (rx/cell nil)
         popup (rx/cell nil)
+        ref-callback (init-bg ctx node popup)
         long-press-timer (volatile! nil)
         cancel-long-press! (fn []
                              (when-let [timer @long-press-timer]
@@ -86,12 +87,12 @@
             grid @(sub [:config/grid])
             scale @(sub [:canvas/scale])]
         [:div
-         {:ref (init-bg ctx node popup)
+         {:ref ref-callback
           :style {:position "absolute"
-                  :backgroundImage (when (get grid :show?) (grid-css grid))
-                  :backgroundColor @(sub [:background/color])
-                  :width (background-width @node w scale)
-                  :height (background-height @node (+ h padding) scale)}
+                  :background-image (when (get grid :show?) (grid-css grid))
+                  :background-color @(sub [:background/color])
+                  :width (str (background-width @node w scale) "px")
+                  :height (str (background-height @node (+ h padding) scale) "px")}
           :on-click #(emit [:item/unselect-all])
           :on-mousedown #(when (and (zero? (.-button %)) (.-shiftKey %))
                            (let [offset [(.-offsetX %) (.-offsetY %)]
@@ -109,7 +110,7 @@
                                     y (.-clientY touch)]
                                 (vreset! long-press-timer
                                          (js/setTimeout
-                                          #(.showAt @popup x y)
+                                          #(.showAt ^goog.ui.PopupMenu @popup x y)
                                           long-press-delay)))))
           :on-touch-move cancel-long-press!
           :on-touch-end cancel-long-press!

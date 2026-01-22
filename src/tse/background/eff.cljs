@@ -21,7 +21,7 @@
   (swap! db assoc-in [:background :dimensions] dimensions))
 
 (defn show-menu [{:keys [db], [menu] :args}]
-  (let [p (.getPosition menu)
+  (let [p (.getPosition ^goog.ui.PopupMenu menu)
         x (.-x p)
         y (.-y p)]
     (swap! db assoc-in [:background :menu-position] [x y])))

@@ -15,7 +15,7 @@
                 (doto (goog.ui.TabBar.)
                   (.decorate node)
                   (.listen goog.ui.Component.EventType.SELECT
-                           (fn [e]
+                           (fn [^js/Event e]
                              (let [dataset (.. e -target getElement -dataset)]
                                (emit [:background-dialog/select-tab (obj/get dataset "tab")])))))))
       (reset! *node node))))
@@ -93,7 +93,8 @@
 
 (defn view [ctx]
   (let [dialog (atom nil)
-        node   (atom nil)]
+        node   (atom nil)
+        ref-callback (init ctx dialog node)]
     (fn [ctx]
       [:div
-       {:ref (init ctx dialog node)}])))
+       {:ref ref-callback}])))

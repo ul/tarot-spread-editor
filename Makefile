@@ -1,7 +1,9 @@
 publish:
 	git checkout gh-pages
 	git reset --hard master
-	lein do clean, cljsbuild once min
+    rm -rf resources/public/js/compiled
+	npm install
+	npx shadow-cljs release app 
 	lein run -m tse.deploy/prepare-edn
 	cp -a resources/public/* ./
 	git add .

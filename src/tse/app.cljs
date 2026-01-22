@@ -11,10 +11,14 @@
    :display "flex"
    :flex-direction "column"})
 
-(defn view [{:keys [sub] :as ctx}]
+(defn share [{:keys [sub]}]
   @(sub [:share/update-fragment])
+  nil)
+
+(defn view [ctx]
   [:div
    {:style style}
+   [share ctx] 
    [tse.header/view ctx]
    [tse.board/view ctx]
    [tse.toolbar/view ctx]

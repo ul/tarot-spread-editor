@@ -1,0 +1,30 @@
+{
+  "name": "tarot-spread-editor",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Tarot Spread Editor",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ul/tarot-spread-editor.git"
+  },
+  "keywords": [],
+  "author": "Ruslan Prakapchuk",
+  "license": "Eclipse Public License",
+  "bugs": {
+    "url": "https://github.com/ul/tarot-spread-editor/issues"
+  },
+  "homepage": "https://github.com/ul/tarot-spread-editor#readme",
+  "devDependencies": {
+    "shadow-cljs": "^3.3.5"
+  },
+  "dependencies": {
+    "inferno": "^9.0.10",
+    "inferno-hyperscript": "^9.0.10",
+    "interactjs": "^1.10.27",
+    "quill": "^1.2.4"
+  }
+}

@@ -12,7 +12,7 @@
   (let [hash (->> state (t/write w) js/encodeURIComponent)
         loc js/window.location
         uri (str (.-pathname loc) (.-search loc) "#" hash)]
-    (js/history.replaceState nil nil uri)))
+    (js/history.pushState nil nil uri)))
 
 (defn update-fragment [{:keys [db sub]}]
   (let [state (rx/rx (select-keys @db serialize-keys))

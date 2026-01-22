@@ -27,8 +27,8 @@
           {:position "absolute"
            :transform (str/format "translate(%spx, %spx) rotate(%srad)" (+ x offset-x) y angle)
            :will-change "transform"
-           :zIndex z-index
-           :height h
+           :z-index z-index
+           :height (str h "px")
            :touch-action "none"}
           :on-load on-load
           :on-pointer-down on-pointer-down}]))))

@@ -19,12 +19,12 @@
         [:div.ql-editor
          {:style
           {:position "absolute"
-           :zIndex z-index
+           :z-index z-index
            :transform (str/format "translate(%spx, %spx) rotate(%srad)" x y angle)
            :will-change "transform"
            :padding "0"
-           :width w
-           :height h
+           :width (str w "px")
+           :height (str h "px")
            :touch-action "none"}
           :ref ref
           :on-pointerdown on-pointer-down}
@@ -32,6 +32,6 @@
           {:style
            {:transform (str/format "scale(%s)" (/ w w0))
             :transform-origin "left top"
-            :width w0
-            :height h0}}
+            :width (str w0 "px")
+            :height (str h0 "px")}}
           content]]))))

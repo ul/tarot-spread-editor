@@ -130,7 +130,7 @@
                  :cards "p:01...14"}
                 {:name {:en [:span {:color "blue"} ≡]}
                  :cards "man,woman"}]
- "symbolon"    [{:name {:en [:span {:style {:fontSize "xx-large"}} ❂]}
+ "symbolon"    [{:name {:en [:span {:style {:font-size "xx-large"}} ❂]}
                  :cards "01...12"}
                 {:name {:en "♈"}
                  :cards "34,35,13,24,36,37,38,39,40,41,42"

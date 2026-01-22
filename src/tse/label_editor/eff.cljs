@@ -1,17 +1,19 @@
 (ns tse.label-editor.eff
   (:require hickory.core
+            [quill :as Quill]
+            ["quill-delta" :as Delta]
             tse.math
             tse.utils))
 
 (defn new-label [{:keys [db]}]
   (let [editor (get-in @db [:label-editor :editor])]
-    (.setText editor "\n"))
+    (.setText ^Quill editor "\n"))
   (swap! db update :label-editor assoc :visible? true :id nil))
 
 (defn edit-label [{:keys [db sub], [id] :args}]
   (let [editor (get-in @db [:label-editor :editor])
         label @(sub [:item/entity id])]
-    (.setContents editor (-> (get label :quill-content) (clj->js) (js/Delta.)))
+    (.setContents ^Quill editor (-> (get label :quill-content) (clj->js) (Delta.)))
     (swap! db update :label-editor assoc :visible? true :id id)))
 
 (defn save-label [{:keys [db emit]}]
@@ -23,7 +25,7 @@
                      (map hickory.core/as-hiccup))
         ;; extra pixel to prevent accidental word wrap
         dimensions (mapv inc (tse.utils/measure-html html))
-        quill-content (-> (.getContents editor) (aget "ops") (js->clj))]
+        quill-content (-> (.getContents ^Quill editor) (aget "ops") (js->clj))]
     (swap! db update :label-editor assoc :visible? false :id nil)
     (emit [(if id :label/update :label/add)
            {:content content

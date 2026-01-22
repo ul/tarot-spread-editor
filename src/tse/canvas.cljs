@@ -50,11 +50,11 @@
                    :user-select "none"
                    :-webkit-user-select "none"
                    :touch-action "manipulation"}}
-          [tse.background/view ctx]
+          ^{:key "background"} [tse.background/view ctx]
           (for [id @(sub [:item/layer-indices :cards])]
             ^{:key id}
             [tse.card/view ctx id])
           (for [id @(sub [:item/layer-indices :labels])]
             ^{:key id}
             [tse.label/view ctx id])
-          [tse.transformer/view ctx]]]))))
+          ^{:key "transformer"} [tse.transformer/view ctx]]]))))

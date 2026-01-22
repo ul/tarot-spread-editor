@@ -9,3 +9,5 @@ figwheel_server.log
 /checkouts
 .DS_Store
 /.rebel_readline_history
+/.shadow-cljs/
+/node_modules/

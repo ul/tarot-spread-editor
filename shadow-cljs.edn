@@ -1,0 +1,18 @@
+{:source-paths ["src"]
+ :dependencies [[com.cognitect/transit-cljs "0.8.280"]
+                [carbon "0.4.0-SNAPSHOT"]
+                [com.taoensso/tempura "1.5.4"]
+                [funcool/cuerdas "2026.415"]
+                [hickory "0.7.1"]]
+ 
+ :builds
+ {:app
+  {:target :browser
+   :output-dir "resources/public/js/compiled"
+   :asset-path "js/compiled"
+   :compiler-options
+   {:output-feature-set :es-next
+    :infer-externs :auto}
+   :modules {:main {:entries [tse.core]}}
+   :devtools {:http-root "resources/public"
+              :http-port 8080}}}}

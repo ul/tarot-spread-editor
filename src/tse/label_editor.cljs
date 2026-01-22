@@ -1,14 +1,14 @@
 (ns tse.label-editor
   (:require carbon.vdom
-            cljsjs.quill
+            [quill :as Quill]
             tse.dialog))
 
-(let [Parchment (.import js/Quill "parchment")
-      ColorAttributor (-> (.import js/Quill "attributors/style/color")
+(let [Parchment (.import Quill "parchment")
+      ColorAttributor (-> (.import Quill "attributors/style/color")
                           .-constructor)
 
       BackgroundStyle (ColorAttributor. "background" "background-color" #js {:scope (.. Parchment -Scope -BLOCK)})]
-  (.register js/Quill "formats/background" BackgroundStyle))
+  (.register Quill "formats/background" BackgroundStyle))
 
 (def editor-options
   #js {:theme "snow"
@@ -23,15 +23,16 @@
   (fn [node]
     (when (not= node @*node)
       (if node
-        (emit [:label-editor/set-editor (js/Quill. node editor-options)])
+        (emit [:label-editor/set-editor (Quill. node editor-options)])
         (emit [:label-editor/dispose-editor]))
       (reset! *node node))))
 
 (defn content-editor [ctx]
-  (let [node (atom nil)]
+  (let [node (atom nil)
+        ref-callback (init-editor ctx node)]
     (fn [ctx]
       [:div
-       {:ref (init-editor ctx node)}])))
+       {:ref ref-callback}])))
 
 (defn init-dialog [{:keys [sub emit] :as ctx} dialog *node]
   (fn [node]
@@ -50,7 +51,8 @@
 
 (defn view [ctx]
   (let [dialog (atom nil)
-        node   (atom nil)]
+        node   (atom nil)
+        ref-callback (init-dialog ctx dialog node)]
     (fn [ctx]
       [:div
-       {:ref (init-dialog ctx dialog node)}])))
+       {:ref ref-callback}])))
