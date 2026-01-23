@@ -45,7 +45,7 @@
    [:input
     {:type "color"
      :defaultValue @(sub [:background-dialog/color])
-     :on-change #(emit [:background-dialog/set-color (.. % -target -value)])
+     :on-input #(emit [:background-dialog/set-color (.. % -target -value)])
      :style {:width "100%"}}]])
 
 (defn background-dialog [ctx]
