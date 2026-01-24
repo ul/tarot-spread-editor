@@ -5,33 +5,34 @@
             tse.transformer
             tse.menu))
 
-(defn view [ctx id]
+(defn view
+  [ctx id]
   (let [ref (tse.transformer/make-interact ctx (atom nil))]
-    (fn [{:keys [sub emit] :as ctx} id]
-      (let [{[x y] :origin
-             [w h] :dimensions
-             [w0 h0] :original-dimensions
+    (fn [{:keys [sub emit], :as ctx} id]
+      (let [{[x y] :origin,
+             [w h] :dimensions,
+             [w0 h0] :original-dimensions,
              :keys [content angle z-index]}
-            @(sub [:item/entity id])
-            on-pointer-down
-            (fn [e]
-              (emit [:item/toggle-selected id (or (.-shiftKey e) (> @(sub [:item/pointers]) 1))]))]
+              @(sub [:item/entity id])
+            on-pointer-down (fn [e]
+                              (emit [:item/toggle-selected id
+                                     (or (.-shiftKey e)
+                                         (> @(sub [:item/pointers]) 1))]))]
         [:div.ql-editor
          {:style
-          {:position "absolute"
-           :z-index z-index
-           :transform (str/format "translate(%spx, %spx) rotate(%srad)" x y angle)
-           :will-change "transform"
-           :padding "0"
-           :width (str w "px")
-           :height (str h "px")
-           :touch-action "none"}
-          :ref ref
+            {:position "absolute",
+             :z-index z-index,
+             :transform
+               (str/format "translate(%spx, %spx) rotate(%srad)" x y angle),
+             :will-change "transform",
+             :padding "0",
+             :width (str w "px"),
+             :height (str h "px"),
+             :touch-action "none"},
+          :ref ref,
           :on-pointerdown on-pointer-down}
          [:div
-          {:style
-           {:transform (str/format "scale(%s)" (/ w w0))
-            :transform-origin "left top"
-            :width (str w0 "px")
-            :height (str h0 "px")}}
-          content]]))))
+          {:style {:transform (str/format "scale(%s)" (/ w w0)),
+                   :transform-origin "left top",
+                   :width (str w0 "px"),
+                   :height (str h0 "px")}} content]]))))

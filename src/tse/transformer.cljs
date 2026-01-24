@@ -1,5 +1,6 @@
 (ns tse.transformer
-  (:require [interactjs :default interact :refer [Interactable InteractEvent createSnapGrid]]
+  (:require [interactjs :default interact :refer
+             [Interactable InteractEvent createSnapGrid]]
             [carbon.rx :as rx :include-macros true]
             [cuerdas.core :as str]
             [tse.math :as math]
@@ -8,129 +9,148 @@
 (set! *warn-on-infer* true)
 
 ;; memoize?
-(defn make-interact [{:keys [emit sub]} *node]
+(defn make-interact
+  [{:keys [emit sub]} *node]
   (let [grid (sub [:config/grid])
         shift-mode? (sub [:transformer/shift-mode?])]
     (fn [node]
       (when (not= node @*node)
         (if node
-          (do
-            (.draggable ^Interactable (interact node)
-                        #js {:inertia false
-                             :autoScroll #js {:enabled true
-                                              :margin 200}
-                             :onstart #(emit [:transformer/start-drag])
-                             :onmove (fn [^InteractEvent e]
-                                       (emit [:transformer/move [(.-dx e) (.-dy e)]]))
-                             :onend #(emit [:transformer/end-drag])})
-            (let [apply-resizable
-                  (fn [shift-mode?]
-                    (.resizable ^Interactable (interact node)
-                                (if shift-mode?
-                                  #js {:preserveAspectRatio true
-                                       :edges #js {:left true :top true :right true :bottom true}
-                                       :onstart #(emit [:transformer/start-drag])
-                                       :onmove (fn [^InteractEvent e]
-                                                 (emit [:transformer/resize (.-rect e) (.-deltaRect e)]))
-                                       :onend #(emit [:transformer/end-drag])}
-                                  false)))]
-              (apply-resizable @shift-mode?)
-              (add-watch shift-mode? :shift-mode?
-                         (fn [_ _ _ shift-mode?]
-                           (apply-resizable shift-mode?))))
-            (add-watch grid :transformer
-                       (fn [_ _ _ {:keys [snap? step]}]
-                         (if (.-parentNode node)
-                           (.draggable ^Interactable (interact node)
-                                       #js {:snap (if snap?
-                                                    #js {:targets #js [(createSnapGrid #js {:x step :y step})]
-                                                         :range js/Infinity
-                                                         :relativePoints #js [#js {:x 0 :y 0}]}
-                                                    nil)})))))
-          (do
-            (remove-watch shift-mode? :shift-mode?)
-            (remove-watch grid :transformer)
-            (js/console.log "FIXME: Dispose Interactable")))
+          (do (.draggable ^Interactable (interact node)
+                          #js {:inertia false,
+                               :autoScroll #js {:enabled true, :margin 200},
+                               :onstart #(emit [:transformer/start-drag]),
+                               :onmove (fn [^InteractEvent e]
+                                         (emit [:transformer/move
+                                                [(.-dx e) (.-dy e)]])),
+                               :onend #(emit [:transformer/end-drag])})
+              (let [apply-resizable
+                      (fn [shift-mode?]
+                        (.resizable
+                          ^Interactable (interact node)
+                          (if shift-mode?
+                            #js {:preserveAspectRatio true,
+                                 :edges #js {:left true,
+                                             :top true,
+                                             :right true,
+                                             :bottom true},
+                                 :onstart #(emit [:transformer/start-drag]),
+                                 :onmove (fn [^InteractEvent e]
+                                           (emit [:transformer/resize (.-rect e)
+                                                  (.-deltaRect e)])),
+                                 :onend #(emit [:transformer/end-drag])}
+                            false)))]
+                (apply-resizable @shift-mode?)
+                (add-watch shift-mode?
+                           :shift-mode?
+                           (fn [_ _ _ shift-mode?]
+                             (apply-resizable shift-mode?))))
+              (add-watch
+                grid
+                :transformer
+                (fn [_ _ _ {:keys [snap? step]}]
+                  (if (.-parentNode node)
+                    (.draggable
+                      ^Interactable (interact node)
+                      #js {:snap (if snap?
+                                   #js {:targets #js [(createSnapGrid
+                                                        #js {:x step,
+                                                             :y step})],
+                                        :range js/Infinity,
+                                        :relativePoints #js [#js {:x 0, :y 0}]}
+                                   nil)})))))
+          (do (remove-watch shift-mode? :shift-mode?)
+              (remove-watch grid :transformer)
+              (js/console.log "FIXME: Dispose Interactable")))
         (reset! *node node)))))
 
 ;; memoize?
-(defn make-rotator [{:keys [emit]} *node]
+(defn make-rotator
+  [{:keys [emit]} *node]
   (fn [node]
     (when (not= node @*node)
       (if node
         (let [^Interactable interact (interact node)]
-          (.draggable interact #js {:inertia false
-                                    :onstart #(emit [:transformer/start-drag])
-                                    :onmove (fn [^InteractEvent e] (emit [:transformer/rotate [(.-dx e) (.-dy e)]]))
-                                    :onend (fn [] (emit [:transformer/end-rotation]) (emit [:transformer/end-drag]))}))
+          (.draggable interact
+                      #js {:inertia false,
+                           :onstart #(emit [:transformer/start-drag]),
+                           :onmove (fn [^InteractEvent e]
+                                     (emit [:transformer/rotate
+                                            [(.-dx e) (.-dy e)]])),
+                           :onend (fn []
+                                    (emit [:transformer/end-rotation])
+                                    (emit [:transformer/end-drag]))}))
         (js/console.log "FIXME: Dispose Interactable"))
       (reset! *node node))))
 
-(defn view [{:keys [sub emit] :as ctx}]
+(defn view
+  [{:keys [sub emit], :as ctx}]
   (let [rotator-ref (make-rotator ctx (atom nil))
         interact-ref (make-interact ctx (atom nil))]
-    (.addEventListener js/window "keydown"
-                       (fn [^js/Event e] (when (.-shiftKey e) (emit [:transformer/shift-mode true]))))
-    (.addEventListener js/window "keyup"
+    (.addEventListener js/window
+                       "keydown"
+                       (fn [^js/Event e]
+                         (when (.-shiftKey e)
+                           (emit [:transformer/shift-mode true]))))
+    (.addEventListener js/window
+                       "keyup"
                        #(emit [:transformer/shift-mode false]))
-    (fn [{:keys [sub emit] :as ctx}]
+    (fn [{:keys [sub emit], :as ctx}]
       [:div
        (when-not (empty? @(sub [:item/selected]))
-         (let [{[x y] :origin
-                [w h] :dimensions
-                {rot :origin} :rotator
-                {:keys [start end]} :selector
+         (let [{[x y] :origin,
+                [w h] :dimensions,
+                {rot :origin} :rotator,
+                {:keys [start end]} :selector,
                 angle :angle}
-               @(sub [:transformer/entity])
+                 @(sub [:transformer/entity])
                [rx ry] (or rot (math/get-rotator-origin x y w h))]
-           [:div
-            {:style {}}
+           [:div {:style {}}
             [:div
-             {:ref rotator-ref
-              :style
-              {:position "absolute"
-               :transform (str/format "translate(%spx, %spx)" rx ry)
-               :will-change "transform"
-               :z-index 100000
-               :width "24px"
-               :height "24px"
-               :border-radius "24px"
-               :background-color "rgba(128,128,128,0.5)"
-               :border "2px solid rgba(128,128,128,0.5)"
-               :touch-action "none"}}]
+             {:ref rotator-ref,
+              :style {:position "absolute",
+                      :transform (str/format "translate(%spx, %spx)" rx ry),
+                      :will-change "transform",
+                      :z-index 100000,
+                      :width "24px",
+                      :height "24px",
+                      :border-radius "24px",
+                      :background-color "rgba(128,128,128,0.5)",
+                      :border "2px solid rgba(128,128,128,0.5)",
+                      :touch-action "none"}}]
             [:div
-             {:ref interact-ref
+             {:ref interact-ref,
               :style
-              {:position "absolute"
-               :transform (str/format "translate(%spx, %spx) rotate(%srad)" x y angle)
-               :will-change "transform"
-               :z-index 100000
-               :width (str w "px")
-               :height (str h "px")
-               :background-color "rgba(128,128,128,0.1)"
-               :border "2px solid rgba(128,128,128,0.5)"
-               :touch-action "none"}
+                {:position "absolute",
+                 :transform
+                   (str/format "translate(%spx, %spx) rotate(%srad)" x y angle),
+                 :will-change "transform",
+                 :z-index 100000,
+                 :width (str w "px"),
+                 :height (str h "px"),
+                 :background-color "rgba(128,128,128,0.1)",
+                 :border "2px solid rgba(128,128,128,0.5)",
+                 :touch-action "none"},
               :on-dblclick #(emit [:item/edit])}
              (when @(sub [:transformer/shift-mode?])
                [:button.pure-button
-                {:style {:width "24px"
-                         :height "24px"
-                         :font-size "12px"
-                         :padding 0
-                         :color "red"
-                         :background-color "rgba(128,128,128,0.8)"
-                         :position "relative"
-                         :left (str (- w 28) "px")}
+                {:style {:width "24px",
+                         :height "24px",
+                         :font-size "12px",
+                         :padding 0,
+                         :color "red",
+                         :background-color "rgba(128,128,128,0.8)",
+                         :position "relative",
+                         :left (str (- w 28) "px")},
                  :on-click #(emit [:item/remove-selected])}
                 [:i.fa.fa-times]])]]))
        (when-let [{:keys [x y w h]} @(sub [:transformer/selector-box])]
          [:div
-          {:style
-           {:position "absolute"
-            :z-index 100000
-            :transform (str/format "translate(%spx, %spx)" x y)
-            :will-change "transform"
-            :background-color "rgba(128,128,128,0.1)"
-            :border "2px solid rgba(128,128,128,0.5)"
-            :width (str w "px")
-            :height (str h "px")}}])])))
+          {:style {:position "absolute",
+                   :z-index 100000,
+                   :transform (str/format "translate(%spx, %spx)" x y),
+                   :will-change "transform",
+                   :background-color "rgba(128,128,128,0.1)",
+                   :border "2px solid rgba(128,128,128,0.5)",
+                   :width (str w "px"),
+                   :height (str h "px")}}])])))

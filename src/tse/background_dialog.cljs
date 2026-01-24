@@ -5,68 +5,63 @@
            goog.ui.Tab
            goog.ui.Component.EventType))
 
-(defn init-tab-bar [{:keys [emit]} *node *bar]
+(defn init-tab-bar
+  [{:keys [emit]} *node *bar]
   (fn [node]
     (when (not= node @*node)
-      (when-let [b @*bar]
-        (.dispose b))
-      (reset! *bar
-              (when node
-                (doto (goog.ui.TabBar.)
-                  (.decorate node)
-                  (.listen goog.ui.Component.EventType.SELECT
-                           (fn [^js/Event e]
-                             (let [dataset (.. e -target getElement -dataset)]
-                               (emit [:background-dialog/select-tab (obj/get dataset "tab")])))))))
+      (when-let [b @*bar] (.dispose b))
+      (reset! *bar (when node
+                     (doto (goog.ui.TabBar.)
+                       (.decorate node)
+                       (.listen goog.ui.Component.EventType.SELECT
+                                (fn [^js/Event e]
+                                  (let [dataset
+                                          (.. e -target getElement -dataset)]
+                                    (emit [:background-dialog/select-tab
+                                           (obj/get dataset "tab")])))))))
       (reset! *node node))))
 
-(defn link-widget [{:keys [emit]}]
-  [:div.pure-form
-   {:style {:padding "1em"
-            :width "100%"}}
+(defn link-widget
+  [{:keys [emit]}]
+  [:div.pure-form {:style {:padding "1em", :width "100%"}}
    [:input
-    {:type "url"
-     :style {:width "100%"}
+    {:type "url",
+     :style {:width "100%"},
      :on-change #(emit [:background-dialog/set-url (.. % -target -value)])}]])
 
-(defn file-widget [{:keys [emit]}]
-  [:div.pure-form
-   {:style {:padding "1em"
-            :width "100%"}}
+(defn file-widget
+  [{:keys [emit]}]
+  [:div.pure-form {:style {:padding "1em", :width "100%"}}
    [:input
-    {:type "file"
-     :on-change #(emit [:background-dialog/choose-file (.. % -target -files)])
+    {:type "file",
+     :on-change #(emit [:background-dialog/choose-file (.. % -target -files)]),
      :style {:width "100%"}}]])
 
-(defn color-widget [{:keys [sub emit]}]
-  [:div.pure-form
-   {:style {:padding "1em"
-            :width "100%"}}
+(defn color-widget
+  [{:keys [sub emit]}]
+  [:div.pure-form {:style {:padding "1em", :width "100%"}}
    [:input
-    {:type "color"
-     :defaultValue @(sub [:background-dialog/color])
-     :on-input #(emit [:background-dialog/set-color (.. % -target -value)])
+    {:type "color",
+     :defaultValue @(sub [:background-dialog/color]),
+     :on-input #(emit [:background-dialog/set-color (.. % -target -value)]),
      :style {:width "100%"}}]])
 
-(defn background-dialog [ctx]
+(defn background-dialog
+  [ctx]
   (let [ref (init-tab-bar ctx (atom nil) (atom nil))]
     (fn [{:keys [sub]}]
       (let [tab @(sub [:background-dialog/tab])]
-        [:div
-         {:style {:width "30em"}}
-         [:div.goog-tab-bar.goog-tab-bar-top
-          {:ref ref}
+        [:div {:style {:width "30em"}}
+         [:div.goog-tab-bar.goog-tab-bar-top {:ref ref}
           [:div.goog-tab
-           {:data-tab "color"
+           {:data-tab "color",
             :class (when (= "color" tab) "goog-tab-selected")}
            @(sub [:t :background-dialog.tabs/color "Color"])]
           [:div.goog-tab
-           {:data-tab "link"
-            :class (when (= "link" tab) "goog-tab-selected")}
+           {:data-tab "link", :class (when (= "link" tab) "goog-tab-selected")}
            @(sub [:t :background-dialog.tabs/link "Link"])]
           [:div.goog-tab
-           {:data-tab "file"
-            :class (when (= "file" tab) "goog-tab-selected")}
+           {:data-tab "file", :class (when (= "file" tab) "goog-tab-selected")}
            @(sub [:t :background-dialog.tabs/file "File"])]]
          [:div.goog-tab-bar-clear]
          [:div.goog-tab-content
@@ -76,25 +71,25 @@
             "color" [color-widget ctx]
             nil)]]))))
 
-(defn init [{:keys [sub emit] :as ctx} dialog *node]
+(defn init
+  [{:keys [sub emit], :as ctx} dialog *node]
   (fn [node]
     (when (not= node @*node)
       (if node
-        (reset! dialog
-                (tse.dialog/make {:visible? (sub [:background-dialog/visible?])
-                                  :title (sub [:t :background-dialog/title "Background"])
-                                  :view [background-dialog ctx]
-                                  :handlers {"ok" #(emit [:background-dialog/save])
-                                             "cancel" #(emit [:background-dialog/cancel])}}))
-        (do
-          (.dispose @dialog)
-          (reset! dialog nil)))
+        (reset! dialog (tse.dialog/make
+                         {:visible? (sub [:background-dialog/visible?]),
+                          :title (sub [:t :background-dialog/title
+                                       "Background"]),
+                          :view [background-dialog ctx],
+                          :handlers {"ok" #(emit [:background-dialog/save]),
+                                     "cancel"
+                                       #(emit [:background-dialog/cancel])}}))
+        (do (.dispose @dialog) (reset! dialog nil)))
       (reset! *node node))))
 
-(defn view [ctx]
+(defn view
+  [ctx]
   (let [dialog (atom nil)
-        node   (atom nil)
+        node (atom nil)
         ref-callback (init ctx dialog node)]
-    (fn [ctx]
-      [:div
-       {:ref ref-callback}])))
+    (fn [ctx] [:div {:ref ref-callback}])))

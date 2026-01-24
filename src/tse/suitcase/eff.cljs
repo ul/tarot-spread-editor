@@ -3,10 +3,10 @@
 
 (def reader (t/reader :json))
 
-(defn load-suitcases [{:keys [db]}]
+(defn load-suitcases
+  [{:keys [db]}]
   (-> (js/fetch "suitcases.min.json")
       (.then #(.text %))
       (.then #(swap! db assoc :suitcases (t/read reader %)))))
 
-(def spec
-  {:suitcase/load load-suitcases})
+(def spec {:suitcase/load load-suitcases})

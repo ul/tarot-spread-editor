@@ -1,1 +1,7 @@
-with (import <nixpkgs> { }); mkShell { buildInputs = [ leiningen ]; }
+with (import <nixpkgs> { });
+mkShell {
+  buildInputs = [
+    leiningen
+    zprint
+  ];
+}

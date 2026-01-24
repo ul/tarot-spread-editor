@@ -1,4 +1,3 @@
 (ns tse.label.sub)
 
-(def spec
-  {})
+(def spec {})
