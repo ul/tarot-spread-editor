@@ -24,5 +24,4 @@
       {:items items,
        :active active,
        :placeholder (sub [:t :deck-search/placeholder "Select a deck..."]),
-       :hint (sub [:t :deck-search/hint
-                   "Start typing deck name (at least 3 letters)"])}]]))
+       :hint (sub [:t :deck-search/hint "Start typing deck's name"])}]]))

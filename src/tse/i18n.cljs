@@ -22,7 +22,7 @@
                   :remove-all-confirmation "Are you sure to clean canvas?"},
         :canvas {:scale "Scale"},
         :deck-search {:placeholder "Select a deck...",
-                      :hint "Start typing deck name (at least 3 letters)"},
+                      :hint "Start typing deck's name"},
         :label-editor {:title "Label"}},
    :ru {:app {:title "Редактор Раскладов",
               :disclaimer "Отказ от ответственности",
@@ -46,8 +46,7 @@
                     "Вы действительно хотите очистить холст?"},
         :canvas {:scale "Масштаб"},
         :deck-search {:placeholder "Выберите колоду...",
-                      :hint
-                        "Начните набирать название колоды (минимум 3 буквы)"},
+                      :hint "Начните набирать название колоды"},
         :label-editor {:title "Ярлык"}}})
 
 (def opts {:dict dictionary})

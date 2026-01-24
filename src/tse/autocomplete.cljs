@@ -19,7 +19,7 @@
       (str/lower-case)
       (str/includes? query)))
 
-(defn good-query [query] (>= (count query) 3))
+(defn good-query [query] (>= (count query) 1))
 
 (defn menu-control?
   [{:keys [good-query?]} [event]]
