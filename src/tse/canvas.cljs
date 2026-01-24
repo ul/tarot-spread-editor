@@ -8,8 +8,10 @@
 (defn view
   [{:keys [sub emit emit-sync], :as ctx}]
   (let [*node (atom nil)
-        inc-pointers #(emit-sync [:item/update-pointers 1])
-        dec-pointers #(emit-sync [:item/update-pointers -1])
+        inc-pointers #(when (zero? (.-button %))
+                        (emit-sync [:item/update-pointers 1]))
+        dec-pointers #(when (zero? (.-button %))
+                        (emit-sync [:item/update-pointers -1]))
         ref (fn [node]
               (when (not= node @*node)
                 (when-let [node @*node]
