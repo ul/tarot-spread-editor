@@ -1,4 +1,4 @@
-{:source-paths ["src"]
+{:source-paths ["src" "test"]
  :dependencies [[com.cognitect/transit-cljs "0.8.280"]
                 [carbon "0.4.0-SNAPSHOT"]
                 [com.taoensso/tempura "1.5.4"]
@@ -15,4 +15,10 @@
     :infer-externs :auto}
    :modules {:main {:entries [tse.core]}}
    :devtools {:http-root "resources/public"
-              :http-port 8080}}}}
+              :http-port 8080}}
+
+  :test
+  {:target :node-test
+   :output-to "target/test.js"
+   :autorun false
+   :prepend-js "var jsdom=require('jsdom');var dom=new jsdom.JSDOM('<!DOCTYPE html><html><body></body></html>');globalThis.window=dom.window;globalThis.document=dom.window.document;"}}}

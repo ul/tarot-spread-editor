@@ -9,4 +9,5 @@
                  [com.cognitect/transit-clj "1.0.333"]
                  [funcool/cuerdas "2026.415"]
                  [com.taoensso/encore "3.159.0"]]
-  :source-paths ["src"])
+  :source-paths ["src"]
+  :test-paths ["test"])

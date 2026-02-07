@@ -1,3 +1,11 @@
+test-cljs:
+	npx shadow-cljs compile test && node target/test.js
+
+test-clj:
+	lein test
+
+test: test-cljs test-clj
+
 publish:
 	git checkout gh-pages
 	git reset --hard master
