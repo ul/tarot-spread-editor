@@ -9,8 +9,11 @@
       BackgroundStyle (ColorAttributor. "background"
                                         "background-color"
                                         #js {:scope
-                                               (.. Parchment -Scope -BLOCK)})]
-  (.register Quill "formats/background" BackgroundStyle))
+                                               (.. Parchment -Scope -BLOCK)})
+      Size (.import Quill "attributors/class/size")]
+  (.register Quill "formats/background" BackgroundStyle)
+  (set! (.-whitelist Size) #js [false "40px" "50px" "70px" "90px" "100px"])
+  (.register Quill Size true))
 
 (def editor-options
   #js {:theme "snow",
