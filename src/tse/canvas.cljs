@@ -37,6 +37,7 @@
           [:input
            {:type :range,
             :title @(sub [:t :canvas/scale]),
+            :aria-label @(sub [:t :canvas/scale]),
             :min 0.2,
             :max 2.5,
             :step 0.1,

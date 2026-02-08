@@ -28,7 +28,7 @@
                              invalidate)]
         (vswap! cache assoc v sub)
         sub)
-      (js/console.warn "no sub" key))))
+      (throw (js/Error. (str "No subscription registered for " key))))))
 
 (defn make
   [db]

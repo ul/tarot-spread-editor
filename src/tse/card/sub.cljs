@@ -3,7 +3,6 @@
 
 (defn used-by-deck
   [{:keys [db sub], deck :args}]
-  ;; FIXME transducers ftw
   (rx/rx (map (comp vec (juxt :suit :index)) (keep :card @(sub [:item/all])))))
 
 (defn usable-by-deck

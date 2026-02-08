@@ -45,6 +45,7 @@
      [:div
       [:button.pure-button
        {:title @(sub [:t :board/random-hint "Draw random card"]),
+        :aria-label @(sub [:t :board/random-hint "Draw random card"]),
         :on-click #(emit [:card/random])} @(sub [:t :board/random "random"])]
       " "
       [:label.pure-checkbox

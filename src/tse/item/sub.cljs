@@ -8,14 +8,12 @@
 
 (defn layer-indices
   [{:keys [db sub], [layer] :args}]
-  ;; FIXME transducers ftw
   (rx/rx (map first
            (filter (comp (layer-pred layer) second)
              @(sub [:item/all-indexed])))))
 
 (defn layer-all
   [{:keys [db sub], [layer] :args}]
-  ;; FIXME transducers ftw
   (rx/rx (filter (layer-pred layer) @(sub [:item/all]))))
 
 (defn get-entity

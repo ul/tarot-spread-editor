@@ -11,6 +11,6 @@
 
 (defn measure-html
   [html]
-  (let [ruler (.getElementById js/document "ruler")]
+  (when-let [ruler (.getElementById js/document "ruler")]
     (set! (.-innerHTML ruler) html)
     [(.-clientWidth ruler) (.-clientHeight ruler)]))

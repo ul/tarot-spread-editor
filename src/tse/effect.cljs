@@ -1,9 +1,6 @@
 (ns tse.effect
   (:require [carbon.rx :as rx :include-macros true]))
 
-;; REVIEW generally you want rAF for UI animations/actions
-;; and rIC for hydration and heavy data updates
-;; perhaps implementing effects priority/notations?
 (def schedule js/window.requestAnimationFrame)
 
 (defn register* [key->fn key f] (vswap! key->fn assoc key f))
@@ -18,7 +15,7 @@
           (rx/no-rx
             (f
               {:emit emit, :emit-sync emit-sync, :sub sub, :db db, :args args}))
-          (js/console.warn "no effect" key))))))
+          (throw (js/Error. (str "No effect registered for " key))))))))
 
 (defn emit*
   [perform queue v]
@@ -30,7 +27,7 @@
   (if-let [f (get @key->fn key)]
     (rx/no-rx
       (f {:emit emit, :emit-sync emit-sync, :sub sub, :db db, :args args}))
-    (js/console.warn "no effect" key)))
+    (throw (js/Error. (str "No effect registered for " key)))))
 
 (defn make
   [db sub]

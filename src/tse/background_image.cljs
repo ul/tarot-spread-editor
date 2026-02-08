@@ -27,7 +27,7 @@
                                (emit [:background/resize (.-rect e)
                                       (.-deltaRect e)]))),
                    :onend #(emit [:transformer/end-drag])})))
-        (js/console.log "FIXME Dispose Interactable"))
+        (.unset ^Interactable (interact @*node)))
       (reset! *node node))))
 
 (defn view
@@ -41,6 +41,7 @@
           :on-load #(emit [:background/set-dimensions
                            [(.. % -target -clientWidth)
                             (.. % -target -clientHeight)]]),
+          :on-error #(js/console.warn "Failed to load background image"),
           :style {:position "absolute",
                   :transform (str/format "translate(%spx, %spx)" x y),
                   :will-change "transform",

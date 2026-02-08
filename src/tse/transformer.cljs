@@ -1,6 +1,5 @@
 (ns tse.transformer
-  (:require [interactjs :default interact :refer
-             [Interactable InteractEvent createSnapGrid]]
+  (:require [interactjs :default interact :refer [Interactable InteractEvent]]
             [carbon.rx :as rx :include-macros true]
             [cuerdas.core :as str]
             [tse.math :as math]
@@ -8,11 +7,10 @@
 
 (set! *warn-on-infer* true)
 
-;; memoize?
+
 (defn make-interact
   [{:keys [emit sub]} *node]
-  (let [grid (sub [:config/grid])
-        shift-mode? (sub [:transformer/shift-mode?])]
+  (let [shift-mode? (sub [:transformer/shift-mode?])]
     (fn [node]
       (when (not= node @*node)
         (if node
@@ -44,27 +42,12 @@
                 (add-watch shift-mode?
                            :shift-mode?
                            (fn [_ _ _ shift-mode?]
-                             (apply-resizable shift-mode?))))
-              (add-watch
-                grid
-                :transformer
-                (fn [_ _ _ {:keys [snap? step]}]
-                  (if (.-parentNode node)
-                    (.draggable
-                      ^Interactable (interact node)
-                      #js {:snap (if snap?
-                                   #js {:targets #js [(createSnapGrid
-                                                        #js {:x step,
-                                                             :y step})],
-                                        :range js/Infinity,
-                                        :relativePoints #js [#js {:x 0, :y 0}]}
-                                   nil)})))))
+                             (apply-resizable shift-mode?)))))
           (do (remove-watch shift-mode? :shift-mode?)
-              (remove-watch grid :transformer)
-              (js/console.log "FIXME: Dispose Interactable")))
+              (.unset ^Interactable (interact @*node))))
         (reset! *node node)))))
 
-;; memoize?
+
 (defn make-rotator
   [{:keys [emit]} *node]
   (fn [node]
@@ -80,7 +63,7 @@
                            :onend (fn []
                                     (emit [:transformer/end-rotation])
                                     (emit [:transformer/end-drag]))}))
-        (js/console.log "FIXME: Dispose Interactable"))
+        (.unset ^Interactable (interact @*node)))
       (reset! *node node))))
 
 (defn view
@@ -108,6 +91,8 @@
            [:div {:style {}}
             [:div
              {:ref rotator-ref,
+              :role "slider",
+              :aria-label "Rotate selection",
               :style {:position "absolute",
                       :transform (str/format "translate(%spx, %spx)" rx ry),
                       :will-change "transform",
@@ -142,8 +127,8 @@
                          :background-color "rgba(128,128,128,0.8)",
                          :position "relative",
                          :left (str (- w 28) "px")},
-                 :on-click #(emit [:item/remove-selected])}
-                [:i.fa.fa-times]])]]))
+                 :on-click #(emit [:item/remove-selected]),
+                 :aria-label "Remove selected items"} [:i.fa.fa-times]])]]))
        (when-let [{:keys [x y w h]} @(sub [:transformer/selector-box])]
          [:div
           {:style {:position "absolute",

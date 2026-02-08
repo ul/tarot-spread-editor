@@ -13,8 +13,9 @@
               @(sub [:card/entity id])
             offset-x (if @ratio (* 0.5 (- w (* h @ratio))) 0.0)
             on-load (fn [e]
-                      (reset! ratio (/ (.. e -target -width)
-                                       (.. e -target -height))))
+                      (let [h (.. e -target -height)]
+                        (when (pos? h)
+                          (reset! ratio (/ (.. e -target -width) h)))))
             on-pointer-down (fn [e]
                               (emit [:item/toggle-selected id
                                      (or (.-shiftKey e)
@@ -32,4 +33,5 @@
                   :height (str h "px"),
                   :touch-action "none"},
           :on-load on-load,
+          :on-error #(js/console.warn "Failed to load card image" src),
           :on-pointer-down on-pointer-down}]))))
