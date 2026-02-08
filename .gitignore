@@ -11,3 +11,4 @@ figwheel_server.log
 /.rebel_readline_history
 /.shadow-cljs/
 /node_modules/
+/.playwright-mcp/

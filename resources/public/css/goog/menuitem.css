@@ -146,3 +146,10 @@
   font-size: 12px;
   padding-left: 4px;
 }
+
+@media (pointer: coarse) {
+  .goog-menuitem {
+    padding: 12px 2em 12px 28px;
+    font-size: 16px;
+  }
+}

@@ -40,7 +40,7 @@
                        node
                        {:on-show #(emit [:background/show-menu %])}))
 
-(def long-press-delay 500)
+(def long-press-delay 350)
 
 (defn init-bg
   [{:keys [emit], :as ctx} *node *popup]

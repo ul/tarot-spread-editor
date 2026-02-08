@@ -138,3 +138,61 @@ a.mini>img:hover {
 .ql-editor {
     font-size: 40px;
 }
+
+/* Touch active states */
+a.mini > img:active {
+    box-shadow: 0 5px 5px black;
+    top: -5px;
+    position: relative;
+}
+
+.pure-button:active {
+    opacity: 0.75;
+}
+
+/* Card gallery responsive image */
+.card-gallery-img {
+    height: 120px;
+}
+
+/* Board section collapse */
+.board-section.collapsed > :not(:first-child) {
+    display: none !important;
+}
+
+/* Coarse pointer (touch) adjustments */
+@media (pointer: coarse) {
+    .pure-button {
+        min-width: 44px;
+        min-height: 44px;
+    }
+
+    .autocomplete .pure-menu-link {
+        padding: 12px 1em;
+        font-size: 16px;
+    }
+
+    .goog-menuitem {
+        padding: 12px 2em 12px 28px;
+        font-size: 16px;
+    }
+}
+
+.header-links {
+    display: flex;
+}
+
+/* Responsive breakpoint */
+@media (max-width: 768px) {
+    .header-links {
+        display: none;
+    }
+
+    .board-section {
+        flex-direction: column;
+    }
+
+    .card-gallery-img {
+        height: 80px;
+    }
+}

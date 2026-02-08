@@ -9,19 +9,20 @@
 
 
 (defn make-interact
-  [{:keys [emit sub]} *node]
+  [{:keys [emit sub]} *node & [*dragged?]]
   (let [shift-mode? (sub [:transformer/shift-mode?])]
     (fn [node]
       (when (not= node @*node)
         (if node
-          (do (.draggable ^Interactable (interact node)
-                          #js {:inertia false,
-                               :autoScroll #js {:enabled true, :margin 200},
-                               :onstart #(emit [:transformer/start-drag]),
-                               :onmove (fn [^InteractEvent e]
-                                         (emit [:transformer/move
-                                                [(.-dx e) (.-dy e)]])),
-                               :onend #(emit [:transformer/end-drag])})
+          (do (.draggable
+                ^Interactable (interact node)
+                #js {:inertia false,
+                     :autoScroll #js {:enabled true, :margin 200},
+                     :onstart #(emit [:transformer/start-drag]),
+                     :onmove (fn [^InteractEvent e]
+                               (when *dragged? (reset! *dragged? true))
+                               (emit [:transformer/move [(.-dx e) (.-dy e)]])),
+                     :onend #(emit [:transformer/end-drag])})
               (let [apply-resizable
                       (fn [shift-mode?]
                         (.resizable
@@ -69,7 +70,8 @@
 (defn view
   [{:keys [sub emit], :as ctx}]
   (let [rotator-ref (make-rotator ctx (atom nil))
-        interact-ref (make-interact ctx (atom nil))]
+        *dragged? (atom false)
+        interact-ref (make-interact ctx (atom nil) *dragged?)]
     (.addEventListener js/window
                        "keydown"
                        (fn [^js/Event e]
@@ -97,9 +99,9 @@
                       :transform (str/format "translate(%spx, %spx)" rx ry),
                       :will-change "transform",
                       :z-index 100000,
-                      :width "24px",
-                      :height "24px",
-                      :border-radius "24px",
+                      :width "44px",
+                      :height "44px",
+                      :border-radius "44px",
                       :background-color "rgba(128,128,128,0.5)",
                       :border "2px solid rgba(128,128,128,0.5)",
                       :touch-action "none"}}]
@@ -116,17 +118,25 @@
                  :background-color "rgba(128,128,128,0.1)",
                  :border "2px solid rgba(128,128,128,0.5)",
                  :touch-action "none"},
-              :on-dblclick #(emit [:item/edit])}
+              :on-dblclick #(emit [:item/edit]),
+              :on-click (fn []
+                          (if @*dragged?
+                            (reset! *dragged? false)
+                            (let [selected @(sub [:item/selected])]
+                              (when (= 1 (count selected))
+                                (let [item (first selected)]
+                                  (when (= :labels (:layer item))
+                                    (emit [:item/edit])))))))}
              (when @(sub [:transformer/shift-mode?])
                [:button.pure-button
-                {:style {:width "24px",
-                         :height "24px",
-                         :font-size "12px",
+                {:style {:width "44px",
+                         :height "44px",
+                         :font-size "14px",
                          :padding 0,
                          :color "red",
                          :background-color "rgba(128,128,128,0.8)",
                          :position "relative",
-                         :left (str (- w 28) "px")},
+                         :left (str (- w 48) "px")},
                  :on-click #(emit [:item/remove-selected]),
                  :aria-label "Remove selected items"} [:i.fa.fa-times]])]]))
        (when-let [{:keys [x y w h]} @(sub [:transformer/selector-box])]

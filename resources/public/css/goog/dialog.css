@@ -19,6 +19,7 @@
   color: #000;
   padding: 4px;
   position: absolute;
+  max-width: min(calc(100vw - 2em), 600px);
 }
 
 .modal-dialog a,
@@ -65,6 +66,11 @@
 .modal-dialog-content {
   background-color: #fff;
   padding: 8px;
+}
+
+.modal-dialog-content {
+  max-height: 80vh;
+  overflow-y: auto;
 }
 
 .goog-buttonset-default {

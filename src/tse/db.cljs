@@ -40,4 +40,5 @@
             :pointers 0,
             :background-dialog {:tab "color", :color "#ffffff"},
             :background {:origin [0 0]},
+            :board-visible? true,
             :loaded? false}))

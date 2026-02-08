@@ -3,8 +3,14 @@
 (defn add-label
   [{:keys [db sub], [item] :args}]
   (let [canvas (.. js/document (getElementById "canvas") getBoundingClientRect)
-        [mx my] @(sub [:background/menu-position])
+        menu-pos @(sub [:background/menu-position])
         scale @(sub [:canvas/scale])
+        [mx my]
+          (or menu-pos
+              [(+ (.-scrollX js/window) (.-x canvas) (/ (.-width canvas) 2))
+               (+ (.-scrollY js/window)
+                  (.-y canvas)
+                  (/ (- (.-innerHeight js/window) (.-y canvas)) 2))])
         x (-> mx
               (- (.-scrollX js/window) (.-x canvas))
               (/ scale))

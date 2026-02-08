@@ -82,7 +82,9 @@
            ^{:key label}
            [:li.pure-menu-item {:class (when (= position i) "pure-menu-active")}
             [:a.pure-menu-link
-             {:href "#", :on-mousedown #(dispatch [:select item])} label]])
+             {:href "#",
+              :on-click #(do (.preventDefault %) (dispatch [:select item]))}
+             label]])
          [:li.pure-menu-item [:a.pure-menu-link {:href ""} @hint]])]]]))
 
 (defn on-keydown

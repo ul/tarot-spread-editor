@@ -16,20 +16,22 @@
 
 (def link-style {:text-decoration "none", :color "#fff"})
 
-(def lang-style {:width "5em", :background "#2d3e50", :color "#6fbef3"})
+(def lang-style
+  {:width "5em", :background "#2d3e50", :color "#6fbef3", :gap "0.4em"})
 
 (def item-style {:display "flex", :align-items "center", :padding "0.5rem"})
 
 (defn view
   [{:keys [sub emit]}]
   [:div {:style header-style} [:div {:style title-style} @(sub [:t :app/title])]
-   [:div {:style item-style}
-    [:a {:style link-style, :href "/disclaimer"} @(sub [:t :app/disclaimer])]]
-   [:div {:style item-style}
-    [:a {:style link-style, :href "mailto:fer.obbee@gmail.com"}
-     @(sub [:t :app/contact])]] [:div {:style {:flex 1}}]
+   [:div.header-links {}
+    [:div {:style item-style}
+     [:a {:style link-style, :href "/disclaimer"} @(sub [:t :app/disclaimer])]]
+    [:div {:style item-style}
+     [:a {:style link-style, :href "mailto:fer.obbee@gmail.com"}
+      @(sub [:t :app/contact])]]] [:div {:style {:flex 1}}]
    [:button.pure-button
     {:style (merge lang-style item-style),
      :title @(sub [:t :lang/switch]),
-     :on-click #(emit [:lang/switch])} [:i.fa.fa-language]
-    @(sub [:lang/code])]])
+     :on-click #(emit [:lang/switch])} [:i.fa.fa-language] " "
+    (name @(sub [:lang/code]))]])

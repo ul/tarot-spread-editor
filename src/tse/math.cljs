@@ -73,7 +73,7 @@
 
 (defn center [x w] (+ x (* 0.5 w)))
 
-(defn get-rotator-origin [x y w h] [(- (center x w) 5) (- y 30)])
+(defn get-rotator-origin [x y w h] [(- (center x w) 22) (- y 52)])
 
 (defn merge-boxes
   [[left1 top1 right1 bottom1] [left2 top2 right2 bottom2]]

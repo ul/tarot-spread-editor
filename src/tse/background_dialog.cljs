@@ -51,7 +51,7 @@
   (let [ref (init-tab-bar ctx (atom nil) (atom nil))]
     (fn [{:keys [sub]}]
       (let [tab @(sub [:background-dialog/tab])]
-        [:div {:style {:width "30em"}}
+        [:div {:style {:width "30em", :max-width "90vw"}}
          [:div.goog-tab-bar.goog-tab-bar-top {:ref ref}
           [:div.goog-tab
            {:data-tab "color",

@@ -33,26 +33,29 @@
          :on-click (fn [e]
                      (.preventDefault e)
                      (emit [:card/add {:deck deck, :suit suit, :index index}]))}
-        [:img {:src src, :style {:height "120px"}}]]))])
+        [:img.card-gallery-img {:src src}]]))])
 
 (defn view
   [{:keys [sub emit], :as ctx}]
-  [:div {:style {:display "flex", :flex-direction "column", :margin "1rem"}}
-   [deck-search/view ctx]
-   [:div {:style {:display "flex"}} [suit-selector ctx]
-    [:div {:style {:flex 1, :display "flex", :flex-direction "column"}}
-     [card-selector ctx]
-     [:div
-      [:button.pure-button
-       {:title @(sub [:t :board/random-hint "Draw random card"]),
-        :aria-label @(sub [:t :board/random-hint "Draw random card"]),
-        :on-click #(emit [:card/random])} @(sub [:t :board/random "random"])]
-      " "
-      [:label.pure-checkbox
-       {:title @(sub [:t :board/reversible?-hint "reversible?"])}
-       [:input
-        {:type "checkbox",
-         :checked (when @(sub [:card/random-reversible?]) "checked"),
-         :on-change #(emit [:card/set-random-reversible
-                            (.. % -target -checked)])}] " "
-       @(sub [:t :board/reversible? "reversible?"])]]]]])
+  (let [visible? @(sub [:config/board-visible?])]
+    [:div.board-section
+     {:class (when-not visible? "collapsed"),
+      :style {:display "flex", :flex-direction "column", :margin "1rem"}}
+     [deck-search/view ctx]
+     [:div {:style {:display "flex"}} [suit-selector ctx]
+      [:div {:style {:flex 1, :display "flex", :flex-direction "column"}}
+       [card-selector ctx]
+       [:div
+        [:button.pure-button
+         {:title @(sub [:t :board/random-hint "Draw random card"]),
+          :aria-label @(sub [:t :board/random-hint "Draw random card"]),
+          :on-click #(emit [:card/random])} @(sub [:t :board/random "random"])]
+        " "
+        [:label.pure-checkbox
+         {:title @(sub [:t :board/reversible?-hint "reversible?"])}
+         [:input
+          {:type "checkbox",
+           :checked (when @(sub [:card/random-reversible?]) "checked"),
+           :on-change #(emit [:card/set-random-reversible
+                              (.. % -target -checked)])}] " "
+         @(sub [:t :board/reversible? "reversible?"])]]]]]))
