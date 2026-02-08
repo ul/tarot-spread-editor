@@ -1,7 +1,6 @@
 (ns tse.label-editor.eff
   (:require hickory.core
-            [quill :as Quill]
-            ["quill-delta" :as Delta]
+            ["quill" :default Quill :refer [Delta]]
             tse.math
             tse.utils))
 

@@ -26,6 +26,6 @@
     "inferno": "^9.0.10",
     "inferno-hyperscript": "^9.0.10",
     "interactjs": "^1.10.27",
-    "quill": "^1.2.4"
+    "quill": "^2.0.3"
   }
 }

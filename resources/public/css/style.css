@@ -109,3 +109,32 @@ a.mini>img:hover {
 #canvas p, #ruler p {
     margin: 0;
 }
+
+/* Quill size picker labels for custom pixel values */
+.ql-snow .ql-picker.ql-size .ql-picker-label[data-value="40px"]::before,
+.ql-snow .ql-picker.ql-size .ql-picker-item[data-value="40px"]::before {
+    content: '40px';
+}
+.ql-snow .ql-picker.ql-size .ql-picker-label[data-value="50px"]::before,
+.ql-snow .ql-picker.ql-size .ql-picker-item[data-value="50px"]::before {
+    content: '50px';
+}
+.ql-snow .ql-picker.ql-size .ql-picker-label[data-value="70px"]::before,
+.ql-snow .ql-picker.ql-size .ql-picker-item[data-value="70px"]::before {
+    content: '70px';
+}
+.ql-snow .ql-picker.ql-size .ql-picker-label[data-value="90px"]::before,
+.ql-snow .ql-picker.ql-size .ql-picker-item[data-value="90px"]::before {
+    content: '90px';
+}
+.ql-snow .ql-picker.ql-size .ql-picker-label[data-value="100px"]::before,
+.ql-snow .ql-picker.ql-size .ql-picker-item[data-value="100px"]::before {
+    content: '100px';
+}
+
+/* Default label font size to match smallest offered size.
+   Applies to the Quill editor, #ruler (measurement), and canvas labels
+   (all use .ql-editor). */
+.ql-editor {
+    font-size: 40px;
+}

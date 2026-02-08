@@ -1,19 +1,21 @@
 (ns tse.label-editor
   (:require carbon.vdom
-            [quill :as Quill]
+            ["quill" :default Quill]
             tse.dialog))
 
 (let [Parchment (.import Quill "parchment")
-      ColorAttributor (-> (.import Quill "attributors/style/color")
-                          .-constructor)
-      BackgroundStyle (ColorAttributor. "background"
+      StyleAttributor (.-StyleAttributor Parchment)
+      BackgroundStyle (StyleAttributor. "background"
                                         "background-color"
                                         #js {:scope
                                                (.. Parchment -Scope -BLOCK)})
-      Size (.import Quill "attributors/class/size")]
-  (.register Quill "formats/background" BackgroundStyle)
-  (set! (.-whitelist Size) #js [false "40px" "50px" "70px" "90px" "100px"])
-  (.register Quill Size true))
+      SizeStyle (StyleAttributor. "size"
+                                  "font-size"
+                                  #js {:scope (.. Parchment -Scope -INLINE),
+                                       :whitelist #js [false "40px" "50px"
+                                                       "70px" "90px" "100px"]})]
+  (.register Quill "formats/background" BackgroundStyle true)
+  (.register Quill "formats/size" SizeStyle true))
 
 (def editor-options
   #js {:theme "snow",
