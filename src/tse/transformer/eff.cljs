@@ -5,31 +5,14 @@
 (defn move
   [{:keys [db sub], [[dx dy]] :args}]
   (let [scale @(sub [:canvas/scale])
-        {:keys [snap? step]} @(sub [:config/grid])
         sdx (/ dx scale)
         sdy (/ dy scale)]
-    (if snap?
-      (let [{:keys [drag-origins drag-delta]} (:transformer @db)
-            [tdx tdy] (math/v+ (or drag-delta [0 0]) [sdx sdy])]
-        (swap! db assoc-in [:transformer :drag-delta] [tdx tdy])
-        (swap! db update
-          :items
-          (fn [items]
-            (mapv (fn [item origin]
-                    (if (:selected? item)
-                      (let [[ox oy] origin]
-                        (assoc item
-                          :origin [(max 0 (math/snap (+ ox tdx) step))
-                                   (max 0 (math/snap (+ oy tdy) step))]))
-                      item))
-              items
-              drag-origins))))
-      (swap! db update
-        :items
-        update-selected
-        update
-        :origin
-        (fn [[x y]] [(max 0 (+ x sdx)) (max 0 (+ y sdy))])))))
+    (swap! db update
+      :items
+      update-selected
+      update
+      :origin
+      (fn [[x y]] [(max 0 (+ x sdx)) (max 0 (+ y sdy))]))))
 
 (defn resize
   [{:keys [db sub], [^js/DomRect rect ^js/DomRect deltaRect] :args}]
@@ -109,19 +92,11 @@
 
 (defn start-drag
   [{:keys [db]}]
-  (swap! db update
-    :transformer
-    merge
-    {:dragging? true,
-     :drag-origins (mapv :origin (:items @db)),
-     :drag-delta [0 0]}))
+  (swap! db assoc-in [:transformer :dragging?] true))
 
 (defn end-drag
   [{:keys [db]}]
-  (swap! db update
-    :transformer
-    merge
-    {:dragging? false, :drag-origins nil, :drag-delta nil}))
+  (swap! db assoc-in [:transformer :dragging?] false))
 
 (def spec
   {:transformer/move move,

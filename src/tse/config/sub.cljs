@@ -5,5 +5,4 @@
   {:config/deck-base-url [:deck-base-url],
    :config/grid [:grid],
    :config/show-grid? [:grid :show?],
-   :config/snap-grid? [:grid :snap?],
    :config/board-visible? [:board-visible?]})

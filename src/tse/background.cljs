@@ -13,14 +13,6 @@
                                              (.isChecked ^goog.ui.MenuItem
                                                          %)])}))
 
-(defn snap-grid-menu-item
-  [{:keys [sub emit]}]
-  (tse.menu/make-check-item
-    {:content (sub [:t :menu/snap-grid? "Snap to grid?"]),
-     :checked? (sub [:config/snap-grid?]),
-     :action #(emit [:config/toggle-grid-snap
-                     (.isChecked ^goog.ui.MenuItem %)])}))
-
 (defn add-label-menu-item
   [{:keys [sub emit]}]
   (tse.menu/make-item {:content (sub [:t :menu/add-label "Add label"]),
@@ -34,8 +26,7 @@
 
 (defn make-popup-menu
   [{:keys [sub emit], :as ctx} node]
-  (tse.menu/make-popup [(show-grid-menu-item ctx) (snap-grid-menu-item ctx)
-                        (add-label-menu-item ctx)
+  (tse.menu/make-popup [(show-grid-menu-item ctx) (add-label-menu-item ctx)
                         (set-background-menu-item ctx)]
                        node
                        {:on-show #(emit [:background/show-menu %])}))

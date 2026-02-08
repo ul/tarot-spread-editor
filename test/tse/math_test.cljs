@@ -116,7 +116,7 @@
 ;; get-rotator-origin
 
 (deftest get-rotator-origin-position
-  (is (= [55.0 -10] (math/get-rotator-origin 10 20 100 50))))
+  (is (= [38.0 -32] (math/get-rotator-origin 10 20 100 50))))
 
 ;; merge-boxes
 

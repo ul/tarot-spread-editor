@@ -12,13 +12,3 @@
   (let [ctx (make-ctx {:db {:grid {:show? true}}, :args [false]})]
     (eff/toggle-grid-show ctx)
     (is (false? (get-in @(:db ctx) [:grid :show?])))))
-
-(deftest toggle-grid-snap-on
-  (let [ctx (make-ctx {:db {:grid {:snap? false}}, :args [true]})]
-    (eff/toggle-grid-snap ctx)
-    (is (true? (get-in @(:db ctx) [:grid :snap?])))))
-
-(deftest toggle-grid-snap-off
-  (let [ctx (make-ctx {:db {:grid {:snap? true}}, :args [false]})]
-    (eff/toggle-grid-snap ctx)
-    (is (false? (get-in @(:db ctx) [:grid :snap?])))))
