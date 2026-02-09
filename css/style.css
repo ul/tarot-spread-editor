@@ -1,0 +1,198 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    display: flex;
+}
+
+#app {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
+a.mini {
+    margin: 5px;
+}
+
+a.mini.active>img,
+a.mini>img:hover {
+    box-shadow: 0 5px/*5px*/
+    5px black;
+    /*left: -5px;*/
+    top: -5px;
+    position: relative;
+}
+
+.autocomplete {
+    position: relative;
+    margin-bottom: 1em;
+}
+
+.autocomplete input {
+    width: 100%;
+}
+
+.autocomplete .menu-wrapper {
+    position: absolute;
+    width: 100%;
+    padding: 0 1em;
+    display: none;
+    z-index: 100000;
+}
+
+.autocomplete .menu-wrapper.open {
+    display: block;
+}
+
+.autocomplete .pure-menu {
+    background-color: #fafaff;
+}
+
+.autocomplete .pure-menu-list {
+    letter-spacing: 0;
+}
+
+.button-destructive {
+    color: rgb(202, 60, 60);
+}
+
+.button-success,
+.button-error,
+.button-danger,
+.button-warning,
+.button-secondary {
+    color: white;
+    border-radius: 4px;
+    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
+}
+
+.button-success {
+    background: rgb(28, 184, 65);
+    /* this is a green */
+}
+
+.button-error,
+.button-danger {
+    background: rgb(202, 60, 60);
+    /* this is a maroon */
+}
+
+.button-warning {
+    background: rgb(223, 117, 20);
+    /* this is an orange */
+}
+
+.button-secondary {
+    background: rgb(66, 184, 221);
+    /* this is a light blue */
+}
+
+#canvas {
+    user-select: none;
+}
+
+.modal-dialog-buttons {
+    display: flex;
+    justify-content: space-between;
+}
+
+#ruler {
+    position: absolute;
+    visibility: hidden;
+    height: auto;
+    width: auto;
+    white-space: nowrap;
+}
+
+#canvas p, #ruler p {
+    margin: 0;
+}
+
+/* Quill size picker labels for custom pixel values */
+.ql-snow .ql-picker.ql-size .ql-picker-label[data-value="40px"]::before,
+.ql-snow .ql-picker.ql-size .ql-picker-item[data-value="40px"]::before {
+    content: '40px';
+}
+.ql-snow .ql-picker.ql-size .ql-picker-label[data-value="50px"]::before,
+.ql-snow .ql-picker.ql-size .ql-picker-item[data-value="50px"]::before {
+    content: '50px';
+}
+.ql-snow .ql-picker.ql-size .ql-picker-label[data-value="70px"]::before,
+.ql-snow .ql-picker.ql-size .ql-picker-item[data-value="70px"]::before {
+    content: '70px';
+}
+.ql-snow .ql-picker.ql-size .ql-picker-label[data-value="90px"]::before,
+.ql-snow .ql-picker.ql-size .ql-picker-item[data-value="90px"]::before {
+    content: '90px';
+}
+.ql-snow .ql-picker.ql-size .ql-picker-label[data-value="100px"]::before,
+.ql-snow .ql-picker.ql-size .ql-picker-item[data-value="100px"]::before {
+    content: '100px';
+}
+
+/* Default label font size to match smallest offered size.
+   Applies to the Quill editor, #ruler (measurement), and canvas labels
+   (all use .ql-editor). */
+.ql-editor {
+    font-size: 40px;
+}
+
+/* Touch active states */
+a.mini > img:active {
+    box-shadow: 0 5px 5px black;
+    top: -5px;
+    position: relative;
+}
+
+.pure-button:active {
+    opacity: 0.75;
+}
+
+/* Card gallery responsive image */
+.card-gallery-img {
+    height: 120px;
+}
+
+/* Board section collapse */
+.board-section.collapsed > :not(:first-child) {
+    display: none !important;
+}
+
+/* Coarse pointer (touch) adjustments */
+@media (pointer: coarse) {
+    .pure-button {
+        min-width: 44px;
+        min-height: 44px;
+    }
+
+    .autocomplete .pure-menu-link {
+        padding: 12px 1em;
+        font-size: 16px;
+    }
+
+    .goog-menuitem {
+        padding: 12px 2em 12px 28px;
+        font-size: 16px;
+    }
+}
+
+.header-links {
+    display: flex;
+}
+
+/* Responsive breakpoint */
+@media (max-width: 768px) {
+    .header-links {
+        display: none;
+    }
+
+    .board-section {
+        flex-direction: column;
+    }
+
+    .card-gallery-img {
+        height: 80px;
+    }
+}
