@@ -1,10 +1,12 @@
 import { test, expect } from "@playwright/test";
+import { waitForApp } from "./helpers.js";
 
 // Cards are direct img children of #canvas (background img is inside a div)
 const canvasCardsSelector = "#canvas > img";
 
 test("clicking random adds a card to the canvas", async ({ page }) => {
   await page.goto("/");
+  await waitForApp(page);
 
   const canvasCards = page.locator(canvasCardsSelector);
   const initialCount = await canvasCards.count();
@@ -18,6 +20,7 @@ test("with reversible checked, random card may be upside down", async ({
   page,
 }) => {
   await page.goto("/");
+  await waitForApp(page);
 
   const checkbox = page.locator("label.pure-checkbox input[type=checkbox]");
   await checkbox.check();

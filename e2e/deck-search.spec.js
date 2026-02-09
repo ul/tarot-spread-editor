@@ -1,9 +1,11 @@
 import { test, expect } from "@playwright/test";
+import { waitForApp } from "./helpers.js";
 
 test("selecting a deck from autocomplete changes the active deck", async ({
   page,
 }) => {
   await page.goto("/");
+  await waitForApp(page);
 
   const input = page.getByRole("textbox", { name: "Select a deck..." });
   await expect(input).toHaveValue("Rider Waite");
@@ -21,6 +23,7 @@ test("selecting a deck from autocomplete changes the active deck", async ({
 
 test("keyboard navigation selects a deck", async ({ page }) => {
   await page.goto("/");
+  await waitForApp(page);
 
   const input = page.getByRole("textbox", { name: "Select a deck..." });
   await input.click();
@@ -39,6 +42,7 @@ test("keyboard navigation selects a deck", async ({ page }) => {
 
 test("typing filters the deck list", async ({ page }) => {
   await page.goto("/");
+  await waitForApp(page);
 
   const input = page.getByRole("textbox", { name: "Select a deck..." });
   await input.click();

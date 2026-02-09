@@ -1,4 +1,5 @@
 import { test, expect } from "@playwright/test";
+import { waitForApp } from "./helpers.js";
 
 // Cards are direct img children of #canvas (background img is inside a div)
 const canvasCardsSelector = "#canvas > img";
@@ -15,6 +16,7 @@ test.describe("remove selected button", () => {
     page,
   }) => {
     await page.goto("/");
+    await waitForApp(page);
 
     // Add a card
     await page.locator("a.mini").first().click();
@@ -42,6 +44,7 @@ test.describe("remove all button", () => {
 
   test("clears all cards after confirming dialog", async ({ page }) => {
     await page.goto("/");
+    await waitForApp(page);
 
     // Add two cards
     await page.locator("a.mini").first().click();

@@ -25,12 +25,21 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ~/.m2/repository
-          key: m2-${{ hashFiles('shadow-cljs.edn') }}
+          key: m2-${{ hashFiles('shadow-cljs.edn', 'project.clj') }}
           restore-keys: m2-
 
       - run: npm ci
-      - run: npx shadow-cljs compile test
-      - run: node target/test.js
+
+      - name: ClojureScript unit tests
+        run: npx shadow-cljs compile test && node target/test.js
+
+      - name: Install Leiningen
+        uses: DeLaGuardo/setup-clojure@13.4
+        with:
+          lein: latest
+
+      - name: Clojure unit tests
+        run: lein test
 
   e2e:
     name: E2E tests
@@ -52,7 +61,7 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ~/.m2/repository
-          key: m2-${{ hashFiles('shadow-cljs.edn') }}
+          key: m2-${{ hashFiles('shadow-cljs.edn', 'project.clj') }}
           restore-keys: m2-
 
       - name: Cache Playwright browsers
@@ -70,10 +79,17 @@ jobs:
         if: steps.playwright-cache.outputs.cache-hit == 'true'
         run: npx playwright install-deps chromium
 
-      - run: npx shadow-cljs release app
+      - name: Install Leiningen
+        uses: DeLaGuardo/setup-clojure@13.4
+        with:
+          lein: latest
 
-      - name: Start static server
-        run: python3 -m http.server 8080 -d resources/public &
+      - name: Generate deck data
+        run: lein run -m tse.deploy/prepare-edn
+
+      - run: npx shadow-cljs release app
 
       - name: Run e2e tests
         run: npx playwright test
+        env:
+          CI: true

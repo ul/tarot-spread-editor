@@ -1,4 +1,5 @@
 import { test, expect } from "@playwright/test";
+import { waitForApp } from "./helpers.js";
 
 // Cards are direct img children of #canvas (background img is inside a div)
 const canvasCardsSelector = "#canvas > img";
@@ -7,6 +8,7 @@ test("clicking a card on canvas selects it (transformer appears)", async ({
   page,
 }) => {
   await page.goto("/");
+  await waitForApp(page);
 
   // Add a card
   await page.locator("a.mini").first().click();
@@ -22,6 +24,7 @@ test("clicking a card on canvas selects it (transformer appears)", async ({
 
 test("clicking empty area deselects the card", async ({ page }) => {
   await page.goto("/");
+  await waitForApp(page);
 
   // Add a card and select it
   await page.locator("a.mini").first().click();
@@ -42,6 +45,7 @@ test("clicking empty area deselects the card", async ({ page }) => {
 
 test("dragging a card changes its position", async ({ page }) => {
   await page.goto("/");
+  await waitForApp(page);
 
   // Add a card
   await page.locator("a.mini").first().click();

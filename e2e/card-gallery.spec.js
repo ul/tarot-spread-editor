@@ -1,10 +1,12 @@
 import { test, expect } from "@playwright/test";
+import { waitForApp } from "./helpers.js";
 
 // Cards are direct img children of #canvas (background img is inside a div)
 const canvasCardsSelector = "#canvas > img";
 
 test("clicking a card in gallery adds it to the canvas", async ({ page }) => {
   await page.goto("/");
+  await waitForApp(page);
 
   const canvasCards = page.locator(canvasCardsSelector);
   const initialCount = await canvasCards.count();
@@ -16,6 +18,7 @@ test("clicking a card in gallery adds it to the canvas", async ({ page }) => {
 
 test("clicking the same card again adds a second copy", async ({ page }) => {
   await page.goto("/");
+  await waitForApp(page);
 
   const canvasCards = page.locator(canvasCardsSelector);
   const initialCount = await canvasCards.count();
@@ -30,6 +33,7 @@ test("clicking the same card again adds a second copy", async ({ page }) => {
 
 test("used card gets active class in gallery", async ({ page }) => {
   await page.goto("/");
+  await waitForApp(page);
 
   const card = page.locator("a.mini").first();
   await expect(card).not.toHaveClass(/active/);
