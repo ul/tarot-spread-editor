@@ -1,0 +1,39 @@
+#!/usr/bin/env bash
+# Formats staged Clojure files with zprint. Install with `make hooks`.
+set -euo pipefail
+
+staged=()
+while IFS= read -r f; do staged+=("$f"); done \
+  < <(git diff --cached --name-only --diff-filter=ACM -- '*.clj' '*.cljs' '*.cljc')
+[ ${#staged[@]} -eq 0 ] && exit 0
+
+# Formatting a partially staged file and re-adding it would commit the
+# unstaged hunks too, so those files are left alone.
+files=()
+for f in "${staged[@]}"; do
+  if git diff --quiet -- "$f"; then
+    files+=("$f")
+  else
+    echo "pre-commit: $f has unstaged changes, not formatting it" >&2
+  fi
+done
+[ ${#files[@]} -eq 0 ] && exit 0
+
+# macOS ships an unrelated /usr/bin/zprint (kernel memory zones), so check
+# that we found the Clojure formatter.
+zprint_bin=""
+while read -r z; do
+  if "$z" --version 2>&1 | grep -q '^zprint-'; then zprint_bin="$z"; break; fi
+done < <(type -ap zprint)
+
+if [ -n "$zprint_bin" ]; then
+  "$zprint_bin" -w "${files[@]}"
+elif command -v nix-shell >/dev/null; then
+  nix-shell -p zprint --run "zprint -w $(printf '%q ' "${files[@]}")"
+else
+  echo "pre-commit: zprint (the Clojure formatter) not found." >&2
+  echo "Install it, or commit with --no-verify to skip formatting." >&2
+  exit 1
+fi
+
+git add -- "${files[@]}"

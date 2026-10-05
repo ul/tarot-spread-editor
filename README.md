@@ -15,6 +15,7 @@ You need Node.js 24 and a JDK (21+). With Nix, `nix-shell` (or direnv, see
 
 ```bash
 npm ci
+make hooks        # once: zprint pre-commit hook
 make dev          # http://localhost:8080 with hot reload
 ```
 

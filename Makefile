@@ -1,4 +1,8 @@
-.PHONY: dev test test-cljs test-clj e2e data release update-snapshots publish
+.PHONY: hooks dev test test-cljs test-clj e2e data release update-snapshots publish
+
+# Formats staged Clojure files with zprint on commit
+hooks:
+	git config core.hooksPath .githooks
 
 # Development server with hot reload at http://localhost:8080
 dev: data
