@@ -3,6 +3,8 @@ name: Tests
 on:
   push:
     branches: [master]
+  pull_request:
+  workflow_call:
 
 jobs:
   unit:
@@ -18,28 +20,27 @@ jobs:
 
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 24
           cache: npm
 
+      # carbon is a SNAPSHOT dependency and is excluded so that every run
+      # resolves the latest published build
       - name: Cache Maven/Clojars deps
         uses: actions/cache@v4
         with:
-          path: ~/.m2/repository
-          key: m2-${{ hashFiles('shadow-cljs.edn', 'project.clj') }}
+          path: |
+            ~/.m2/repository
+            !~/.m2/repository/carbon
+          key: m2-${{ hashFiles('shadow-cljs.edn') }}
           restore-keys: m2-
 
       - run: npm ci
 
       - name: ClojureScript unit tests
-        run: npx shadow-cljs compile test && node target/test.js
-
-      - name: Install Leiningen
-        uses: DeLaGuardo/setup-clojure@13.4
-        with:
-          lein: latest
+        run: make test-cljs
 
       - name: Clojure unit tests
-        run: lein test
+        run: make test-clj
 
   e2e:
     name: E2E tests
@@ -54,14 +55,16 @@ jobs:
 
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 24
           cache: npm
 
       - name: Cache Maven/Clojars deps
         uses: actions/cache@v4
         with:
-          path: ~/.m2/repository
-          key: m2-${{ hashFiles('shadow-cljs.edn', 'project.clj') }}
+          path: |
+            ~/.m2/repository
+            !~/.m2/repository/carbon
+          key: m2-${{ hashFiles('shadow-cljs.edn') }}
           restore-keys: m2-
 
       - name: Cache Playwright browsers
@@ -79,17 +82,12 @@ jobs:
         if: steps.playwright-cache.outputs.cache-hit == 'true'
         run: npx playwright install-deps chromium
 
-      - name: Install Leiningen
-        uses: DeLaGuardo/setup-clojure@13.4
-        with:
-          lein: latest
-
-      - name: Generate deck data
-        run: lein run -m tse.deploy/prepare-edn
-
-      - run: npx shadow-cljs release app
-
       - name: Run e2e tests
-        run: npx playwright test
-        env:
-          CI: true
+        run: make e2e
+
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: playwright-report
+          path: test-results/
+          retention-days: 7

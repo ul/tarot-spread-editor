@@ -21,36 +21,58 @@
                                            (obj/get dataset "tab")])))))))
       (reset! *node node))))
 
+(def widget-style {:padding "1em", :width "100%", :box-sizing "border-box"})
+
 (defn link-widget
-  [{:keys [emit]}]
-  [:div.pure-form {:style {:padding "1em", :width "100%"}}
-   [:input
-    {:type "url",
-     :style {:width "100%"},
-     :on-change #(emit [:background-dialog/set-url (.. % -target -value)])}]])
+  [{:keys [sub emit]}]
+  (let [src @(sub [:background-dialog/src])]
+    [:div.pure-form {:style widget-style}
+     [:input
+      {:type "url",
+       :placeholder "https://",
+       :defaultValue (when (some->> src
+                                    (re-find #"^https?://"))
+                       src),
+       :style {:width "100%"},
+       :on-change #(emit [:background-dialog/set-url
+                          (.. % -target -value)])}]]))
 
 (defn file-widget
-  [{:keys [emit]}]
-  [:div.pure-form {:style {:padding "1em", :width "100%"}}
+  [{:keys [sub emit]}]
+  [:div.pure-form {:style widget-style}
    [:input
     {:type "file",
+     :accept "image/*",
      :on-change #(emit [:background-dialog/choose-file (.. % -target -files)]),
-     :style {:width "100%"}}]])
+     :style {:width "100%"}}]
+   [:p {:style {:font-size "85%", :color "#666"}}
+    @(sub [:t :background-dialog/file-not-shared
+           "Uploaded images are not included in shared links."])]])
 
 (defn color-widget
   [{:keys [sub emit]}]
-  [:div.pure-form {:style {:padding "1em", :width "100%"}}
+  [:div.pure-form {:style widget-style}
    [:input
     {:type "color",
      :defaultValue @(sub [:background-dialog/color]),
      :on-input #(emit [:background-dialog/set-color (.. % -target -value)]),
      :style {:width "100%"}}]])
 
+(defn remove-image-button
+  [{:keys [sub emit]}]
+  (when @(sub [:background-dialog/src])
+    [:div {:style {:padding "0 1em 1em"}}
+     [:button.pure-button
+      {:type "button", :on-click #(emit [:background-dialog/remove-image])}
+      @(sub [:t :background-dialog/remove-image "Remove image"])]]))
+
 (defn background-dialog
   [ctx]
   (let [ref (init-tab-bar ctx (atom nil) (atom nil))]
     (fn [{:keys [sub]}]
-      (let [tab @(sub [:background-dialog/tab])]
+      (let [tab @(sub [:background-dialog/tab])
+            ;; remount inputs on every open so they show the current values
+            session @(sub [:background-dialog/session])]
         [:div {:style {:width "30em", :max-width "90vw"}}
          [:div.goog-tab-bar.goog-tab-bar-top {:ref ref}
           [:div.goog-tab
@@ -66,10 +88,10 @@
          [:div.goog-tab-bar-clear]
          [:div.goog-tab-content
           (condp = tab
-            "link" [link-widget ctx]
-            "file" [file-widget ctx]
-            "color" [color-widget ctx]
-            nil)]]))))
+            "link" ^{:key (str "link" session)} [link-widget ctx]
+            "file" ^{:key (str "file" session)} [file-widget ctx]
+            "color" ^{:key (str "color" session)} [color-widget ctx]
+            nil) [remove-image-button ctx]]]))))
 
 (defn init
   [{:keys [sub emit], :as ctx} dialog *node]

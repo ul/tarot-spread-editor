@@ -20,7 +20,7 @@
 
 (defn subscribe*
   [db subscribe key->fn cache invalidate [key & args :as v]]
-  (if-let [sub (get-in @cache v)]
+  (if-let [sub (get @cache v)]
     sub
     (if-let [f (get @key->fn key)]
       (let [sub (rx/add-drop (f {:sub subscribe, :db db, :args args})

@@ -2,7 +2,6 @@
   (:require [clojure.edn :as edn]
             [tse.suitcase :as suitcase]
             [cognitect.transit :as t]
-            [taoensso.encore :as e]
             [clojure.java.io :as io]
             [clojure.set :as set]))
 
@@ -33,9 +32,9 @@
       (t/write (t/writer dw :json)
                (reduce #(assoc %1 (get %2 :src) %2) {} decks))
       (t/write (t/writer sw :json)
-               (e/map-vals
+               (update-vals
+                 suitcases
                  (fn [suitcase]
                    {:suits
                       (mapv #(update % :cards (comp vec suitcase/parse-cards))
-                        suitcase)})
-                 suitcases)))))
+                        suitcase)}))))))

@@ -12,7 +12,7 @@
           (tse.math/v0)))))
 
 (defn resize
-  [{:keys [db sub emit], [^js/DomRect rect ^js/DomRect deltaRect] :args}]
+  [{:keys [db sub emit], [^js/DomRect deltaRect] :args}]
   (let [dv [(.-width deltaRect) (.-height deltaRect)]
         scale @(sub [:canvas/scale])]
     (emit [:background/move [(.-left deltaRect) (.-top deltaRect)]])
@@ -25,15 +25,7 @@
   [{:keys [db], [dimensions] :args}]
   (swap! db assoc-in [:background :dimensions] dimensions))
 
-(defn show-menu
-  [{:keys [db], [menu] :args}]
-  (let [p (.getPosition ^goog.ui.PopupMenu menu)
-        x (.-x p)
-        y (.-y p)]
-    (swap! db assoc-in [:background :menu-position] [x y])))
-
 (def spec
   {:background/move move,
    :background/resize resize,
-   :background/set-dimensions set-dimensions,
-   :background/show-menu show-menu})
+   :background/set-dimensions set-dimensions})

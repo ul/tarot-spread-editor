@@ -54,7 +54,7 @@
       (is (= 10 (:z-index (nth items 0))))
       (is (= 2 (:z-index (nth items 1)))))))
 
-(deftest update-pointers-increments
-  (let [ctx (make-ctx {:db {:pointers 0}, :args [1]})]
-    (eff/update-pointers ctx)
+(deftest set-pointers-sets-count
+  (let [ctx (make-ctx {:db {:pointers 3}, :args [1]})]
+    (eff/set-pointers ctx)
     (is (= 1 (:pointers @(:db ctx))))))

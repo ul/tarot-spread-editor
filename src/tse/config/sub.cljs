@@ -1,5 +1,4 @@
-(ns tse.config.sub
-  (:require [carbon.rx :as rx :include-macros true]))
+(ns tse.config.sub)
 
 (def spec
   {:config/deck-base-url [:deck-base-url],

@@ -1,20 +1,34 @@
+.PHONY: dev test test-cljs test-clj e2e data release update-snapshots publish
+
+# Development server with hot reload at http://localhost:8080
+dev: data
+	npx shadow-cljs watch app
+
+test: test-cljs test-clj
+
 test-cljs:
 	npx shadow-cljs compile test && node target/test.js
 
 test-clj:
-	lein test
+	npx shadow-cljs clj-run tse.clj-test-runner/main
 
-test: test-cljs test-clj
+# Runs against a release build; starts its own static server on :8080
+e2e: release
+	CI=true npx playwright test
 
-publish:
-	git checkout gh-pages
-	git reset --hard master
+# resources/{decks,suitcases}.edn -> resources/public/*.min.json
+data:
+	npx shadow-cljs clj-run tse.deploy/prepare-edn
+
+# carbon is a SNAPSHOT dependency: drop the cached copy so the latest
+# published build is resolved
+update-snapshots:
+	rm -rf ~/.m2/repository/carbon/carbon/0.4.0-SNAPSHOT ~/.m2/repository/carbon/rx/0.4.0-SNAPSHOT
+
+release: update-snapshots data
 	rm -rf resources/public/js/compiled
-	npm install
-	npx shadow-cljs release app 
-	lein run -m tse.deploy/prepare-edn
-	cp -a resources/public/* ./
-	git add .
-	git commit -m "up"
-	git push -f
-	git checkout master
+	npx shadow-cljs release app
+
+# Builds and deploys master to GitHub Pages (.github/workflows/deploy.yml)
+publish:
+	gh workflow run deploy.yml --ref master

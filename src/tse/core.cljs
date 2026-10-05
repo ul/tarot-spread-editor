@@ -1,7 +1,8 @@
-(ns ^:figwheel-always tse.core
+(ns tse.core
   (:require carbon.vdom
             carbon.rx
             tse.app
+            tse.share
             tse.sub
             tse.effect
             tse.db
@@ -22,9 +23,7 @@
             tse.config.eff
             tse.transformer.sub
             tse.transformer.eff
-            tse.share.sub
             tse.share.eff
-            tse.label.sub
             tse.label.eff
             tse.label-editor.sub
             tse.label-editor.eff
@@ -32,8 +31,6 @@
             tse.background-dialog.eff
             tse.background.sub
             tse.background.eff))
-
-(enable-console-print!)
 
 (defonce ctx
   (let [s (tse.sub/make tse.db/app-db)
@@ -60,8 +57,6 @@
                         tse.canvas.sub/spec
                         tse.config.sub/spec
                         tse.transformer.sub/spec
-                        tse.share.sub/spec
-                        tse.label.sub/spec
                         tse.label-editor.sub/spec
                         tse.background-dialog.sub/spec
                         tse.background.sub/spec)
@@ -89,5 +84,15 @@
 (js/window.addEventListener "popstate"
                             (fn [_]
                               ((get ctx :emit) [:share/load-from-fragment])))
+
+(defn- sync-viewport-width!
+  []
+  ((get ctx :emit)
+    [:viewport/set-width (.. js/document -documentElement -clientWidth)]))
+
+(sync-viewport-width!)
+(js/window.addEventListener "resize" sync-viewport-width!)
+
+(tse.share/start-sync! tse.db/app-db)
 
 (carbon.vdom/mount [tse.app/view ctx] (js/document.getElementById "app"))

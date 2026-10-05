@@ -23,7 +23,8 @@ test.describe("remove selected button", () => {
     const canvasCards = page.locator(canvasCardsSelector);
     await expect(canvasCards).toHaveCount(1);
 
-    // Select the card by clicking it on the canvas (force: background intercepts)
+    // Select the card by clicking it on the canvas (force: the selection
+    // overlay covers a newly added card)
     await canvasCards.first().click({ force: true });
 
     const btn = page.getByRole("button", { name: "Remove selected" });

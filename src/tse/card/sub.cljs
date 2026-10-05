@@ -2,11 +2,15 @@
   (:require [carbon.rx :as rx :include-macros true]))
 
 (defn used-by-deck
-  [{:keys [db sub], deck :args}]
-  (rx/rx (map (comp vec (juxt :suit :index)) (keep :card @(sub [:item/all])))))
+  "[suit index] of every card from `deck` on the canvas, with repetitions."
+  [{:keys [sub], [deck] :args}]
+  (rx/rx (->> @(sub [:item/all])
+              (keep :card)
+              (filter #(= deck (get % :deck)))
+              (map (juxt :suit :index)))))
 
 (defn usable-by-deck
-  [{:keys [db sub], [deck] :args}]
+  [{:keys [sub], [deck] :args}]
   (let [deck (sub [:deck/entity deck])
         card-suitcase (rx/rx @(sub [:suitcase/entity (get @deck :suitcase)]))]
     (rx/rx (mapcat (fn [[k v]]

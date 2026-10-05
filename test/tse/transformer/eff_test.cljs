@@ -53,3 +53,19 @@
   (let [ctx (make-ctx {:db {:transformer {:dragging? true}}})]
     (eff/end-drag ctx)
     (is (false? (get-in @(:db ctx) [:transformer :dragging?])))))
+
+(deftest resize-from-left-edge-keeps-right-edge
+  ;; one 100x50 item at [100 0] (also its bounding box), canvas scale 2:
+  ;; on screen it is 200 wide; dragging the left edge 200px left doubles it
+  (let [ctx (make-ctx {:db {:items [{:selected? true,
+                                     :origin [100 0],
+                                     :dimensions [100 50],
+                                     :angle 0}]},
+                       :subs {[:canvas/scale] 2,
+                              [:transformer/entity] {:origin [100 0]}},
+                       :args [#js {:width 400}
+                              #js {:width 200, :left -200, :top 0}]})]
+    (eff/resize ctx)
+    (let [{[x y] :origin, [w h] :dimensions} (first (:items @(:db ctx)))]
+      (is (= [0 0 200 100] [x y w h]))
+      (is (= 200 (+ x w))))))

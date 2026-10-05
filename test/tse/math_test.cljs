@@ -2,17 +2,6 @@
   (:require [cljs.test :refer [deftest testing is are]]
             [tse.math :as math]))
 
-;; simple-box
-
-(deftest simple-box-orders-coords
-  (is (= [1 2 3 4] (math/simple-box [1 2] [3 4]))))
-
-(deftest simple-box-swaps-when-reversed
-  (is (= [1 2 3 4] (math/simple-box [3 4] [1 2]))))
-
-(deftest simple-box-mixed-order
-  (is (= [1 2 3 4] (math/simple-box [3 2] [1 4]))))
-
 ;; selector-box
 
 (deftest selector-box-scale-1
@@ -96,19 +85,6 @@
         (is (= snapped result))
         (is (= x result))))))
 
-;; snap-resize
-
-(deftest snap-resize-proportional
-  (let [[x' y'] (math/snap-resize [100 50])]
-    (is (= 50.0 y'))
-    (is (= 100.0 x'))))
-
-(deftest snap-resize-snaps-y
-  (let [[x' y'] (math/snap-resize [100 51])]
-    (is (= 50.0 y'))
-    ;; x should be scaled proportionally
-    (is (< (Math/abs (- x' (/ (* 50 100) 51))) 0.01))))
-
 ;; center
 
 (deftest center-computes-midpoint (is (= 60.0 (math/center 10 100))))
@@ -152,3 +128,20 @@
   (is (true? (math/overlap? [0 0 10 10] [10 10 20 20]))))
 
 (deftest overlap-contained (is (true? (math/overlap? [0 0 20 20] [5 5 15 15]))))
+
+;; scale-item
+
+(deftest scale-item-from-left-edge-keeps-right-edge
+  ;; box [0 0 100 50] grows by 2x while its left edge moves to -100
+  (let [item {:origin [0 0], :dimensions [100 50], :angle 0}
+        {[x y] :origin, [w h] :dimensions}
+          (math/scale-item item [0 0] [-100 0] 2)]
+    (is (= [-100 0 200 100] [x y w h]))
+    (is (= 100 (+ x w)))))
+
+(deftest scale-item-scales-gaps-in-groups
+  (let [a (math/scale-item {:origin [0 0], :dimensions [10 10]} [0 0] [0 0] 2)
+        b (math/scale-item {:origin [20 0], :dimensions [10 10]} [0 0] [0 0] 2)]
+    (is (= [0 0] (:origin a)))
+    (is (= [40 0] (:origin b)))
+    (is (= [20 20] (:dimensions b)))))

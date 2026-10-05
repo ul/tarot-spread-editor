@@ -1,0 +1,48 @@
+name: Deploy
+
+# Manual: `make publish` or the "Run workflow" button on GitHub.
+on:
+  workflow_dispatch:
+
+concurrency:
+  group: deploy
+  cancel-in-progress: false
+
+jobs:
+  test:
+    uses: ./.github/workflows/test.yml
+
+  deploy:
+    name: Publish to GitHub Pages
+    needs: test
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: zulu
+          java-version: 21
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+
+      - run: npm ci
+
+      # no Maven cache here on purpose: always build with the latest
+      # published carbon snapshot
+      - name: Build
+        run: make release
+
+      # replaces the contents of the gh-pages branch with resources/public
+      - uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_branch: gh-pages
+          publish_dir: resources/public
+          cname: tarot-editor.mantike.pro
+          commit_message: deploy ${{ github.sha }}

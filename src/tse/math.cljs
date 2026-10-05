@@ -1,9 +1,5 @@
 (ns tse.math)
 
-(defn simple-box
-  [[x1 y1] [x2 y2]]
-  [(min x1 x2) (min y1 y2) (max x1 x2) (max y1 y2)])
-
 (defn selector-box
   [scale [start-x start-y] [end-x end-y]]
   (let [w (/ (Math/abs (- start-x end-x)) scale)
@@ -64,13 +60,6 @@
 (def rotation-snap-threshold (/ Math/PI 120))
 (defn snap-angle [x] (snap-nearby x rotation-snap rotation-snap-threshold))
 
-(def resize-snap 10)
-(def resize-snap-threshold 1)
-(defn snap-resize
-  [[x y]]
-  (let [y' (snap-nearby y resize-snap resize-snap-threshold)]
-    [(/ (* y' x) y) y']))
-
 (defn center [x w] (+ x (* 0.5 w)))
 
 (defn get-rotator-origin [x y w h] [(- (center x w) 22) (- y 52)])
@@ -89,3 +78,15 @@
 (defn overlap?
   [[x1 y1 x2 y2] [x1' y1' x2' y2']]
   (and (<= x1 x2') (<= x1' x2) (<= y1 y2') (<= y1' y2)))
+
+(defn scale-item
+  "Scales an item by k around anchor point p, which itself moves to p'.
+  Scaling the item's centre keeps rotated items in place relative to each
+  other."
+  [{[x y] :origin, [w h] :dimensions, :as item} p p' k]
+  (let [w' (* k w)
+        h' (* k h)
+        [cx cy] (v+ p' (v* (v- [(+ x (* 0.5 w)) (+ y (* 0.5 h))] p) k))]
+    (assoc item
+      :origin [(- cx (* 0.5 w')) (- cy (* 0.5 h'))]
+      :dimensions [w' h'])))

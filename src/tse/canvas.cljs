@@ -1,29 +1,34 @@
 (ns tse.canvas
-  (:require [carbon.rx :as rx :include-macros true]
-            tse.card
+  (:require tse.card
             tse.label
             tse.transformer
             tse.background))
 
 (defn view
-  [{:keys [sub emit emit-sync], :as ctx}]
+  [{:keys [emit-sync]}]
+  ;; Number of pointers pressed on the canvas, used for multi-touch
+  ;; selection. Releases are tracked on window: a pointer can be released
+  ;; outside of the canvas.
   (let [*node (atom nil)
-        inc-pointers #(when (zero? (.-button %))
-                        (emit-sync [:item/update-pointers 1]))
-        dec-pointers #(when (zero? (.-button %))
-                        (emit-sync [:item/update-pointers -1]))
+        pointers (js/Set.)
+        sync-pointers #(emit-sync [:item/set-pointers (.-size pointers)])
+        pointer-down #(when (zero? (.-button %))
+                        (.add pointers (.-pointerId %))
+                        (sync-pointers))
+        pointer-up #(when (.delete pointers (.-pointerId %)) (sync-pointers))
         ref (fn [node]
               (when (not= node @*node)
                 (when-let [node @*node]
-                  (doto node
-                    (.removeEventListener "pointerdown" inc-pointers true)
-                    (.removeEventListener "pointerup" dec-pointers true)
-                    (.removeEventListener "pointercancel" dec-pointers true)))
+                  (.removeEventListener node "pointerdown" pointer-down true)
+                  (.removeEventListener js/window "pointerup" pointer-up true)
+                  (.removeEventListener js/window
+                                        "pointercancel"
+                                        pointer-up
+                                        true))
                 (when node
-                  (doto node
-                    (.addEventListener "pointerdown" inc-pointers true)
-                    (.addEventListener "pointerup" dec-pointers true)
-                    (.addEventListener "pointercancel" dec-pointers true)))
+                  (.addEventListener node "pointerdown" pointer-down true)
+                  (.addEventListener js/window "pointerup" pointer-up true)
+                  (.addEventListener js/window "pointercancel" pointer-up true))
                 (reset! *node node)))]
     (fn [{:keys [sub emit], :as ctx}]
       (let [scale @(sub [:canvas/scale])]

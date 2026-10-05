@@ -1,19 +1,18 @@
 (ns tse.item.sub
-  (:require [carbon.rx :as rx :include-macros true]
-            [tse.math :as math]))
+  (:require [carbon.rx :as rx :include-macros true]))
 
 (defn layer-pred [layer] (fn [item] (= (get item :layer) layer)))
 
 (defn all-indexed [{sub :sub}] (rx/rx (map-indexed vector @(sub [:item/all]))))
 
 (defn layer-indices
-  [{:keys [db sub], [layer] :args}]
+  [{:keys [sub], [layer] :args}]
   (rx/rx (map first
            (filter (comp (layer-pred layer) second)
              @(sub [:item/all-indexed])))))
 
 (defn layer-all
-  [{:keys [db sub], [layer] :args}]
+  [{:keys [sub], [layer] :args}]
   (rx/rx (filter (layer-pred layer) @(sub [:item/all]))))
 
 (defn get-entity

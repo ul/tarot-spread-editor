@@ -1,7 +1,10 @@
 (ns tse.label-editor
   (:require carbon.vdom
-            ["quill" :default Quill]
-            tse.dialog))
+            hickory.core
+            ["quill" :default Quill :refer [Delta]]
+            tse.dialog
+            tse.sanitize
+            tse.utils))
 
 (let [Parchment (.import Quill "parchment")
       StyleAttributor (.-StyleAttributor Parchment)
@@ -29,38 +32,62 @@
                                         #js {:background #js []}]
                                    #js ["clean"]]}})
 
-(defn init-editor
-  [{:keys [sub emit]} *node]
-  (fn [node]
-    (when (not= node @*node)
-      (if node
-        (emit [:label-editor/set-editor (Quill. node editor-options)])
-        (emit [:label-editor/dispose-editor]))
-      (reset! *node node))))
+(defn load-delta!
+  [^Quill editor delta]
+  (if (seq delta)
+    (.setContents editor (Delta. (clj->js delta)))
+    (.setText editor "\n")))
+
+(defn read-label
+  "Renders the editor contents into label data. The DOM is needed both to
+  parse Quill's HTML and to measure it."
+  [^Quill editor]
+  (let [html (.. editor -root -innerHTML)]
+    {:content (->> (hickory.core/parse-fragment html)
+                   (map hickory.core/as-hiccup)
+                   tse.sanitize/sanitize-content),
+     :quill-content (js->clj (.-ops (.getContents editor))),
+     ;; extra pixel to prevent accidental word wrap
+     :dimensions (mapv inc (tse.utils/measure-html html))}))
 
 (defn content-editor
-  [ctx]
-  (let [node (atom nil)
-        ref-callback (init-editor ctx node)]
-    (fn [ctx] [:div {:ref ref-callback}])))
+  [*editor]
+  (let [*node (atom nil)
+        ref-callback (fn [node]
+                       (when (not= node @*node)
+                         (reset! *editor (when node
+                                           (Quill. node editor-options)))
+                         (reset! *node node)))]
+    (fn [_] [:div {:ref ref-callback}])))
 
 (defn init-dialog
-  [{:keys [sub emit], :as ctx} dialog *node]
-  (fn [node]
-    (when (not= node @*node)
-      (if node
-        (reset! dialog (tse.dialog/make
-                         {:visible? (sub [:label-editor/visible?]),
-                          :title (sub [:t :label-editor/title "Label"]),
-                          :view [content-editor ctx],
-                          :handlers {"ok" #(emit [:label-editor/save]),
-                                     "cancel" #(emit [:label-editor/cancel])}}))
-        (do (.dispose @dialog) (reset! dialog nil)))
-      (reset! *node node))))
+  [{:keys [sub emit]} *editor dialog *node]
+  (let [visible? (sub [:label-editor/visible?])]
+    (fn [node]
+      (when (not= node @*node)
+        (if node
+          (do (reset! dialog (tse.dialog/make
+                               {:visible? visible?,
+                                :title (sub [:t :label-editor/title "Label"]),
+                                :view [content-editor *editor],
+                                :handlers
+                                  {"ok" #(when-let [editor @*editor]
+                                           (emit [:label-editor/save
+                                                  (read-label editor)])),
+                                   "cancel" #(emit [:label-editor/cancel])}}))
+              ;; fill the editor whenever the dialog opens
+              (add-watch visible?
+                         *editor
+                         (fn [_ _ _ visible?]
+                           (when-let [editor (and visible? @*editor)]
+                             (load-delta! editor @(sub [:label-editor/delta]))
+                             (.focus ^Quill editor)))))
+          (do (remove-watch visible? *editor)
+              (.dispose @dialog)
+              (reset! dialog nil)))
+        (reset! *node node)))))
 
 (defn view
   [ctx]
-  (let [dialog (atom nil)
-        node (atom nil)
-        ref-callback (init-dialog ctx dialog node)]
-    (fn [ctx] [:div {:ref ref-callback}])))
+  (let [ref-callback (init-dialog ctx (atom nil) (atom nil) (atom nil))]
+    (fn [_] [:div {:ref ref-callback}])))

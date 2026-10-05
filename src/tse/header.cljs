@@ -26,7 +26,8 @@
   [:div {:style header-style} [:div {:style title-style} @(sub [:t :app/title])]
    [:div.header-links {}
     [:div {:style item-style}
-     [:a {:style link-style, :href "/disclaimer"} @(sub [:t :app/disclaimer])]]
+     [:a {:style link-style, :href "disclaimer.html"}
+      @(sub [:t :app/disclaimer])]]
     [:div {:style item-style}
      [:a {:style link-style, :href "mailto:fer.obbee@gmail.com"}
       @(sub [:t :app/contact])]]] [:div {:style {:flex 1}}]

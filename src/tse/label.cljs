@@ -1,9 +1,6 @@
 (ns tse.label
-  (:require [goog.labs.userAgent.browser :as browser]
-            [cuerdas.core :as str]
-            [carbon.rx :as rx :include-macros true]
-            tse.transformer
-            tse.menu))
+  (:require [cuerdas.core :as str]
+            tse.transformer))
 
 (defn view
   [ctx id]

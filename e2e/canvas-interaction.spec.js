@@ -14,7 +14,8 @@ test("clicking a card on canvas selects it (transformer appears)", async ({
   await page.locator("a.mini").first().click();
 
   const card = page.locator(canvasCardsSelector).first();
-  // Use force:true because the background div intercepts pointer events
+  // A newly added card is selected, so the selection overlay covers it;
+  // force skips the "element receives the click" check
   await card.click({ force: true });
 
   // When selected, the "Remove selected" button becomes enabled
@@ -70,10 +71,8 @@ test("dragging a card changes its position", async ({ page }) => {
     await page.mouse.up();
   }
 
-  // Wait for the transform update
-  await page.waitForTimeout(100);
-
   // Position should have changed
-  const newTransform = await card.evaluate((el) => el.style.transform);
-  expect(newTransform).not.toBe(initialTransform);
+  await expect
+    .poll(() => card.evaluate((el) => el.style.transform))
+    .not.toBe(initialTransform);
 });

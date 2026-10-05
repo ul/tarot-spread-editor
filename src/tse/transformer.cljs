@@ -1,12 +1,9 @@
 (ns tse.transformer
   (:require [interactjs :default interact :refer [Interactable InteractEvent]]
-            [carbon.rx :as rx :include-macros true]
             [cuerdas.core :as str]
-            [tse.math :as math]
-            [taoensso.encore :as encore]))
+            [tse.math :as math]))
 
 (set! *warn-on-infer* true)
-
 
 (defn make-interact
   [{:keys [emit sub]} *node & [*dragged?]]
@@ -14,37 +11,40 @@
     (fn [node]
       (when (not= node @*node)
         (if node
-          (do (.draggable
-                ^Interactable (interact node)
-                #js {:inertia false,
-                     :autoScroll #js {:enabled true, :margin 200},
-                     :onstart #(emit [:transformer/start-drag]),
-                     :onmove (fn [^InteractEvent e]
-                               (when *dragged? (reset! *dragged? true))
-                               (emit [:transformer/move [(.-dx e) (.-dy e)]])),
-                     :onend #(emit [:transformer/end-drag])})
-              (let [apply-resizable
-                      (fn [shift-mode?]
-                        (.resizable
-                          ^Interactable (interact node)
-                          (if shift-mode?
-                            #js {:preserveAspectRatio true,
-                                 :edges #js {:left true,
-                                             :top true,
-                                             :right true,
-                                             :bottom true},
-                                 :onstart #(emit [:transformer/start-drag]),
-                                 :onmove (fn [^InteractEvent e]
-                                           (emit [:transformer/resize (.-rect e)
-                                                  (.-deltaRect e)])),
-                                 :onend #(emit [:transformer/end-drag])}
-                            false)))]
-                (apply-resizable @shift-mode?)
-                (add-watch shift-mode?
-                           :shift-mode?
-                           (fn [_ _ _ shift-mode?]
-                             (apply-resizable shift-mode?)))))
-          (do (remove-watch shift-mode? :shift-mode?)
+          (do
+            (.draggable ^Interactable (interact node)
+                        #js {:inertia false,
+                             :autoScroll #js {:enabled true, :margin 200},
+                             :onstart #(emit [:transformer/start-drag]),
+                             :onmove (fn [^InteractEvent e]
+                                       (when *dragged? (reset! *dragged? true))
+                                       (emit [:transformer/move
+                                              [(.-dx e) (.-dy e)]])),
+                             :onend #(emit [:transformer/end-drag])})
+            (let [apply-resizable
+                    (fn [shift-mode?]
+                      (.resizable
+                        ^Interactable (interact node)
+                        (if shift-mode?
+                          #js {:preserveAspectRatio true,
+                               :edges #js {:left true,
+                                           :top true,
+                                           :right true,
+                                           :bottom true},
+                               :onstart #(emit [:transformer/start-drag]),
+                               :onmove (fn [^InteractEvent e]
+                                         (emit [:transformer/resize (.-rect e)
+                                                (.-deltaRect e)])),
+                               :onend #(emit [:transformer/end-drag])}
+                          false)))]
+              (apply-resizable @shift-mode?)
+              ;; the subscription is shared, so the watch key must be
+              ;; unique per element
+              (add-watch shift-mode?
+                         *node
+                         (fn [_ _ _ shift-mode?]
+                           (apply-resizable shift-mode?)))))
+          (do (remove-watch shift-mode? *node)
               (.unset ^Interactable (interact @*node))))
         (reset! *node node)))))
 
@@ -67,21 +67,30 @@
         (.unset ^Interactable (interact @*node)))
       (reset! *node node))))
 
+(defn make-shift-listener
+  "Holding Shift enables shift mode (resize and delete handles), the same as
+  the toolbar toggle does on touch devices."
+  [{:keys [emit]} *node]
+  (let [on-key (fn [^js/KeyboardEvent e]
+                 (when (and (= "Shift" (.-key e)) (not (.-repeat e)))
+                   (emit [:transformer/shift-mode (= "keydown" (.-type e))])))]
+    (fn [node]
+      (when (not= node @*node)
+        (if node
+          (do (.addEventListener js/window "keydown" on-key)
+              (.addEventListener js/window "keyup" on-key))
+          (do (.removeEventListener js/window "keydown" on-key)
+              (.removeEventListener js/window "keyup" on-key)))
+        (reset! *node node)))))
+
 (defn view
   [{:keys [sub emit], :as ctx}]
   (let [rotator-ref (make-rotator ctx (atom nil))
         *dragged? (atom false)
-        interact-ref (make-interact ctx (atom nil) *dragged?)]
-    (.addEventListener js/window
-                       "keydown"
-                       (fn [^js/Event e]
-                         (when (.-shiftKey e)
-                           (emit [:transformer/shift-mode true]))))
-    (.addEventListener js/window
-                       "keyup"
-                       #(emit [:transformer/shift-mode false]))
+        interact-ref (make-interact ctx (atom nil) *dragged?)
+        shift-ref (make-shift-listener ctx (atom nil))]
     (fn [{:keys [sub emit], :as ctx}]
-      [:div
+      [:div {:ref shift-ref}
        (when-not (empty? @(sub [:item/selected]))
          (let [{[x y] :origin,
                 [w h] :dimensions,
@@ -94,7 +103,7 @@
             [:div
              {:ref rotator-ref,
               :role "slider",
-              :aria-label "Rotate selection",
+              :aria-label @(sub [:t :transformer/rotate]),
               :style {:position "absolute",
                       :transform (str/format "translate(%spx, %spx)" rx ry),
                       :will-change "transform",
@@ -138,7 +147,9 @@
                          :position "relative",
                          :left (str (- w 48) "px")},
                  :on-click #(emit [:item/remove-selected]),
-                 :aria-label "Remove selected items"} [:i.fa.fa-times]])]]))
+                 :title @(sub [:t :toolbar/remove-selected]),
+                 :aria-label @(sub [:t :toolbar/remove-selected])}
+                [:i.fa.fa-times]])]]))
        (when-let [{:keys [x y w h]} @(sub [:transformer/selector-box])]
          [:div
           {:style {:position "absolute",

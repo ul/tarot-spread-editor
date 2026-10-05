@@ -1,6 +1,5 @@
 (ns tse.card
-  (:require [goog.labs.userAgent.browser :as browser]
-            [cuerdas.core :as str]
+  (:require [cuerdas.core :as str]
             [carbon.rx :as rx :include-macros true]
             [tse.transformer :as trans]))
 

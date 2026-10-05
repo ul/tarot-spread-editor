@@ -7,7 +7,7 @@ export default defineConfig({
   },
   ...(process.env.CI && {
     webServer: {
-      command: "python3 -m http.server 8080 -d resources/public",
+      command: "node e2e/server.mjs",
       url: "http://localhost:8080",
       reuseExistingServer: false,
     },

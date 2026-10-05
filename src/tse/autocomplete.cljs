@@ -83,9 +83,12 @@
            [:li.pure-menu-item {:class (when (= position i) "pure-menu-active")}
             [:a.pure-menu-link
              {:href "#",
+              ;; prevent blur of the input, then select
               :on-pointerdown #(do (.preventDefault %)
-                                   (dispatch [:select item]))} label]])
-         [:li.pure-menu-item [:a.pure-menu-link {:href ""} @hint]])]]]))
+                                   (dispatch [:select item])),
+              ;; "#" would navigate and replace the state from the fragment
+              :on-click #(.preventDefault %)} label]])
+         [:li.pure-menu-item [:span.pure-menu-link @hint]])]]]))
 
 (defn on-keydown
   [dispatch e]

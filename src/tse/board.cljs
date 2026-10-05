@@ -1,7 +1,5 @@
 (ns tse.board
-  (:require [carbon.rx :as rx :include-macros true]
-            [taoensso.encore :as encore]
-            [tse.deck-search :as deck-search]))
+  (:require [tse.deck-search :as deck-search]))
 
 (defn suit-selector
   [{:keys [sub emit]}]

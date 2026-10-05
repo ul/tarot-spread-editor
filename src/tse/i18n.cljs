@@ -10,8 +10,12 @@
         :menu {:show-grid? "Show grid?",
                :add-label "Add label",
                :set-background "Set background"},
-        :background-dialog {:tabs {:color "Color", :link "Link", :file "File"},
-                            :title "Background"},
+        :background-dialog
+          {:tabs {:color "Color", :link "Link", :file "File"},
+           :title "Background",
+           :remove-image "Remove image",
+           :file-not-shared
+             "Uploaded images are not included in shared links."},
         :board {:random "random",
                 :random-hint "Draw random card",
                 :reversible? "reversible?",
@@ -22,7 +26,9 @@
                   :add-label "Add label",
                   :set-background "Background",
                   :toggle-grid "Toggle grid",
-                  :toggle-board "Toggle board"},
+                  :toggle-board "Toggle board",
+                  :toggle-resize "Toggle resize mode"},
+        :transformer {:rotate "Rotate selection"},
         :canvas {:scale "Scale"},
         :deck-search {:placeholder "Select a deck...",
                       :hint "Start typing deck's name"},
@@ -34,10 +40,12 @@
         :menu {:show-grid? "Показать сетку?",
                :add-label "Добавить ярлык",
                :set-background "Выбрать фон"},
-        :background-dialog {:tabs {:color "Заливка",
-                                   :link "Указать ссылку",
-                                   :file "Загрузить файл"},
-                            :title "Фон"},
+        :background-dialog
+          {:tabs
+             {:color "Заливка", :link "Указать ссылку", :file "Загрузить файл"},
+           :title "Фон",
+           :remove-image "Убрать изображение",
+           :file-not-shared "Загруженные изображения не сохраняются в ссылке."},
         :board {:random "случайная",
                 :random-hint "Вытащить случайную карту",
                 :reversible? "с перевёрнутыми?",
@@ -49,7 +57,9 @@
                   :add-label "Добавить ярлык",
                   :set-background "Фон",
                   :toggle-grid "Сетка",
-                  :toggle-board "Панель карт"},
+                  :toggle-board "Панель карт",
+                  :toggle-resize "Режим изменения размера"},
+        :transformer {:rotate "Повернуть выделение"},
         :canvas {:scale "Масштаб"},
         :deck-search {:placeholder "Выберите колоду...",
                       :hint "Начните набирать название колоды"},
@@ -58,7 +68,7 @@
 (def opts {:dict dictionary})
 
 (defn t
-  [{:keys [sub args], :as x}]
+  [{:keys [sub args]}]
   (rx/rx (tr opts [@(sub [:lang/code]) :en] (vec args))))
 
 (defn switch [{:keys [db]}] (swap! db update :lang #(if (= % :en) :ru :en)))

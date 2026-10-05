@@ -24,8 +24,7 @@
                    :onstart #(emit [:transformer/start-drag]),
                    :onmove (fn [^InteractEvent e]
                              (when-not (.-shiftKey e)
-                               (emit [:background/resize (.-rect e)
-                                      (.-deltaRect e)]))),
+                               (emit [:background/resize (.-deltaRect e)]))),
                    :onend #(emit [:transformer/end-drag])})))
         (.unset ^Interactable (interact @*node)))
       (reset! *node node))))

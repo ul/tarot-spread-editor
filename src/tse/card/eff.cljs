@@ -1,4 +1,5 @@
-(ns tse.card.eff)
+(ns tse.card.eff
+  (:require [clojure.set :as set]))
 
 (defn set-random-reversible
   [{:keys [db], [value] :args}]
@@ -12,8 +13,8 @@
         scale @(sub [:canvas/scale])
         origin (if last-card
                  (let [{[x y] :origin, [w h] :dimensions} last-card
-                       doc-width (.. js/document -documentElement -scrollWidth)]
-                   (if (< doc-width (* scale (+ x w (first dimensions))))
+                       width @(sub [:viewport/width])]
+                   (if (< width (* scale (+ x w (first dimensions))))
                      [0 (+ y h)]
                      [(+ x w) y]))
                  [0 0])]
@@ -31,7 +32,7 @@
                      item))))))
 
 (defn random-card
-  [{:keys [db sub emit]}]
+  [{:keys [sub emit]}]
   (let [deck @(sub [:deck/active-id])
         usable (set @(sub [:card/usable-by-deck deck]))
         used @(sub [:card/used-by-deck deck])
@@ -40,7 +41,7 @@
         used-in-the-last-deck (set (map first
                                      (remove (fn [[_ freq]] (< freq max-freq))
                                        used-by-freq)))
-        available (clojure.set/difference usable used-in-the-last-deck)
+        available (set/difference usable used-in-the-last-deck)
         [suit index] (rand-nth (vec (if (empty? available) usable available)))
         reversible? @(sub [:card/random-reversible?])]
     (emit [:card/add {:deck deck, :suit suit, :index index}

@@ -18,3 +18,14 @@
         s (sub/make db)
         {:keys [emit-sync]} (effect/make db (:sub s))]
     (is (thrown? js/Error (emit-sync [:nonexistent/effect])))))
+
+(deftest perform-runs-remaining-effects-after-a-failure
+  (let [db (rx/cell {})
+        ran (atom [])
+        key->fn (volatile! {:test/ok (fn [{[x] :args}] (swap! ran conj x)),
+                            :test/fail (fn [_] (throw (js/Error. "boom")))})
+        queue (volatile! [[:test/ok 1] [:test/fail] [:nonexistent/fx]
+                          [:test/ok 2]])]
+    (effect/perform* db identity identity identity key->fn queue)
+    (is (= [1 2] @ran))
+    (is (= [] @queue))))

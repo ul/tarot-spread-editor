@@ -1,5 +1,7 @@
 {:source-paths ["src" "test"]
  :dependencies [[com.cognitect/transit-cljs "0.8.280"]
+                ;; JVM-only, for tse.deploy and tse.suitcase (clj-run)
+                [instaparse "1.5.0"]
                 [carbon "0.4.0-SNAPSHOT"]
                 [com.taoensso/tempura "1.5.4"]
                 [funcool/cuerdas "2026.415"]

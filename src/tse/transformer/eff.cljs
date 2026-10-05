@@ -15,17 +15,19 @@
       (fn [[x y]] [(max 0 (+ x sdx)) (max 0 (+ y sdy))]))))
 
 (defn resize
+  "Uniformly scales the selection. interact.js reports the new rect and how
+  its edges moved (in screen pixels); the selection's bounding box is the
+  anchor, so dragging the left or top edge keeps the opposite edge in place."
   [{:keys [db sub], [^js/DomRect rect ^js/DomRect deltaRect] :args}]
-  (let [dv [(.-left deltaRect) (.-top deltaRect)]
-        w (.-width rect)
-        dw (.-width deltaRect)
-        dd (/ w (- w dw))]
-    (swap! db update
-      :items
-      update-selected
-      update
-      :dimensions
-      #(math/v* % dd))))
+  (let [w (.-width rect)
+        w0 (- w (.-width deltaRect))]
+    (when (pos? w0)
+      (let [scale @(sub [:canvas/scale])
+            p (get @(sub [:transformer/entity]) :origin)
+            p' (math/v+ p
+                        (math/v% [(.-left deltaRect) (.-top deltaRect)] scale))
+            k (/ w w0)]
+        (swap! db update :items update-selected math/scale-item p p' k)))))
 
 (defn rotate
   [{:keys [sub db], [dv] :args}]
@@ -72,8 +74,7 @@
 
 (defn end-selection
   [{:keys [db sub], [end] :args}]
-  (let [items @(sub [:item/all])
-        {:keys [start offset]} (get-in @db [:transformer :selector])
+  (let [{:keys [start offset]} (get-in @db [:transformer :selector])
         end (math/v+ end offset)
         scale @(sub [:canvas/scale])
         selector-box (math/selector-box scale start end)]

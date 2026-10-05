@@ -3,9 +3,10 @@
   "version": "1.0.0",
   "private": true,
   "description": "Tarot Spread Editor",
-  "main": "index.js",
   "scripts": {
-    "test": "npx shadow-cljs compile test"
+    "dev": "make dev",
+    "test": "make test",
+    "e2e": "make e2e"
   },
   "repository": {
     "type": "git",
@@ -13,7 +14,7 @@
   },
   "keywords": [],
   "author": "Ruslan Prakapchuk",
-  "license": "Eclipse Public License",
+  "license": "EPL-2.0",
   "bugs": {
     "url": "https://github.com/ul/tarot-spread-editor/issues"
   },

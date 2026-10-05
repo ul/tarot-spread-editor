@@ -3,7 +3,10 @@
 
 (def reader (t/reader :json))
 
-(defn set-active [{:keys [db], [id] :args}] (swap! db assoc :active-deck id))
+(defn set-active
+  "Switching decks resets the suit: decks have different numbers of suits."
+  [{:keys [db], [id] :args}]
+  (swap! db assoc :active-deck id :active-suit 0))
 
 (defn load-decks
   [{:keys [db]}]

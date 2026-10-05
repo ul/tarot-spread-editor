@@ -1,7 +1,8 @@
 with (import <nixpkgs> { });
 mkShell {
   buildInputs = [
-    leiningen
+    nodejs_24
+    jdk21
     zprint
   ];
 }

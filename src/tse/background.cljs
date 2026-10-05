@@ -3,6 +3,7 @@
             [carbon.rx :as rx :include-macros true]
             tse.math
             tse.menu
+            tse.utils
             tse.background-image))
 
 (defn show-grid-menu-item
@@ -13,10 +14,18 @@
                                              (.isChecked ^goog.ui.MenuItem
                                                          %)])}))
 
+(defn menu-position
+  "Page coordinates of the popup menu that owns the menu item."
+  [^goog.ui.MenuItem mi]
+  (let [p (.getPosition ^goog.ui.PopupMenu (.getParent mi))] [(.-x p) (.-y p)]))
+
 (defn add-label-menu-item
   [{:keys [sub emit]}]
   (tse.menu/make-item {:content (sub [:t :menu/add-label "Add label"]),
-                       :action #(emit [:label-editor/new])}))
+                       :action #(emit [:label-editor/new
+                                       (tse.utils/page->canvas
+                                         @(sub [:canvas/scale])
+                                         (menu-position %))])}))
 
 (defn set-background-menu-item
   [{:keys [sub emit]}]
@@ -25,16 +34,15 @@
                        :action #(emit [:background-dialog/open])}))
 
 (defn make-popup-menu
-  [{:keys [sub emit], :as ctx} node]
+  [ctx node]
   (tse.menu/make-popup [(show-grid-menu-item ctx) (add-label-menu-item ctx)
                         (set-background-menu-item ctx)]
-                       node
-                       {:on-show #(emit [:background/show-menu %])}))
+                       node))
 
 (def long-press-delay 350)
 
 (defn init-bg
-  [{:keys [emit], :as ctx} *node *popup]
+  [ctx *node *popup]
   (fn [node]
     (when (not= node @*node)
       (when-let [p @*popup] (.dispose p))
@@ -112,8 +120,8 @@
           :on-touch-start (fn [e]
                             (when (and @popup (= 1 (.. e -touches -length)))
                               (let [touch (aget (.-touches e) 0)
-                                    x (.-clientX touch)
-                                    y (.-clientY touch)]
+                                    x (.-pageX touch)
+                                    y (.-pageY touch)]
                                 (vreset!
                                   long-press-timer
                                   (js/setTimeout

@@ -51,9 +51,7 @@
                    (= :labels)))
       (emit [:label-editor/edit (ffirst selected)]))))
 
-(defn update-pointers
-  [{db :db, [delta] :args}]
-  (swap! db update :pointers + delta))
+(defn set-pointers [{db :db, [n] :args}] (swap! db assoc :pointers n))
 
 (def spec
   {:item/toggle-selected toggle-selected,
@@ -61,5 +59,5 @@
    :item/remove-all remove-all,
    :item/unselect-all unselect-all,
    :item/raise-selected raise-selected,
-   :item/update-pointers update-pointers,
+   :item/set-pointers set-pointers,
    :item/edit edit-item})

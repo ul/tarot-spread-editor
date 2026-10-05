@@ -1,5 +1,5 @@
 (ns tse.toolbar
-  (:require))
+  (:require tse.utils))
 
 (defn view
   [{:keys [sub emit]}]
@@ -21,7 +21,9 @@
      [:button.pure-button
       {:title @(sub [:t :toolbar/add-label]),
        :aria-label @(sub [:t :toolbar/add-label]),
-       :on-click #(emit [:label-editor/new])} [:i.fa.fa-tag]]
+       :on-click #(emit [:label-editor/new
+                         (tse.utils/viewport-center @(sub [:canvas/scale]))])}
+      [:i.fa.fa-tag]]
      [:button.pure-button
       {:title @(sub [:t :toolbar/set-background]),
        :aria-label @(sub [:t :toolbar/set-background]),
@@ -42,7 +44,8 @@
          :on-click #(emit [:config/toggle-board])} [:i.fa.fa-columns]])
      [:button.pure-button
       {:disabled (when-not has-selected? "disabled"),
-       :title "Toggle resize mode",
+       :title @(sub [:t :toolbar/toggle-resize]),
+       :aria-label @(sub [:t :toolbar/toggle-resize]),
        :style {:background-color (when shift-mode? "rgba(100,149,237,0.9)")},
        :on-click #(emit [:transformer/shift-mode (not shift-mode?)])}
       [:i.fa.fa-expand]]]))

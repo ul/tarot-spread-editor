@@ -19,3 +19,14 @@
         {:keys [register-cursor subscribe]} (sub/make db)]
     (register-cursor :test/val [:nested :val])
     (is (= 7 @(subscribe [:test/val])))))
+
+(deftest subscribe-caches-by-query
+  (let [db (rx/cell {:x 1})
+        {:keys [register-subscription subscribe]} (sub/make db)]
+    (register-subscription :test/x (fn [{:keys [db]}] (rx/rx (:x @db))))
+    (register-subscription :test/arg
+                           (fn [{:keys [db], [k] :args}] (rx/rx (get @db k))))
+    (is (identical? (subscribe [:test/x]) (subscribe [:test/x])))
+    (is (identical? (subscribe [:test/arg :x]) (subscribe [:test/arg :x])))
+    (is (not (identical? (subscribe [:test/arg :x])
+                         (subscribe [:test/arg :y]))))))
